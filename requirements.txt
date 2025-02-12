@@ -1,0 +1,7 @@
+gdsfactory==8.26.1
+numpy==1.26.4
+ryaml==0.4.0
+numba==0.60.0
+multimethod==1.12
+pydantic == 2.10.6
+pydantic-core == 2.27.2

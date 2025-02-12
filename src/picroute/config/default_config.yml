@@ -1,0 +1,26 @@
+run:
+  random_state: 42
+
+dr:
+  router: GridRoute
+  maxIteration: 3
+  
+  net_order: "naive"   # topo, naive
+  group: False
+  # ripup: False
+  enable_45_neighbor: False
+  historyCost: 2000
+  ripup_times: 1
+
+  grid_resolution: 50
+  bend_radius: 60
+  net_bound_scale_factor: 3
+  net_default_bound: 2000
+
+  loss_propagation: 1.5
+  loss_bending: 50
+  loss_crossing: 5000
+  loss_congestion: 500
+
+eval: "noc"    # noc, comp
+  

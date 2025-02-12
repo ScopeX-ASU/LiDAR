@@ -1,0 +1,219 @@
+instances:
+  fanout_yb_0_0:
+    component: mmi1x2
+    settings:
+      macro_type: m_mmi1x2_2
+      placement:
+      - PLACED
+      - [120,80]
+      - N
+      - [10, 10, 10, 10]
+  fanout_yb_0_1:
+    component: mmi1x2
+    settings:
+      macro_type: m_mmi1x2_2
+      placement:
+      - PLACED
+      - [70,52]
+      - E
+      - [10, 10, 10, 10]      
+  fanout_yb_0_2:
+    component: mmi1x2
+    settings:
+      macro_type: m_mmi1x2_2
+      placement:
+      - PLACED
+      - [20,20]
+      - S
+      - [10, 10, 10, 10]    
+  mrr_array_0_mrr_0:
+    component: ring_single_pn
+    settings:
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - PLACED
+      - [0, 60]
+      - N
+      - [10, 10, 10, 10]
+  obstacle1:
+    component: rectangle
+    settings:
+      size: [10, 60]
+      layer: "WG"
+      macro_type: m_ring_double_pn_1
+      placement:
+      - PLACED
+      - [50,30]
+      - N
+      - [10, 10, 10, 10]
+  obstacle2:
+    component: rectangle
+    settings:
+      size: [10, 10]
+      layer: "WG"
+      macro_type: m_ring_double_pn_2
+      placement:
+      - PLACED
+      - [50,35]
+      - N
+      - [10, 10, 10, 10]
+schematic_placements:
+  fanout_yb_0_0: {x: 132.0157023752203, y: 400.0, port: null, rotation: 0, dx: 0,
+    dy: 0, mirror: false}
+  fanout_yb_0_1: {x: 132.0157023752203, y: 400.0, port: null, rotation: 0, dx: 0,
+    dy: 0, mirror: false}
+  mrr_array_0_mrr_0: {x: 217.5157023752203, y: 250.0, port: null, rotation: 0, dx: 0,
+    dy: 0, mirror: false}
+  obstacle1: {x: 1572.836, y: 550.0, port: null, rotation: 0, dx: 0, dy: 0,
+    mirror: false}
+  obstacle2: {x: 1572.836, y: 550.0, port: null, rotation: 0, dx: 0, dy: 0,
+    mirror: false}
+nets:
+  n_0: ['mrr_array_0_mrr_0,o2', 'fanout_yb_0_0,o1']
+  n_1: ['fanout_yb_0_1,o2', 'fanout_yb_0_2,o1']
+ports: {}
+settings:
+  version: '1.0'
+  design: toy_example
+  units_distance_microns: 1
+  die_area:
+  - [0, 0]
+  - [200, 200]
+  num_instances: 6
+  num_nets: 2
+  num_ports: 0
+  wg_radius: 5
+library:
+  m_ring_double_pn_1:
+    property: null
+    type: CORE
+    origin: [0.0, 0.0]
+    size: [10, 60]
+    site: core
+    pins:
+      o1:
+        pin_offset_x: 3.7394645035595264
+        pin_offset_y: 2.425
+        pin_width: 0.5
+        pin_orient: 180.0
+        pin_layer: [1, 0]
+      o4:
+        pin_offset_x: 3.7394645035595264
+        pin_offset_y: 14.025000000000002
+        pin_width: 0.5
+        pin_orient: 180.0
+        pin_layer: [1, 0]
+      o3:
+        pin_offset_x: 11.112237871660767
+        pin_offset_y: 14.025000000000002
+        pin_width: 0.5
+        pin_orient: 0.0
+        pin_layer: [1, 0]
+      o2:
+        pin_offset_x: 11.112237871660767
+        pin_offset_y: 2.425
+        pin_width: 0.5
+        pin_orient: 0.0
+        pin_layer: [1, 0]
+  m_ring_double_pn_2:
+    property: null
+    type: CORE
+    origin: [0.0, 0.0]
+    size: [10, 10]
+    site: core
+    pins:
+      o1:
+        pin_offset_x: 3.7394645035595264
+        pin_offset_y: 2.425
+        pin_width: 0.5
+        pin_orient: 180.0
+        pin_layer: [1, 0]
+      o4:
+        pin_offset_x: 3.7394645035595264
+        pin_offset_y: 14.025000000000002
+        pin_width: 0.5
+        pin_orient: 180.0
+        pin_layer: [1, 0]
+      o3:
+        pin_offset_x: 11.112237871660767
+        pin_offset_y: 14.025000000000002
+        pin_width: 0.5
+        pin_orient: 0.0
+        pin_layer: [1, 0]
+      o2:
+        pin_offset_x: 11.112237871660767
+        pin_offset_y: 2.425
+        pin_width: 0.5
+        pin_orient: 0.0
+        pin_layer: [1, 0]
+  m_mmi1x2_2:
+    property: null
+    type: CORE
+    origin: [0.0, 0.0]
+    size: [25.5, 2.5]
+    site: core
+    pins:
+      o1:
+        pin_offset_x: 0.0
+        pin_offset_y: 1.25
+        pin_width: 0.5
+        pin_orient: 180.0
+        pin_layer: [1, 0]
+      o2:
+        pin_offset_x: 25.5
+        pin_offset_y: 1.875
+        pin_width: 0.5
+        pin_orient: 0.0
+        pin_layer: [1, 0]
+      o3:
+        pin_offset_x: 25.5
+        pin_offset_y: 0.625
+        pin_width: 0.5
+        pin_orient: 0.0
+        pin_layer: [1, 0]
+  m_ring_single_pn_43ee7534_3:
+    property: null
+    type: CORE
+    origin: [0.0, 0.0]
+    size: [14.850499416972895, 15.65164169171836]
+    site: core
+    pins:
+      o1:
+        pin_offset_x: 4.0472986704081455
+        pin_offset_y: 2.425
+        pin_width: 0.5
+        pin_orient: 180.0
+        pin_layer: [1, 0]
+      o2:
+        pin_offset_x: 10.803200746564748
+        pin_offset_y: 2.425
+        pin_width: 0.5
+        pin_orient: 0.0
+        pin_layer: [1, 0]
+
+
+constraints:
+  constr_0:
+    type: alignment
+    settings: {anchor: left}
+    objects: [mod_array_in_mrr_0, mod_array_in_mrr_1, mod_array_in_mrr_2, mod_array_in_mrr_3]
+  constr_1:
+    type: alignment
+    settings: {anchor: left}
+    objects: [fanout_yb_1_0, fanout_yb_1_1]
+  constr_2:
+    type: alignment
+    settings: {anchor: lower}
+    objects: [mrr_array_0_mrr_0, mrr_array_1_mrr_0, mrr_array_2_mrr_0, mrr_array_3_mrr_0]
+  constr_3:
+    type: alignment
+    settings: {anchor: lower}
+    objects: [mrr_array_0_mrr_1, mrr_array_1_mrr_1, mrr_array_2_mrr_1, mrr_array_3_mrr_1]
+  constr_4:
+    type: alignment
+    settings: {anchor: lower}
+    objects: [mrr_array_0_mrr_2, mrr_array_1_mrr_2, mrr_array_2_mrr_2, mrr_array_3_mrr_2]
+  constr_5:
+    type: alignment
+    settings: {anchor: lower}
+    objects: [mrr_array_0_mrr_3, mrr_array_1_mrr_3, mrr_array_2_mrr_3, mrr_array_3_mrr_3]

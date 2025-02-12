@@ -1,0 +1,5561 @@
+schema: null
+instances:
+  gc_array_in_gc_0:
+    component: grating_coupler_elliptical_lumerical
+    settings:
+      parameters: [-2.429836, 0.1, 0.48007, 0.1, 0.607398, 0.1, 0.449884, 0.1, 0.427412,
+        0.1, 0.47579, 0.1, 0.502665, 0.100029, 0.510037, 0.1, 0.4944, 0.10796, 0.474006,
+        0.149727, 0.432728, 0.183953, 0.387202, 0.236018, 0.360322, 0.242618, 0.357704,
+        0.260664, 0.35261, 0.246682, 0.371749, 0.229208, 0.377696, 0.224653, 0.376544,
+        0.220418, 0.380476, 0.219236, 0.379887, 0.217004, 0.382917, 0.218278, 0.364132,
+        0.237291, 0.367683, 0.248651, 0.344151, 0.273357, 0.330623, 0.273504]
+      layer: WG
+      layer_slab: SLAB150
+      taper_angle: 55
+      taper_length: 12.6
+      fiber_angle: 5
+      bias_gap: 0
+      macro_type: m_grating_coupler_elliptical_lumerical_0
+      placement:
+      - FIXED
+      - [0, 450.0]
+      - FN
+      - [30, 30, 30, 30]
+  gc_array_in_gc_1:
+    component: grating_coupler_elliptical_lumerical
+    settings:
+      parameters: [-2.429836, 0.1, 0.48007, 0.1, 0.607398, 0.1, 0.449884, 0.1, 0.427412,
+        0.1, 0.47579, 0.1, 0.502665, 0.100029, 0.510037, 0.1, 0.4944, 0.10796, 0.474006,
+        0.149727, 0.432728, 0.183953, 0.387202, 0.236018, 0.360322, 0.242618, 0.357704,
+        0.260664, 0.35261, 0.246682, 0.371749, 0.229208, 0.377696, 0.224653, 0.376544,
+        0.220418, 0.380476, 0.219236, 0.379887, 0.217004, 0.382917, 0.218278, 0.364132,
+        0.237291, 0.367683, 0.248651, 0.344151, 0.273357, 0.330623, 0.273504]
+      layer: WG
+      layer_slab: SLAB150
+      taper_angle: 55
+      taper_length: 12.6
+      fiber_angle: 5
+      bias_gap: 0
+      macro_type: m_grating_coupler_elliptical_lumerical_0
+      placement:
+      - FIXED
+      - [0, 550.0]
+      - FN
+      - [30, 30, 30, 30]
+  gc_array_in_gc_2:
+    component: grating_coupler_elliptical_lumerical
+    settings:
+      parameters: [-2.429836, 0.1, 0.48007, 0.1, 0.607398, 0.1, 0.449884, 0.1, 0.427412,
+        0.1, 0.47579, 0.1, 0.502665, 0.100029, 0.510037, 0.1, 0.4944, 0.10796, 0.474006,
+        0.149727, 0.432728, 0.183953, 0.387202, 0.236018, 0.360322, 0.242618, 0.357704,
+        0.260664, 0.35261, 0.246682, 0.371749, 0.229208, 0.377696, 0.224653, 0.376544,
+        0.220418, 0.380476, 0.219236, 0.379887, 0.217004, 0.382917, 0.218278, 0.364132,
+        0.237291, 0.367683, 0.248651, 0.344151, 0.273357, 0.330623, 0.273504]
+      layer: WG
+      layer_slab: SLAB150
+      taper_angle: 55
+      taper_length: 12.6
+      fiber_angle: 5
+      bias_gap: 0
+      macro_type: m_grating_coupler_elliptical_lumerical_0
+      placement:
+      - FIXED
+      - [0, 650.0]
+      - FN
+      - [30, 30, 30, 30]
+  gc_array_in_gc_3:
+    component: grating_coupler_elliptical_lumerical
+    settings:
+      parameters: [-2.429836, 0.1, 0.48007, 0.1, 0.607398, 0.1, 0.449884, 0.1, 0.427412,
+        0.1, 0.47579, 0.1, 0.502665, 0.100029, 0.510037, 0.1, 0.4944, 0.10796, 0.474006,
+        0.149727, 0.432728, 0.183953, 0.387202, 0.236018, 0.360322, 0.242618, 0.357704,
+        0.260664, 0.35261, 0.246682, 0.371749, 0.229208, 0.377696, 0.224653, 0.376544,
+        0.220418, 0.380476, 0.219236, 0.379887, 0.217004, 0.382917, 0.218278, 0.364132,
+        0.237291, 0.367683, 0.248651, 0.344151, 0.273357, 0.330623, 0.273504]
+      layer: WG
+      layer_slab: SLAB150
+      taper_angle: 55
+      taper_length: 12.6
+      fiber_angle: 5
+      bias_gap: 0
+      macro_type: m_grating_coupler_elliptical_lumerical_0
+      placement:
+      - FIXED
+      - [0, 750.0]
+      - FN
+      - [30, 30, 30, 30]
+  gc_array_in_gc_4:
+    component: grating_coupler_elliptical_lumerical
+    settings:
+      parameters: [-2.429836, 0.1, 0.48007, 0.1, 0.607398, 0.1, 0.449884, 0.1, 0.427412,
+        0.1, 0.47579, 0.1, 0.502665, 0.100029, 0.510037, 0.1, 0.4944, 0.10796, 0.474006,
+        0.149727, 0.432728, 0.183953, 0.387202, 0.236018, 0.360322, 0.242618, 0.357704,
+        0.260664, 0.35261, 0.246682, 0.371749, 0.229208, 0.377696, 0.224653, 0.376544,
+        0.220418, 0.380476, 0.219236, 0.379887, 0.217004, 0.382917, 0.218278, 0.364132,
+        0.237291, 0.367683, 0.248651, 0.344151, 0.273357, 0.330623, 0.273504]
+      layer: WG
+      layer_slab: SLAB150
+      taper_angle: 55
+      taper_length: 12.6
+      fiber_angle: 5
+      bias_gap: 0
+      macro_type: m_grating_coupler_elliptical_lumerical_0
+      placement:
+      - FIXED
+      - [0, 850.0]
+      - FN
+      - [30, 30, 30, 30]
+  gc_array_in_gc_5:
+    component: grating_coupler_elliptical_lumerical
+    settings:
+      parameters: [-2.429836, 0.1, 0.48007, 0.1, 0.607398, 0.1, 0.449884, 0.1, 0.427412,
+        0.1, 0.47579, 0.1, 0.502665, 0.100029, 0.510037, 0.1, 0.4944, 0.10796, 0.474006,
+        0.149727, 0.432728, 0.183953, 0.387202, 0.236018, 0.360322, 0.242618, 0.357704,
+        0.260664, 0.35261, 0.246682, 0.371749, 0.229208, 0.377696, 0.224653, 0.376544,
+        0.220418, 0.380476, 0.219236, 0.379887, 0.217004, 0.382917, 0.218278, 0.364132,
+        0.237291, 0.367683, 0.248651, 0.344151, 0.273357, 0.330623, 0.273504]
+      layer: WG
+      layer_slab: SLAB150
+      taper_angle: 55
+      taper_length: 12.6
+      fiber_angle: 5
+      bias_gap: 0
+      macro_type: m_grating_coupler_elliptical_lumerical_0
+      placement:
+      - FIXED
+      - [0, 950.0]
+      - FN
+      - [30, 30, 30, 30]
+  gc_array_in_gc_6:
+    component: grating_coupler_elliptical_lumerical
+    settings:
+      parameters: [-2.429836, 0.1, 0.48007, 0.1, 0.607398, 0.1, 0.449884, 0.1, 0.427412,
+        0.1, 0.47579, 0.1, 0.502665, 0.100029, 0.510037, 0.1, 0.4944, 0.10796, 0.474006,
+        0.149727, 0.432728, 0.183953, 0.387202, 0.236018, 0.360322, 0.242618, 0.357704,
+        0.260664, 0.35261, 0.246682, 0.371749, 0.229208, 0.377696, 0.224653, 0.376544,
+        0.220418, 0.380476, 0.219236, 0.379887, 0.217004, 0.382917, 0.218278, 0.364132,
+        0.237291, 0.367683, 0.248651, 0.344151, 0.273357, 0.330623, 0.273504]
+      layer: WG
+      layer_slab: SLAB150
+      taper_angle: 55
+      taper_length: 12.6
+      fiber_angle: 5
+      bias_gap: 0
+      macro_type: m_grating_coupler_elliptical_lumerical_0
+      placement:
+      - FIXED
+      - [0, 1050.0]
+      - FN
+      - [30, 30, 30, 30]
+  gc_array_in_gc_7:
+    component: grating_coupler_elliptical_lumerical
+    settings:
+      parameters: [-2.429836, 0.1, 0.48007, 0.1, 0.607398, 0.1, 0.449884, 0.1, 0.427412,
+        0.1, 0.47579, 0.1, 0.502665, 0.100029, 0.510037, 0.1, 0.4944, 0.10796, 0.474006,
+        0.149727, 0.432728, 0.183953, 0.387202, 0.236018, 0.360322, 0.242618, 0.357704,
+        0.260664, 0.35261, 0.246682, 0.371749, 0.229208, 0.377696, 0.224653, 0.376544,
+        0.220418, 0.380476, 0.219236, 0.379887, 0.217004, 0.382917, 0.218278, 0.364132,
+        0.237291, 0.367683, 0.248651, 0.344151, 0.273357, 0.330623, 0.273504]
+      layer: WG
+      layer_slab: SLAB150
+      taper_angle: 55
+      taper_length: 12.6
+      fiber_angle: 5
+      bias_gap: 0
+      macro_type: m_grating_coupler_elliptical_lumerical_0
+      placement:
+      - FIXED
+      - [0, 1150.0]
+      - FN
+      - [30, 30, 30, 30]
+  mod_array_in_mrr_0:
+    component: ring_double_pn
+    settings:
+      add_gap: 0.3
+      drop_gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        sections:
+        - width: 0.5
+          offset: 0.0
+          insets: null
+          layer: WG
+          port_names: [o1, o2]
+          port_types: [optical, optical]
+          name: _default
+          hidden: false
+          simplify: null
+          width_function: null
+          offset_function: null
+        - width: 6.0
+          offset: 0
+          insets: null
+          layer: SLAB90
+          port_names: [null, null]
+          port_types: [optical, optical]
+          name: slab
+          hidden: false
+          simplify: 0.05
+          width_function: null
+          offset_function: null
+        components_along_path: []
+        radius: 20.0
+        radius_min: 20.0
+        bbox_layers: [DEVREC]
+        bbox_offsets: [0.0]
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      macro_type: m_ring_double_pn_1
+      placement:
+      - UNPLACED
+      - [87.164, 450.0]
+      - W
+      - [30, 30, 30, 30]
+  mod_array_in_mrr_1:
+    component: ring_double_pn
+    settings:
+      add_gap: 0.3
+      drop_gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        sections:
+        - width: 0.5
+          offset: 0.0
+          insets: null
+          layer: WG
+          port_names: [o1, o2]
+          port_types: [optical, optical]
+          name: _default
+          hidden: false
+          simplify: null
+          width_function: null
+          offset_function: null
+        - width: 6.0
+          offset: 0
+          insets: null
+          layer: SLAB90
+          port_names: [null, null]
+          port_types: [optical, optical]
+          name: slab
+          hidden: false
+          simplify: 0.05
+          width_function: null
+          offset_function: null
+        components_along_path: []
+        radius: 20.0
+        radius_min: 20.0
+        bbox_layers: [DEVREC]
+        bbox_offsets: [0.0]
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      macro_type: m_ring_double_pn_1
+      placement:
+      - UNPLACED
+      - [87.164, 550.0]
+      - W
+      - [30, 30, 30, 30]
+  mod_array_in_mrr_2:
+    component: ring_double_pn
+    settings:
+      add_gap: 0.3
+      drop_gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        sections:
+        - width: 0.5
+          offset: 0.0
+          insets: null
+          layer: WG
+          port_names: [o1, o2]
+          port_types: [optical, optical]
+          name: _default
+          hidden: false
+          simplify: null
+          width_function: null
+          offset_function: null
+        - width: 6.0
+          offset: 0
+          insets: null
+          layer: SLAB90
+          port_names: [null, null]
+          port_types: [optical, optical]
+          name: slab
+          hidden: false
+          simplify: 0.05
+          width_function: null
+          offset_function: null
+        components_along_path: []
+        radius: 20.0
+        radius_min: 20.0
+        bbox_layers: [DEVREC]
+        bbox_offsets: [0.0]
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      macro_type: m_ring_double_pn_1
+      placement:
+      - UNPLACED
+      - [87.164, 650.0]
+      - W
+      - [30, 30, 30, 30]
+  mod_array_in_mrr_3:
+    component: ring_double_pn
+    settings:
+      add_gap: 0.3
+      drop_gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        sections:
+        - width: 0.5
+          offset: 0.0
+          insets: null
+          layer: WG
+          port_names: [o1, o2]
+          port_types: [optical, optical]
+          name: _default
+          hidden: false
+          simplify: null
+          width_function: null
+          offset_function: null
+        - width: 6.0
+          offset: 0
+          insets: null
+          layer: SLAB90
+          port_names: [null, null]
+          port_types: [optical, optical]
+          name: slab
+          hidden: false
+          simplify: 0.05
+          width_function: null
+          offset_function: null
+        components_along_path: []
+        radius: 20.0
+        radius_min: 20.0
+        bbox_layers: [DEVREC]
+        bbox_offsets: [0.0]
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      macro_type: m_ring_double_pn_1
+      placement:
+      - UNPLACED
+      - [87.164, 750.0]
+      - W
+      - [30, 30, 30, 30]
+  mod_array_in_mrr_4:
+    component: ring_double_pn
+    settings:
+      add_gap: 0.3
+      drop_gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        sections:
+        - width: 0.5
+          offset: 0.0
+          insets: null
+          layer: WG
+          port_names: [o1, o2]
+          port_types: [optical, optical]
+          name: _default
+          hidden: false
+          simplify: null
+          width_function: null
+          offset_function: null
+        - width: 6.0
+          offset: 0
+          insets: null
+          layer: SLAB90
+          port_names: [null, null]
+          port_types: [optical, optical]
+          name: slab
+          hidden: false
+          simplify: 0.05
+          width_function: null
+          offset_function: null
+        components_along_path: []
+        radius: 20.0
+        radius_min: 20.0
+        bbox_layers: [DEVREC]
+        bbox_offsets: [0.0]
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      macro_type: m_ring_double_pn_1
+      placement:
+      - UNPLACED
+      - [87.164, 850.0]
+      - W
+      - [30, 30, 30, 30]
+  mod_array_in_mrr_5:
+    component: ring_double_pn
+    settings:
+      add_gap: 0.3
+      drop_gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        sections:
+        - width: 0.5
+          offset: 0.0
+          insets: null
+          layer: WG
+          port_names: [o1, o2]
+          port_types: [optical, optical]
+          name: _default
+          hidden: false
+          simplify: null
+          width_function: null
+          offset_function: null
+        - width: 6.0
+          offset: 0
+          insets: null
+          layer: SLAB90
+          port_names: [null, null]
+          port_types: [optical, optical]
+          name: slab
+          hidden: false
+          simplify: 0.05
+          width_function: null
+          offset_function: null
+        components_along_path: []
+        radius: 20.0
+        radius_min: 20.0
+        bbox_layers: [DEVREC]
+        bbox_offsets: [0.0]
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      macro_type: m_ring_double_pn_1
+      placement:
+      - UNPLACED
+      - [87.164, 950.0]
+      - W
+      - [30, 30, 30, 30]
+  mod_array_in_mrr_6:
+    component: ring_double_pn
+    settings:
+      add_gap: 0.3
+      drop_gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        sections:
+        - width: 0.5
+          offset: 0.0
+          insets: null
+          layer: WG
+          port_names: [o1, o2]
+          port_types: [optical, optical]
+          name: _default
+          hidden: false
+          simplify: null
+          width_function: null
+          offset_function: null
+        - width: 6.0
+          offset: 0
+          insets: null
+          layer: SLAB90
+          port_names: [null, null]
+          port_types: [optical, optical]
+          name: slab
+          hidden: false
+          simplify: 0.05
+          width_function: null
+          offset_function: null
+        components_along_path: []
+        radius: 20.0
+        radius_min: 20.0
+        bbox_layers: [DEVREC]
+        bbox_offsets: [0.0]
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      macro_type: m_ring_double_pn_1
+      placement:
+      - UNPLACED
+      - [87.164, 1050.0]
+      - W
+      - [30, 30, 30, 30]
+  mod_array_in_mrr_7:
+    component: ring_double_pn
+    settings:
+      add_gap: 0.3
+      drop_gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        sections:
+        - width: 0.5
+          offset: 0.0
+          insets: null
+          layer: WG
+          port_names: [o1, o2]
+          port_types: [optical, optical]
+          name: _default
+          hidden: false
+          simplify: null
+          width_function: null
+          offset_function: null
+        - width: 6.0
+          offset: 0
+          insets: null
+          layer: SLAB90
+          port_names: [null, null]
+          port_types: [optical, optical]
+          name: slab
+          hidden: false
+          simplify: 0.05
+          width_function: null
+          offset_function: null
+        components_along_path: []
+        radius: 20.0
+        radius_min: 20.0
+        bbox_layers: [DEVREC]
+        bbox_offsets: [0.0]
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      macro_type: m_ring_double_pn_1
+      placement:
+      - UNPLACED
+      - [87.164, 1150.0]
+      - W
+      - [30, 30, 30, 30]
+  fanout_yb_0_0:
+    component: mmi1x2
+    settings:
+      width: null
+      width_taper: 1.0
+      length_taper: 10.0
+      length_mmi: 5.5
+      width_mmi: 2.5
+      gap_mmi: 0.25
+      taper: {function: taper}
+      cross_section: xs_sc
+      macro_type: m_mmi1x2_2
+      placement:
+      - UNPLACED
+      - [132.01570237522031, 800.0]
+      - N
+      - [30, 30, 30, 30]
+  fanout_yb_1_0:
+    component: mmi1x2
+    settings:
+      width: null
+      width_taper: 1.0
+      length_taper: 10.0
+      length_mmi: 5.5
+      width_mmi: 2.5
+      gap_mmi: 0.25
+      taper: {function: taper}
+      cross_section: xs_sc
+      macro_type: m_mmi1x2_2
+      placement:
+      - UNPLACED
+      - [162.01570237522031, 750.0]
+      - N
+      - [30, 30, 30, 30]
+  fanout_yb_1_1:
+    component: mmi1x2
+    settings:
+      width: null
+      width_taper: 1.0
+      length_taper: 10.0
+      length_mmi: 5.5
+      width_mmi: 2.5
+      gap_mmi: 0.25
+      taper: {function: taper}
+      cross_section: xs_sc
+      macro_type: m_mmi1x2_2
+      placement:
+      - UNPLACED
+      - [162.01570237522031, 850.0]
+      - N
+      - [30, 30, 30, 30]
+  fanout_yb_2_0:
+    component: mmi1x2
+    settings:
+      width: null
+      width_taper: 1.0
+      length_taper: 10.0
+      length_mmi: 5.5
+      width_mmi: 2.5
+      gap_mmi: 0.25
+      taper: {function: taper}
+      cross_section: xs_sc
+      macro_type: m_mmi1x2_2
+      placement:
+      - UNPLACED
+      - [192.01570237522031, 650.0]
+      - N
+      - [30, 30, 30, 30]
+  fanout_yb_2_1:
+    component: mmi1x2
+    settings:
+      width: null
+      width_taper: 1.0
+      length_taper: 10.0
+      length_mmi: 5.5
+      width_mmi: 2.5
+      gap_mmi: 0.25
+      taper: {function: taper}
+      cross_section: xs_sc
+      macro_type: m_mmi1x2_2
+      placement:
+      - UNPLACED
+      - [192.01570237522031, 750.0]
+      - N
+      - [30, 30, 30, 30]
+  fanout_yb_2_2:
+    component: mmi1x2
+    settings:
+      width: null
+      width_taper: 1.0
+      length_taper: 10.0
+      length_mmi: 5.5
+      width_mmi: 2.5
+      gap_mmi: 0.25
+      taper: {function: taper}
+      cross_section: xs_sc
+      macro_type: m_mmi1x2_2
+      placement:
+      - UNPLACED
+      - [192.01570237522031, 850.0]
+      - N
+      - [30, 30, 30, 30]
+  fanout_yb_2_3:
+    component: mmi1x2
+    settings:
+      width: null
+      width_taper: 1.0
+      length_taper: 10.0
+      length_mmi: 5.5
+      width_mmi: 2.5
+      gap_mmi: 0.25
+      taper: {function: taper}
+      cross_section: xs_sc
+      macro_type: m_mmi1x2_2
+      placement:
+      - UNPLACED
+      - [192.01570237522031, 950.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_0_mrr_0:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [247.51570237522031, 450.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_0_mrr_1:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [247.51570237522031, 550.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_0_mrr_2:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [247.51570237522031, 650.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_0_mrr_3:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [247.51570237522031, 750.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_0_mrr_4:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [247.51570237522031, 850.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_0_mrr_5:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [247.51570237522031, 950.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_0_mrr_6:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [247.51570237522031, 1050.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_0_mrr_7:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [247.51570237522031, 1150.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_1_mrr_0:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [292.36620179219324, 450.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_1_mrr_1:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [292.36620179219324, 550.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_1_mrr_2:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [292.36620179219324, 650.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_1_mrr_3:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [292.36620179219324, 750.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_1_mrr_4:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [292.36620179219324, 850.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_1_mrr_5:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [292.36620179219324, 950.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_1_mrr_6:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [292.36620179219324, 1050.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_1_mrr_7:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [292.36620179219324, 1150.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_2_mrr_0:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [337.2167012091661, 450.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_2_mrr_1:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [337.2167012091661, 550.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_2_mrr_2:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [337.2167012091661, 650.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_2_mrr_3:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [337.2167012091661, 750.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_2_mrr_4:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [337.2167012091661, 850.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_2_mrr_5:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [337.2167012091661, 950.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_2_mrr_6:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [337.2167012091661, 1050.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_2_mrr_7:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [337.2167012091661, 1150.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_3_mrr_0:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [382.06720062613897, 450.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_3_mrr_1:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [382.06720062613897, 550.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_3_mrr_2:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [382.06720062613897, 650.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_3_mrr_3:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [382.06720062613897, 750.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_3_mrr_4:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [382.06720062613897, 850.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_3_mrr_5:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [382.06720062613897, 950.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_3_mrr_6:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [382.06720062613897, 1050.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_3_mrr_7:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [382.06720062613897, 1150.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_4_mrr_0:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [426.91770004311184, 450.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_4_mrr_1:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [426.91770004311184, 550.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_4_mrr_2:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [426.91770004311184, 650.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_4_mrr_3:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [426.91770004311184, 750.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_4_mrr_4:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [426.91770004311184, 850.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_4_mrr_5:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [426.91770004311184, 950.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_4_mrr_6:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [426.91770004311184, 1050.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_4_mrr_7:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [426.91770004311184, 1150.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_5_mrr_0:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [471.7681994600847, 450.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_5_mrr_1:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [471.7681994600847, 550.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_5_mrr_2:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [471.7681994600847, 650.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_5_mrr_3:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [471.7681994600847, 750.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_5_mrr_4:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [471.7681994600847, 850.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_5_mrr_5:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [471.7681994600847, 950.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_5_mrr_6:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [471.7681994600847, 1050.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_5_mrr_7:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [471.7681994600847, 1150.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_6_mrr_0:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [516.6186988770576, 450.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_6_mrr_1:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [516.6186988770576, 550.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_6_mrr_2:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [516.6186988770576, 650.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_6_mrr_3:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [516.6186988770576, 750.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_6_mrr_4:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [516.6186988770576, 850.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_6_mrr_5:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [516.6186988770576, 950.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_6_mrr_6:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [516.6186988770576, 1050.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_6_mrr_7:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [516.6186988770576, 1150.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_7_mrr_0:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [561.4691982940304, 450.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_7_mrr_1:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [561.4691982940304, 550.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_7_mrr_2:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [561.4691982940304, 650.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_7_mrr_3:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [561.4691982940304, 750.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_7_mrr_4:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [561.4691982940304, 850.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_7_mrr_5:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [561.4691982940304, 950.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_7_mrr_6:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [561.4691982940304, 1050.0]
+      - N
+      - [30, 30, 30, 30]
+  mrr_array_7_mrr_7:
+    component: ring_single_pn
+    settings:
+      gap: 0.3
+      radius: 5.0
+      doping_angle: 85
+      cross_section:
+        function: cross_section
+        settings:
+          radius: 10
+          radius_min: 5
+          sections:
+          - width: 4.85
+            offset: 0
+            insets: null
+            layer: SLAB90
+            port_names: [null, null]
+            port_types: [optical, optical]
+            name: slab
+            hidden: false
+            simplify: null
+            width_function: null
+            offset_function: null
+        module: gdsfactory.cross_section
+      pn_cross_section:
+        function: pn
+        settings: {width_doping: 2.425, width_slab: 4.85, layer_via: VIAC, width_via: 0.5,
+          layer_metal: M1, width_metal: 0.5}
+        module: gdsfactory.cross_section
+      doped_heater: true
+      doped_heater_angle_buffer: 10
+      doped_heater_layer: NPP
+      doped_heater_width: 0.5
+      doped_heater_waveguide_offset: 2.175
+      heater_vias:
+        function: via_stack
+        settings:
+          size: [0.5, 0.5]
+          layers: [M1, M2]
+          vias:
+          - function: via
+            settings:
+              layer: VIAC
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+          - function: via
+            settings:
+              layer: VIA1
+              size: [0.1, 0.1]
+              spacing: [0.2, 0.2]
+              enclosure: 0.1
+            module: gdsfactory.components.via
+        module: gdsfactory.components.via_stack
+      add_gap: 0.3
+      drop_gap: 0.3
+      macro_type: m_ring_single_pn_43ee7534_3
+      placement:
+      - UNPLACED
+      - [561.4691982940304, 1150.0]
+      - N
+      - [30, 30, 30, 30]
+  gc_array_out_gc_0:
+    component: grating_coupler_elliptical_lumerical
+    settings:
+      parameters: [-2.429836, 0.1, 0.48007, 0.1, 0.607398, 0.1, 0.449884, 0.1, 0.427412,
+        0.1, 0.47579, 0.1, 0.502665, 0.100029, 0.510037, 0.1, 0.4944, 0.10796, 0.474006,
+        0.149727, 0.432728, 0.183953, 0.387202, 0.236018, 0.360322, 0.242618, 0.357704,
+        0.260664, 0.35261, 0.246682, 0.371749, 0.229208, 0.377696, 0.224653, 0.376544,
+        0.220418, 0.380476, 0.219236, 0.379887, 0.217004, 0.382917, 0.218278, 0.364132,
+        0.237291, 0.367683, 0.248651, 0.344151, 0.273357, 0.330623, 0.273504]
+      layer: WG
+      layer_slab: SLAB150
+      taper_angle: 55
+      taper_length: 12.6
+      fiber_angle: 5
+      bias_gap: 0
+      macro_type: m_grating_coupler_elliptical_lumerical_0
+      placement:
+      - FIXED
+      - [1572.836, 450.0]
+      - N
+      - [30, 30, 30, 30]
+  gc_array_out_gc_1:
+    component: grating_coupler_elliptical_lumerical
+    settings:
+      parameters: [-2.429836, 0.1, 0.48007, 0.1, 0.607398, 0.1, 0.449884, 0.1, 0.427412,
+        0.1, 0.47579, 0.1, 0.502665, 0.100029, 0.510037, 0.1, 0.4944, 0.10796, 0.474006,
+        0.149727, 0.432728, 0.183953, 0.387202, 0.236018, 0.360322, 0.242618, 0.357704,
+        0.260664, 0.35261, 0.246682, 0.371749, 0.229208, 0.377696, 0.224653, 0.376544,
+        0.220418, 0.380476, 0.219236, 0.379887, 0.217004, 0.382917, 0.218278, 0.364132,
+        0.237291, 0.367683, 0.248651, 0.344151, 0.273357, 0.330623, 0.273504]
+      layer: WG
+      layer_slab: SLAB150
+      taper_angle: 55
+      taper_length: 12.6
+      fiber_angle: 5
+      bias_gap: 0
+      macro_type: m_grating_coupler_elliptical_lumerical_0
+      placement:
+      - FIXED
+      - [1572.836, 550.0]
+      - N
+      - [30, 30, 30, 30]
+  gc_array_out_gc_2:
+    component: grating_coupler_elliptical_lumerical
+    settings:
+      parameters: [-2.429836, 0.1, 0.48007, 0.1, 0.607398, 0.1, 0.449884, 0.1, 0.427412,
+        0.1, 0.47579, 0.1, 0.502665, 0.100029, 0.510037, 0.1, 0.4944, 0.10796, 0.474006,
+        0.149727, 0.432728, 0.183953, 0.387202, 0.236018, 0.360322, 0.242618, 0.357704,
+        0.260664, 0.35261, 0.246682, 0.371749, 0.229208, 0.377696, 0.224653, 0.376544,
+        0.220418, 0.380476, 0.219236, 0.379887, 0.217004, 0.382917, 0.218278, 0.364132,
+        0.237291, 0.367683, 0.248651, 0.344151, 0.273357, 0.330623, 0.273504]
+      layer: WG
+      layer_slab: SLAB150
+      taper_angle: 55
+      taper_length: 12.6
+      fiber_angle: 5
+      bias_gap: 0
+      macro_type: m_grating_coupler_elliptical_lumerical_0
+      placement:
+      - FIXED
+      - [1572.836, 650.0]
+      - N
+      - [30, 30, 30, 30]
+  gc_array_out_gc_3:
+    component: grating_coupler_elliptical_lumerical
+    settings:
+      parameters: [-2.429836, 0.1, 0.48007, 0.1, 0.607398, 0.1, 0.449884, 0.1, 0.427412,
+        0.1, 0.47579, 0.1, 0.502665, 0.100029, 0.510037, 0.1, 0.4944, 0.10796, 0.474006,
+        0.149727, 0.432728, 0.183953, 0.387202, 0.236018, 0.360322, 0.242618, 0.357704,
+        0.260664, 0.35261, 0.246682, 0.371749, 0.229208, 0.377696, 0.224653, 0.376544,
+        0.220418, 0.380476, 0.219236, 0.379887, 0.217004, 0.382917, 0.218278, 0.364132,
+        0.237291, 0.367683, 0.248651, 0.344151, 0.273357, 0.330623, 0.273504]
+      layer: WG
+      layer_slab: SLAB150
+      taper_angle: 55
+      taper_length: 12.6
+      fiber_angle: 5
+      bias_gap: 0
+      macro_type: m_grating_coupler_elliptical_lumerical_0
+      placement:
+      - FIXED
+      - [1572.836, 750.0]
+      - N
+      - [30, 30, 30, 30]
+  gc_array_out_gc_4:
+    component: grating_coupler_elliptical_lumerical
+    settings:
+      parameters: [-2.429836, 0.1, 0.48007, 0.1, 0.607398, 0.1, 0.449884, 0.1, 0.427412,
+        0.1, 0.47579, 0.1, 0.502665, 0.100029, 0.510037, 0.1, 0.4944, 0.10796, 0.474006,
+        0.149727, 0.432728, 0.183953, 0.387202, 0.236018, 0.360322, 0.242618, 0.357704,
+        0.260664, 0.35261, 0.246682, 0.371749, 0.229208, 0.377696, 0.224653, 0.376544,
+        0.220418, 0.380476, 0.219236, 0.379887, 0.217004, 0.382917, 0.218278, 0.364132,
+        0.237291, 0.367683, 0.248651, 0.344151, 0.273357, 0.330623, 0.273504]
+      layer: WG
+      layer_slab: SLAB150
+      taper_angle: 55
+      taper_length: 12.6
+      fiber_angle: 5
+      bias_gap: 0
+      macro_type: m_grating_coupler_elliptical_lumerical_0
+      placement:
+      - FIXED
+      - [1572.836, 850.0]
+      - N
+      - [30, 30, 30, 30]
+  gc_array_out_gc_5:
+    component: grating_coupler_elliptical_lumerical
+    settings:
+      parameters: [-2.429836, 0.1, 0.48007, 0.1, 0.607398, 0.1, 0.449884, 0.1, 0.427412,
+        0.1, 0.47579, 0.1, 0.502665, 0.100029, 0.510037, 0.1, 0.4944, 0.10796, 0.474006,
+        0.149727, 0.432728, 0.183953, 0.387202, 0.236018, 0.360322, 0.242618, 0.357704,
+        0.260664, 0.35261, 0.246682, 0.371749, 0.229208, 0.377696, 0.224653, 0.376544,
+        0.220418, 0.380476, 0.219236, 0.379887, 0.217004, 0.382917, 0.218278, 0.364132,
+        0.237291, 0.367683, 0.248651, 0.344151, 0.273357, 0.330623, 0.273504]
+      layer: WG
+      layer_slab: SLAB150
+      taper_angle: 55
+      taper_length: 12.6
+      fiber_angle: 5
+      bias_gap: 0
+      macro_type: m_grating_coupler_elliptical_lumerical_0
+      placement:
+      - FIXED
+      - [1572.836, 950.0]
+      - N
+      - [30, 30, 30, 30]
+  gc_array_out_gc_6:
+    component: grating_coupler_elliptical_lumerical
+    settings:
+      parameters: [-2.429836, 0.1, 0.48007, 0.1, 0.607398, 0.1, 0.449884, 0.1, 0.427412,
+        0.1, 0.47579, 0.1, 0.502665, 0.100029, 0.510037, 0.1, 0.4944, 0.10796, 0.474006,
+        0.149727, 0.432728, 0.183953, 0.387202, 0.236018, 0.360322, 0.242618, 0.357704,
+        0.260664, 0.35261, 0.246682, 0.371749, 0.229208, 0.377696, 0.224653, 0.376544,
+        0.220418, 0.380476, 0.219236, 0.379887, 0.217004, 0.382917, 0.218278, 0.364132,
+        0.237291, 0.367683, 0.248651, 0.344151, 0.273357, 0.330623, 0.273504]
+      layer: WG
+      layer_slab: SLAB150
+      taper_angle: 55
+      taper_length: 12.6
+      fiber_angle: 5
+      bias_gap: 0
+      macro_type: m_grating_coupler_elliptical_lumerical_0
+      placement:
+      - FIXED
+      - [1572.836, 1050.0]
+      - N
+      - [30, 30, 30, 30]
+  gc_array_out_gc_7:
+    component: grating_coupler_elliptical_lumerical
+    settings:
+      parameters: [-2.429836, 0.1, 0.48007, 0.1, 0.607398, 0.1, 0.449884, 0.1, 0.427412,
+        0.1, 0.47579, 0.1, 0.502665, 0.100029, 0.510037, 0.1, 0.4944, 0.10796, 0.474006,
+        0.149727, 0.432728, 0.183953, 0.387202, 0.236018, 0.360322, 0.242618, 0.357704,
+        0.260664, 0.35261, 0.246682, 0.371749, 0.229208, 0.377696, 0.224653, 0.376544,
+        0.220418, 0.380476, 0.219236, 0.379887, 0.217004, 0.382917, 0.218278, 0.364132,
+        0.237291, 0.367683, 0.248651, 0.344151, 0.273357, 0.330623, 0.273504]
+      layer: WG
+      layer_slab: SLAB150
+      taper_angle: 55
+      taper_length: 12.6
+      fiber_angle: 5
+      bias_gap: 0
+      macro_type: m_grating_coupler_elliptical_lumerical_0
+      placement:
+      - FIXED
+      - [1572.836, 1150.0]
+      - N
+      - [30, 30, 30, 30]
+schematic_placements:
+  gc_array_in_gc_0: {x: 0.0, y: 450.0, port: sw, rotation: 0, dx: null, dy: null,
+    mirror: true}
+  gc_array_in_gc_1: {x: 0.0, y: 550.0, port: sw, rotation: 0, dx: null, dy: null,
+    mirror: true}
+  gc_array_in_gc_2: {x: 0.0, y: 650.0, port: sw, rotation: 0, dx: null, dy: null,
+    mirror: true}
+  gc_array_in_gc_3: {x: 0.0, y: 750.0, port: sw, rotation: 0, dx: null, dy: null,
+    mirror: true}
+  gc_array_in_gc_4: {x: 0.0, y: 850.0, port: sw, rotation: 0, dx: null, dy: null,
+    mirror: true}
+  gc_array_in_gc_5: {x: 0.0, y: 950.0, port: sw, rotation: 0, dx: null, dy: null,
+    mirror: true}
+  gc_array_in_gc_6: {x: 0.0, y: 1050.0, port: sw, rotation: 0, dx: null, dy: null,
+    mirror: true}
+  gc_array_in_gc_7: {x: 0.0, y: 1150.0, port: sw, rotation: 0, dx: null, dy: null,
+    mirror: true}
+  mod_array_in_mrr_0: {x: 87.164, y: 450.0, port: sw, rotation: 90, dx: null, dy: null,
+    mirror: null}
+  mod_array_in_mrr_1: {x: 87.164, y: 550.0, port: sw, rotation: 90, dx: null, dy: null,
+    mirror: null}
+  mod_array_in_mrr_2: {x: 87.164, y: 650.0, port: sw, rotation: 90, dx: null, dy: null,
+    mirror: null}
+  mod_array_in_mrr_3: {x: 87.164, y: 750.0, port: sw, rotation: 90, dx: null, dy: null,
+    mirror: null}
+  mod_array_in_mrr_4: {x: 87.164, y: 850.0, port: sw, rotation: 90, dx: null, dy: null,
+    mirror: null}
+  mod_array_in_mrr_5: {x: 87.164, y: 950.0, port: sw, rotation: 90, dx: null, dy: null,
+    mirror: null}
+  mod_array_in_mrr_6: {x: 87.164, y: 1050.0, port: sw, rotation: 90, dx: null, dy: null,
+    mirror: null}
+  mod_array_in_mrr_7: {x: 87.164, y: 1150.0, port: sw, rotation: 90, dx: null, dy: null,
+    mirror: null}
+  fanout_yb_0_0: {x: 132.01570237522031, y: 800.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  fanout_yb_1_0: {x: 162.01570237522031, y: 750.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  fanout_yb_1_1: {x: 162.01570237522031, y: 850.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  fanout_yb_2_0: {x: 192.01570237522031, y: 650.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  fanout_yb_2_1: {x: 192.01570237522031, y: 750.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  fanout_yb_2_2: {x: 192.01570237522031, y: 850.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  fanout_yb_2_3: {x: 192.01570237522031, y: 950.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_0_mrr_0: {x: 247.51570237522031, y: 450.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_0_mrr_1: {x: 247.51570237522031, y: 550.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_0_mrr_2: {x: 247.51570237522031, y: 650.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_0_mrr_3: {x: 247.51570237522031, y: 750.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_0_mrr_4: {x: 247.51570237522031, y: 850.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_0_mrr_5: {x: 247.51570237522031, y: 950.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_0_mrr_6: {x: 247.51570237522031, y: 1050.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_0_mrr_7: {x: 247.51570237522031, y: 1150.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_1_mrr_0: {x: 292.36620179219324, y: 450.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_1_mrr_1: {x: 292.36620179219324, y: 550.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_1_mrr_2: {x: 292.36620179219324, y: 650.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_1_mrr_3: {x: 292.36620179219324, y: 750.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_1_mrr_4: {x: 292.36620179219324, y: 850.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_1_mrr_5: {x: 292.36620179219324, y: 950.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_1_mrr_6: {x: 292.36620179219324, y: 1050.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_1_mrr_7: {x: 292.36620179219324, y: 1150.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_2_mrr_0: {x: 337.2167012091661, y: 450.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_2_mrr_1: {x: 337.2167012091661, y: 550.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_2_mrr_2: {x: 337.2167012091661, y: 650.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_2_mrr_3: {x: 337.2167012091661, y: 750.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_2_mrr_4: {x: 337.2167012091661, y: 850.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_2_mrr_5: {x: 337.2167012091661, y: 950.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_2_mrr_6: {x: 337.2167012091661, y: 1050.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_2_mrr_7: {x: 337.2167012091661, y: 1150.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_3_mrr_0: {x: 382.06720062613897, y: 450.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_3_mrr_1: {x: 382.06720062613897, y: 550.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_3_mrr_2: {x: 382.06720062613897, y: 650.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_3_mrr_3: {x: 382.06720062613897, y: 750.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_3_mrr_4: {x: 382.06720062613897, y: 850.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_3_mrr_5: {x: 382.06720062613897, y: 950.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_3_mrr_6: {x: 382.06720062613897, y: 1050.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_3_mrr_7: {x: 382.06720062613897, y: 1150.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_4_mrr_0: {x: 426.91770004311184, y: 450.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_4_mrr_1: {x: 426.91770004311184, y: 550.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_4_mrr_2: {x: 426.91770004311184, y: 650.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_4_mrr_3: {x: 426.91770004311184, y: 750.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_4_mrr_4: {x: 426.91770004311184, y: 850.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_4_mrr_5: {x: 426.91770004311184, y: 950.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_4_mrr_6: {x: 426.91770004311184, y: 1050.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_4_mrr_7: {x: 426.91770004311184, y: 1150.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_5_mrr_0: {x: 471.7681994600847, y: 450.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_5_mrr_1: {x: 471.7681994600847, y: 550.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_5_mrr_2: {x: 471.7681994600847, y: 650.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_5_mrr_3: {x: 471.7681994600847, y: 750.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_5_mrr_4: {x: 471.7681994600847, y: 850.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_5_mrr_5: {x: 471.7681994600847, y: 950.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_5_mrr_6: {x: 471.7681994600847, y: 1050.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_5_mrr_7: {x: 471.7681994600847, y: 1150.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_6_mrr_0: {x: 516.6186988770576, y: 450.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_6_mrr_1: {x: 516.6186988770576, y: 550.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_6_mrr_2: {x: 516.6186988770576, y: 650.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_6_mrr_3: {x: 516.6186988770576, y: 750.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_6_mrr_4: {x: 516.6186988770576, y: 850.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_6_mrr_5: {x: 516.6186988770576, y: 950.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_6_mrr_6: {x: 516.6186988770576, y: 1050.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_6_mrr_7: {x: 516.6186988770576, y: 1150.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_7_mrr_0: {x: 561.4691982940304, y: 450.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_7_mrr_1: {x: 561.4691982940304, y: 550.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_7_mrr_2: {x: 561.4691982940304, y: 650.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_7_mrr_3: {x: 561.4691982940304, y: 750.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_7_mrr_4: {x: 561.4691982940304, y: 850.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_7_mrr_5: {x: 561.4691982940304, y: 950.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_7_mrr_6: {x: 561.4691982940304, y: 1050.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  mrr_array_7_mrr_7: {x: 561.4691982940304, y: 1150.0, port: sw, rotation: 0, dx: null,
+    dy: null, mirror: null}
+  gc_array_out_gc_0: {x: 1572.836, y: 450.0, port: sw, rotation: 0, dx: null, dy: null,
+    mirror: null}
+  gc_array_out_gc_1: {x: 1572.836, y: 550.0, port: sw, rotation: 0, dx: null, dy: null,
+    mirror: null}
+  gc_array_out_gc_2: {x: 1572.836, y: 650.0, port: sw, rotation: 0, dx: null, dy: null,
+    mirror: null}
+  gc_array_out_gc_3: {x: 1572.836, y: 750.0, port: sw, rotation: 0, dx: null, dy: null,
+    mirror: null}
+  gc_array_out_gc_4: {x: 1572.836, y: 850.0, port: sw, rotation: 0, dx: null, dy: null,
+    mirror: null}
+  gc_array_out_gc_5: {x: 1572.836, y: 950.0, port: sw, rotation: 0, dx: null, dy: null,
+    mirror: null}
+  gc_array_out_gc_6: {x: 1572.836, y: 1050.0, port: sw, rotation: 0, dx: null, dy: null,
+    mirror: null}
+  gc_array_out_gc_7: {x: 1572.836, y: 1150.0, port: sw, rotation: 0, dx: null, dy: null,
+    mirror: null}
+nets:
+  n_0: ['fanout_yb_0_0,o2', 'fanout_yb_1_0,o1']
+  n_1: ['fanout_yb_0_0,o3', 'fanout_yb_1_1,o1']
+  n_2: ['fanout_yb_1_0,o2', 'fanout_yb_2_0,o1']
+  n_3: ['fanout_yb_1_0,o3', 'fanout_yb_2_1,o1']
+  n_4: ['fanout_yb_1_1,o2', 'fanout_yb_2_2,o1']
+  n_5: ['fanout_yb_1_1,o3', 'fanout_yb_2_3,o1']
+  n_6: ['gc_array_in_gc_0,o1', 'mod_array_in_mrr_0,o4']
+  n_7: ['gc_array_in_gc_1,o1', 'mod_array_in_mrr_1,o4']
+  n_8: ['gc_array_in_gc_2,o1', 'mod_array_in_mrr_2,o4']
+  n_9: ['gc_array_in_gc_3,o1', 'mod_array_in_mrr_3,o4']
+  n_10: ['gc_array_in_gc_4,o1', 'mod_array_in_mrr_4,o4']
+  n_11: ['gc_array_in_gc_5,o1', 'mod_array_in_mrr_5,o4']
+  n_12: ['gc_array_in_gc_6,o1', 'mod_array_in_mrr_6,o4']
+  n_13: ['gc_array_in_gc_7,o1', 'mod_array_in_mrr_7,o4']
+  n_14: ['mod_array_in_mrr_0,o2', 'mod_array_in_mrr_1,o1']
+  n_15: ['mod_array_in_mrr_1,o2', 'mod_array_in_mrr_2,o1']
+  n_16: ['mod_array_in_mrr_2,o2', 'mod_array_in_mrr_3,o1']
+  n_17: ['mod_array_in_mrr_3,o2', 'mod_array_in_mrr_4,o1']
+  n_18: ['mod_array_in_mrr_4,o2', 'mod_array_in_mrr_5,o1']
+  n_19: ['mod_array_in_mrr_5,o2', 'mod_array_in_mrr_6,o1']
+  n_20: ['mod_array_in_mrr_6,o2', 'mod_array_in_mrr_7,o1']
+  n_21: ['mod_array_in_mrr_0,o1', 'fanout_yb_0_0,o1']
+  n_22: ['fanout_yb_2_0,o2', 'mrr_array_0_mrr_0,o1']
+  n_23: ['fanout_yb_2_0,o3', 'mrr_array_0_mrr_1,o1']
+  n_24: ['fanout_yb_2_1,o2', 'mrr_array_0_mrr_2,o1']
+  n_25: ['fanout_yb_2_1,o3', 'mrr_array_0_mrr_3,o1']
+  n_26: ['fanout_yb_2_2,o2', 'mrr_array_0_mrr_4,o1']
+  n_27: ['fanout_yb_2_2,o3', 'mrr_array_0_mrr_5,o1']
+  n_28: ['fanout_yb_2_3,o2', 'mrr_array_0_mrr_6,o1']
+  n_29: ['fanout_yb_2_3,o3', 'mrr_array_0_mrr_7,o1']
+  n_30: ['mrr_array_0_mrr_0,o2', 'mrr_array_1_mrr_0,o1']
+  n_31: ['mrr_array_0_mrr_1,o2', 'mrr_array_1_mrr_1,o1']
+  n_32: ['mrr_array_0_mrr_2,o2', 'mrr_array_1_mrr_2,o1']
+  n_33: ['mrr_array_0_mrr_3,o2', 'mrr_array_1_mrr_3,o1']
+  n_34: ['mrr_array_0_mrr_4,o2', 'mrr_array_1_mrr_4,o1']
+  n_35: ['mrr_array_0_mrr_5,o2', 'mrr_array_1_mrr_5,o1']
+  n_36: ['mrr_array_0_mrr_6,o2', 'mrr_array_1_mrr_6,o1']
+  n_37: ['mrr_array_0_mrr_7,o2', 'mrr_array_1_mrr_7,o1']
+  n_38: ['mrr_array_1_mrr_0,o2', 'mrr_array_2_mrr_0,o1']
+  n_39: ['mrr_array_1_mrr_1,o2', 'mrr_array_2_mrr_1,o1']
+  n_40: ['mrr_array_1_mrr_2,o2', 'mrr_array_2_mrr_2,o1']
+  n_41: ['mrr_array_1_mrr_3,o2', 'mrr_array_2_mrr_3,o1']
+  n_42: ['mrr_array_1_mrr_4,o2', 'mrr_array_2_mrr_4,o1']
+  n_43: ['mrr_array_1_mrr_5,o2', 'mrr_array_2_mrr_5,o1']
+  n_44: ['mrr_array_1_mrr_6,o2', 'mrr_array_2_mrr_6,o1']
+  n_45: ['mrr_array_1_mrr_7,o2', 'mrr_array_2_mrr_7,o1']
+  n_46: ['mrr_array_2_mrr_0,o2', 'mrr_array_3_mrr_0,o1']
+  n_47: ['mrr_array_2_mrr_1,o2', 'mrr_array_3_mrr_1,o1']
+  n_48: ['mrr_array_2_mrr_2,o2', 'mrr_array_3_mrr_2,o1']
+  n_49: ['mrr_array_2_mrr_3,o2', 'mrr_array_3_mrr_3,o1']
+  n_50: ['mrr_array_2_mrr_4,o2', 'mrr_array_3_mrr_4,o1']
+  n_51: ['mrr_array_2_mrr_5,o2', 'mrr_array_3_mrr_5,o1']
+  n_52: ['mrr_array_2_mrr_6,o2', 'mrr_array_3_mrr_6,o1']
+  n_53: ['mrr_array_2_mrr_7,o2', 'mrr_array_3_mrr_7,o1']
+  n_54: ['mrr_array_3_mrr_0,o2', 'mrr_array_4_mrr_0,o1']
+  n_55: ['mrr_array_3_mrr_1,o2', 'mrr_array_4_mrr_1,o1']
+  n_56: ['mrr_array_3_mrr_2,o2', 'mrr_array_4_mrr_2,o1']
+  n_57: ['mrr_array_3_mrr_3,o2', 'mrr_array_4_mrr_3,o1']
+  n_58: ['mrr_array_3_mrr_4,o2', 'mrr_array_4_mrr_4,o1']
+  n_59: ['mrr_array_3_mrr_5,o2', 'mrr_array_4_mrr_5,o1']
+  n_60: ['mrr_array_3_mrr_6,o2', 'mrr_array_4_mrr_6,o1']
+  n_61: ['mrr_array_3_mrr_7,o2', 'mrr_array_4_mrr_7,o1']
+  n_62: ['mrr_array_4_mrr_0,o2', 'mrr_array_5_mrr_0,o1']
+  n_63: ['mrr_array_4_mrr_1,o2', 'mrr_array_5_mrr_1,o1']
+  n_64: ['mrr_array_4_mrr_2,o2', 'mrr_array_5_mrr_2,o1']
+  n_65: ['mrr_array_4_mrr_3,o2', 'mrr_array_5_mrr_3,o1']
+  n_66: ['mrr_array_4_mrr_4,o2', 'mrr_array_5_mrr_4,o1']
+  n_67: ['mrr_array_4_mrr_5,o2', 'mrr_array_5_mrr_5,o1']
+  n_68: ['mrr_array_4_mrr_6,o2', 'mrr_array_5_mrr_6,o1']
+  n_69: ['mrr_array_4_mrr_7,o2', 'mrr_array_5_mrr_7,o1']
+  n_70: ['mrr_array_5_mrr_0,o2', 'mrr_array_6_mrr_0,o1']
+  n_71: ['mrr_array_5_mrr_1,o2', 'mrr_array_6_mrr_1,o1']
+  n_72: ['mrr_array_5_mrr_2,o2', 'mrr_array_6_mrr_2,o1']
+  n_73: ['mrr_array_5_mrr_3,o2', 'mrr_array_6_mrr_3,o1']
+  n_74: ['mrr_array_5_mrr_4,o2', 'mrr_array_6_mrr_4,o1']
+  n_75: ['mrr_array_5_mrr_5,o2', 'mrr_array_6_mrr_5,o1']
+  n_76: ['mrr_array_5_mrr_6,o2', 'mrr_array_6_mrr_6,o1']
+  n_77: ['mrr_array_5_mrr_7,o2', 'mrr_array_6_mrr_7,o1']
+  n_78: ['mrr_array_6_mrr_0,o2', 'mrr_array_7_mrr_0,o1']
+  n_79: ['mrr_array_6_mrr_1,o2', 'mrr_array_7_mrr_1,o1']
+  n_80: ['mrr_array_6_mrr_2,o2', 'mrr_array_7_mrr_2,o1']
+  n_81: ['mrr_array_6_mrr_3,o2', 'mrr_array_7_mrr_3,o1']
+  n_82: ['mrr_array_6_mrr_4,o2', 'mrr_array_7_mrr_4,o1']
+  n_83: ['mrr_array_6_mrr_5,o2', 'mrr_array_7_mrr_5,o1']
+  n_84: ['mrr_array_6_mrr_6,o2', 'mrr_array_7_mrr_6,o1']
+  n_85: ['mrr_array_6_mrr_7,o2', 'mrr_array_7_mrr_7,o1']
+  n_86: ['mrr_array_7_mrr_0,o2', 'gc_array_out_gc_0,o1']
+  n_87: ['mrr_array_7_mrr_1,o2', 'gc_array_out_gc_1,o1']
+  n_88: ['mrr_array_7_mrr_2,o2', 'gc_array_out_gc_2,o1']
+  n_89: ['mrr_array_7_mrr_3,o2', 'gc_array_out_gc_3,o1']
+  n_90: ['mrr_array_7_mrr_4,o2', 'gc_array_out_gc_4,o1']
+  n_91: ['mrr_array_7_mrr_5,o2', 'gc_array_out_gc_5,o1']
+  n_92: ['mrr_array_7_mrr_6,o2', 'gc_array_out_gc_6,o1']
+  n_93: ['mrr_array_7_mrr_7,o2', 'gc_array_out_gc_7,o1']
+ports: {}
+schema_version: 1
+settings:
+  version: '1.0'
+  design: mrr_weight_bank_8x8
+  units_distance_microns: 1
+  die_area:
+  - [0, 0]
+  - [1600, 1600]
+  num_instances: 95
+  num_nets: 94
+  num_ports: 0
+  wg_radius: 5
+library:
+  m_grating_coupler_elliptical_lumerical_0:
+    property: null
+    type: CORE
+    origin: [0.0, 0.0]
+    size: [27.164, 25.746000000000002]
+    site: core
+    pins:
+      o1:
+        pin_offset_x: 0.0
+        pin_offset_y: 12.873000000000001
+        pin_width: 0.5
+        pin_orient: 180.0
+        pin_layer: [1, 0]
+      o2:
+        pin_offset_x: 19.430000000000003
+        pin_offset_y: 12.873000000000001
+        pin_width: 10.0
+        pin_orient: 0.0
+        pin_layer: [1, 0]
+  m_ring_double_pn_1:
+    property: null
+    type: CORE
+    origin: [0.0, 0.0]
+    size: [14.851702375220293, 22.560991705105728]
+    site: core
+    pins:
+      o1:
+        pin_offset_x: 3.739464503559527
+        pin_offset_y: 5.480044814474563
+        pin_width: 0.5
+        pin_orient: 180.0
+        pin_layer: [1, 0]
+      o4:
+        pin_offset_x: 3.739464503559527
+        pin_offset_y: 17.08004481447456
+        pin_width: 0.5
+        pin_orient: 180.0
+        pin_layer: [1, 0]
+      o3:
+        pin_offset_x: 11.112237871660767
+        pin_offset_y: 17.08004481447456
+        pin_width: 0.5
+        pin_orient: 0.0
+        pin_layer: [1, 0]
+      o2:
+        pin_offset_x: 11.112237871660767
+        pin_offset_y: 5.480044814474563
+        pin_width: 0.5
+        pin_orient: 0.0
+        pin_layer: [1, 0]
+  m_mmi1x2_2:
+    property: null
+    type: CORE
+    origin: [0.0, 0.0]
+    size: [25.5, 2.5]
+    site: core
+    pins:
+      o1:
+        pin_offset_x: 0.0
+        pin_offset_y: 1.25
+        pin_width: 0.5
+        pin_orient: 180.0
+        pin_layer: [1, 0]
+      o2:
+        pin_offset_x: 25.5
+        pin_offset_y: 1.875
+        pin_width: 0.5
+        pin_orient: 0.0
+        pin_layer: [1, 0]
+      o3:
+        pin_offset_x: 25.5
+        pin_offset_y: 0.625
+        pin_width: 0.5
+        pin_orient: 0.0
+        pin_layer: [1, 0]
+  m_ring_single_pn_43ee7534_3:
+    property: null
+    type: CORE
+    origin: [0.0, 0.0]
+    size: [14.850499416972895, 15.651464503559527]
+    site: core
+    pins:
+      o1:
+        pin_offset_x: 4.047298670408146
+        pin_offset_y: 2.425
+        pin_width: 0.5
+        pin_orient: 180.0
+        pin_layer: [1, 0]
+      o2:
+        pin_offset_x: 10.80320074656475
+        pin_offset_y: 2.425
+        pin_width: 0.5
+        pin_orient: 0.0
+        pin_layer: [1, 0]
+constraints:
+  constr_0:
+    type: alignment
+    settings: {anchor: left}
+    objects: [mod_array_in_mrr_0, mod_array_in_mrr_1, mod_array_in_mrr_2, mod_array_in_mrr_3,
+      mod_array_in_mrr_4, mod_array_in_mrr_5, mod_array_in_mrr_6, mod_array_in_mrr_7]
+  constr_1:
+    type: alignment
+    settings: {anchor: left}
+    objects: [fanout_yb_1_0, fanout_yb_1_1]
+  constr_2:
+    type: alignment
+    settings: {anchor: left}
+    objects: [fanout_yb_2_0, fanout_yb_2_1, fanout_yb_2_2, fanout_yb_2_3]
+  constr_3:
+    type: alignment
+    settings: {anchor: lower}
+    objects: [mrr_array_0_mrr_0, mrr_array_1_mrr_0, mrr_array_2_mrr_0, mrr_array_3_mrr_0,
+      mrr_array_4_mrr_0, mrr_array_5_mrr_0, mrr_array_6_mrr_0, mrr_array_7_mrr_0]
+  constr_4:
+    type: alignment
+    settings: {anchor: lower}
+    objects: [mrr_array_0_mrr_1, mrr_array_1_mrr_1, mrr_array_2_mrr_1, mrr_array_3_mrr_1,
+      mrr_array_4_mrr_1, mrr_array_5_mrr_1, mrr_array_6_mrr_1, mrr_array_7_mrr_1]
+  constr_5:
+    type: alignment
+    settings: {anchor: lower}
+    objects: [mrr_array_0_mrr_2, mrr_array_1_mrr_2, mrr_array_2_mrr_2, mrr_array_3_mrr_2,
+      mrr_array_4_mrr_2, mrr_array_5_mrr_2, mrr_array_6_mrr_2, mrr_array_7_mrr_2]
+  constr_6:
+    type: alignment
+    settings: {anchor: lower}
+    objects: [mrr_array_0_mrr_3, mrr_array_1_mrr_3, mrr_array_2_mrr_3, mrr_array_3_mrr_3,
+      mrr_array_4_mrr_3, mrr_array_5_mrr_3, mrr_array_6_mrr_3, mrr_array_7_mrr_3]
+  constr_7:
+    type: alignment
+    settings: {anchor: lower}
+    objects: [mrr_array_0_mrr_4, mrr_array_1_mrr_4, mrr_array_2_mrr_4, mrr_array_3_mrr_4,
+      mrr_array_4_mrr_4, mrr_array_5_mrr_4, mrr_array_6_mrr_4, mrr_array_7_mrr_4]
+  constr_8:
+    type: alignment
+    settings: {anchor: lower}
+    objects: [mrr_array_0_mrr_5, mrr_array_1_mrr_5, mrr_array_2_mrr_5, mrr_array_3_mrr_5,
+      mrr_array_4_mrr_5, mrr_array_5_mrr_5, mrr_array_6_mrr_5, mrr_array_7_mrr_5]
+  constr_9:
+    type: alignment
+    settings: {anchor: lower}
+    objects: [mrr_array_0_mrr_6, mrr_array_1_mrr_6, mrr_array_2_mrr_6, mrr_array_3_mrr_6,
+      mrr_array_4_mrr_6, mrr_array_5_mrr_6, mrr_array_6_mrr_6, mrr_array_7_mrr_6]
+  constr_10:
+    type: alignment
+    settings: {anchor: lower}
+    objects: [mrr_array_0_mrr_7, mrr_array_1_mrr_7, mrr_array_2_mrr_7, mrr_array_3_mrr_7,
+      mrr_array_4_mrr_7, mrr_array_5_mrr_7, mrr_array_6_mrr_7, mrr_array_7_mrr_7]
+  constr_11:
+    type: alignment
+    settings: {anchor: left}
+    objects: [mrr_array_0_mrr_0, mrr_array_0_mrr_1, mrr_array_0_mrr_2, mrr_array_0_mrr_3,
+      mrr_array_0_mrr_4, mrr_array_0_mrr_5, mrr_array_0_mrr_6, mrr_array_0_mrr_7]
+  constr_12:
+    type: alignment
+    settings: {anchor: left}
+    objects: [mrr_array_1_mrr_0, mrr_array_1_mrr_1, mrr_array_1_mrr_2, mrr_array_1_mrr_3,
+      mrr_array_1_mrr_4, mrr_array_1_mrr_5, mrr_array_1_mrr_6, mrr_array_1_mrr_7]
+  constr_13:
+    type: alignment
+    settings: {anchor: left}
+    objects: [mrr_array_2_mrr_0, mrr_array_2_mrr_1, mrr_array_2_mrr_2, mrr_array_2_mrr_3,
+      mrr_array_2_mrr_4, mrr_array_2_mrr_5, mrr_array_2_mrr_6, mrr_array_2_mrr_7]
+  constr_14:
+    type: alignment
+    settings: {anchor: left}
+    objects: [mrr_array_3_mrr_0, mrr_array_3_mrr_1, mrr_array_3_mrr_2, mrr_array_3_mrr_3,
+      mrr_array_3_mrr_4, mrr_array_3_mrr_5, mrr_array_3_mrr_6, mrr_array_3_mrr_7]
+  constr_15:
+    type: alignment
+    settings: {anchor: left}
+    objects: [mrr_array_4_mrr_0, mrr_array_4_mrr_1, mrr_array_4_mrr_2, mrr_array_4_mrr_3,
+      mrr_array_4_mrr_4, mrr_array_4_mrr_5, mrr_array_4_mrr_6, mrr_array_4_mrr_7]
+  constr_16:
+    type: alignment
+    settings: {anchor: left}
+    objects: [mrr_array_5_mrr_0, mrr_array_5_mrr_1, mrr_array_5_mrr_2, mrr_array_5_mrr_3,
+      mrr_array_5_mrr_4, mrr_array_5_mrr_5, mrr_array_5_mrr_6, mrr_array_5_mrr_7]
+  constr_17:
+    type: alignment
+    settings: {anchor: left}
+    objects: [mrr_array_6_mrr_0, mrr_array_6_mrr_1, mrr_array_6_mrr_2, mrr_array_6_mrr_3,
+      mrr_array_6_mrr_4, mrr_array_6_mrr_5, mrr_array_6_mrr_6, mrr_array_6_mrr_7]
+  constr_18:
+    type: alignment
+    settings: {anchor: left}
+    objects: [mrr_array_7_mrr_0, mrr_array_7_mrr_1, mrr_array_7_mrr_2, mrr_array_7_mrr_3,
+      mrr_array_7_mrr_4, mrr_array_7_mrr_5, mrr_array_7_mrr_6, mrr_array_7_mrr_7]

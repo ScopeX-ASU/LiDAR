@@ -1,0 +1,29 @@
+run:
+  random_state: 42
+  output_layout_gds_path: "/home/hzhou144/projects/PICRoute/src/picroute/result/layout.gds"
+
+dr:
+  router: GridRoute
+  maxIteration: 10
+  
+  net_order: "topo"   # topo, naive
+  group: True
+  enable_45_neighbor: True
+  historyCost: 1000
+  ripup_times: 10
+
+  grid_resolution: 2
+  bend_radius: 5
+  net_bound_scale_factor: 1.5
+  net_default_bound: 100
+
+  loss_propagation: 1.5
+  loss_bending: 50
+  loss_crossing: 0
+  loss_congestion: 500
+
+show_temp: False
+
+eval: "comp"    # noc, comp
+il_cross: 0.5
+  
