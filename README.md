@@ -64,7 +64,8 @@ To further enhance overall port accessibility, several port access assignment te
 
 ### Prerequisites
 - Python >=3.11
-- Required Python packages (listed in requirements.txt)
+- [GDSFactory](https://github.com/gdsfactory/gdsfactory) ==8.26.1
+- Other required Python packages (listed in requirements.txt)
 - klayout and klive (Optional)
 
 ### Get the LiDAR Source
