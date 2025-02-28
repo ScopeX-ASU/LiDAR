@@ -4,7 +4,7 @@ By [Hongjian Zhou](https://scopex-asu.github.io/index.html), [Keren Zhu](https:/
 
 This repo is the official implementation of ["LiDAR:Automated Curvy Waveguide Detailed Routing for Large-Scale Photonic Integrated Circuits"](https://arxiv.org/abs/2410.01260).
 <p align="center">
-  <img src="figs/LiDAR_logo.jpg" width="400" height="400"/>
+  <img src="figs/LiDAR_logo.png" width="350" height="400"/>
 </p>
 ## Table of Contents
 
