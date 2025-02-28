@@ -115,8 +115,11 @@ The input to LiDAR is formated as netlist and tool's configuration as yaml simil
 ```
 @inproceedings{hzhou2025lidar,
   title={LiDAR: Automated Curvy Waveguide Detailed Routing for Large-Scale Photonic Integrated Circuits},
-  author={Hongjian Zhou and Keren, Zhu and Jiaqi, Gu},
+  author={Hongjian Zhou and Keren Zhu and Jiaqi Gu},
   booktitile={International Symposium on Physical Design (ISPD)},
   year={2025}
 }
+```
+```
+Hongjian Zhou, Keren Zhu and Jiaqi Gu, "LiDAR: Automated Curvy Waveguide Detailed Routing for Large-Scale Photonic Integrated Circuits," International Symposium on Physical Design (ISPD), 2025.
 ```
