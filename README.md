@@ -6,6 +6,7 @@ This repo is the official implementation of ["LiDAR:Automated Curvy Waveguide De
 <p align="center">
   <img src="figs/LiDAR_logo.png" width="350" height="400"/>
 </p>
+
 ## Table of Contents
 
 - [Introduction](#introduction)
