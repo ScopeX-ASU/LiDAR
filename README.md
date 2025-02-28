@@ -15,32 +15,32 @@ This repo is the official implementation of ["LiDAR:Automated Curvy Waveguide De
 
 ## Introduction
 
-**LiDAR** is developed for automatedly generating large-scale real-world PIC routing solution while considering specific photonic design rules. LiDAR features a grid-based **curvy-aware A\*** engine with adaptive **crossing insertion**, **congestion-aware net ordering and objective**, and **crossing-waveguide optimization scheme**, all tailored to the unique property of PIC. 
+**LiDAR** is developed for automatically generating large-scale real-world PIC routing solutions while considering specific photonic design rules. LiDAR features a grid-based **curvy-aware A\*** engine with adaptive **crossing insertion**, **congestion-aware net ordering and objective**, and **crossing-waveguide optimization scheme**, all tailored to the unique property of PIC. 
 
 <p align="center">
   <img src="figs/curvy aware neighbors.jpg" width="400" height="240"/>
 </p>
 
-To effciently enable curvy-aware A\* search, we propose parametric curvy-aware methods to generate neighbor candidates based on parametric bending geometry and perform comprehensive DRC check to select legal neighbors for exploration. Each routing node is defned by its spatial location and orientation *(x, y, orientation)*, and we have 45° neighbors to enable 45° routing.
+To efficiently enable curvy-aware A\* search, we propose parametric curvy-aware methods to generate neighbor candidates based on parametric bending geometry and perform a comprehensive DRC check to select legal neighbors for exploration. Each routing node is defined by its spatial location and orientation *(x, y, orientation)*, and we have 45° neighbors to enable 45° routing.
 
 <p align="center">
-  <img src="figs/grid map.jpg" width="400" height="200"/>
+  <img src="figs/grid map.jpg" width="400" height="260"/>
 </p>
 
-To ensure that only feasible neighbors are considered for exploration, a GridMap-based legality check is necessary. Each routed grids are assigned with the waveguide orientaion for futther crossing insertion.
+To ensure that only feasible neighbors are considered for exploration, a GridMap-based legality check is necessary. Each routed grids are assigned with the waveguide orientation for further crossing insertion.
 
 <p align="center">
   <img src="figs/crossing insertion.jpg" width="600" height="150"/>
 </p>
 
-If a neighbor candidate hits a previously routed waveguide (marked as an obstacle), we need to check whether it is feasible to insert a waveguide crossing to pass through it.
+If a neighboring candidate hits a previously routed waveguide (marked as an obstacle), we need to check whether it is feasible to insert a waveguide crossing to pass through it.
 
 <p align="center">
-  <img src="figs/port access.jpg" width="400" height="350"/>
+  <img src="figs/port access.jpg" width="500" height="440"/>
 </p>
 To further enhance overall port accessibility, several port access assignment techniques are proposed.   
 
-- **Port Propagation**: Propagates the ports that are inside the component' bounding box.
+- **Port Propagation**: Propagates the ports that are inside the component's bounding box.
 - **Bending-Aware Port Access Region Reservation**: To prevent other waveguides from blocking port regions, grids in front of each port are reserved for the corresponding net, ensuring they cannot be crossed by other nets.
 - **Congested Port Spreading**: Spreads the access ports with a predefned extension length and spacing for ports in the same grid.
 - **Channel Planning via Staggered Access Point Oﬀsets**: For densely placed ports, we progressively extend the access region length and use staggered access ports to facilitate the placement of consecutive crossings.
@@ -55,7 +55,7 @@ To further enhance overall port accessibility, several port access assignment te
 | main/            | Main function |
 | queue/           | Queue data structure for A star search |
 | routing/         | Implementation of routing algorithm|
-| scripts/         | Scropt for batch execution of benchmarks |
+| scripts/         | Script for batch execution of benchmarks |
 | utils/           | Utilities for post-processing and logging|
 
 
@@ -78,7 +78,7 @@ cd src/picroute
 python benchmarks/clements.py
 python benchmarks/MMIports.py
 ```
-Benchmark currently provide photonic computing circuits. Users can generate different size and configuration of benchmarks based on these scripts. 
+Benchmark currently provides photonic computing circuits. Users can generate different sizes and configurations of benchmarks based on these scripts. 
 
 #### 2. How to run
 ```bash
@@ -93,7 +93,7 @@ or
 cd src/picroute
 python main/picroute.py --benchmark path-to-benchmark --config path to router config
 ```
-The input to LiDAR is formated as netlist and tool's configuration as yaml similar to LEF/DEF.
+The input to LiDAR is formatted as a netlist, and the tool's configuration is as yaml, similar to LEF/DEF.
 
 ### LiDAR's Configurations
 | YAML Parameter      | Description                                                                               |
@@ -108,7 +108,7 @@ The input to LiDAR is formated as netlist and tool's configuration as yaml simil
 | bend_radius         |    radius of bend                                      |
 | net_default_bound   |    minimum routing boundary (um)                 |
 | net_bound_scale_factor   |   scale factor of the routing boundary                                    |
-| loss        |       loss for the propagation, bending and crossing                     |
+| loss        |       loss for the propagation, bending, and crossing                     |
 | show_temp   |       show the intermediate routing result or not (needs klayout and klive)           |
 
 ## Citing LiDAR
