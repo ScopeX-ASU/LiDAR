@@ -18,7 +18,10 @@ This repo is the official implementation of ["LiDAR:Automated Curvy Waveguide De
 **LiDAR** is developed for automatically generating large-scale real-world PIC routing solutions while considering specific photonic design rules. LiDAR features a grid-based **curvy-aware A\*** engine with adaptive **crossing insertion**, **congestion-aware net ordering and objective**, and **crossing-waveguide optimization scheme**, all tailored to the unique property of PIC. 
 
 - Animation
-- ![PTC_animation](figs/PTC_animation.gif)
+
+| 16x16 Photonic Tensor Core (ADEPT)                                              | WRONoC                                |
+| ----------------------------------------------------- | ------------------------------------------ |
+| ![PTC_animation](figs/PTC_animation.gif)              |  ![ONoC_animation](figs/NoC_animation.gif)  |
 <p align="center">
   <img src="figs/curvy aware neighbors.jpg" width="400" height="240"/>
 </p>
