@@ -19,9 +19,9 @@ This repo is the official implementation of ["LiDAR:Automated Curvy Waveguide De
 
 - Animation
 
-| 16x16 Photonic Tensor Core (ADEPT)                                              | WRONoC                                |
-| ----------------------------------------------------- | ------------------------------------------ |
-| ![PTC_animation](figs/PTC_animation.gif)              |  ![ONoC_animation](figs/NoC_animation.gif)  |
+| 16x16 Photonic Tensor Core (ADEPT)                                              | WRONoC_north                                |
+| ----------------------------------------------------- | ------------------------ |
+| <img src="figs/PTC_animation.gif" width="600" height="260"/>              |  <img src="figs/NoC_animation.gif" width="300" height="260"/>   |
 <p align="center">
   <img src="figs/curvy aware neighbors.jpg" width="400" height="240"/>
 </p>
