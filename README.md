@@ -1,8 +1,13 @@
 # LiDAR: Automated Curvy Waveguide Detailed Routing for Large-Scale Photonic Integrated Circuits
+<p align="center">
+    <a href="https://github.com/ScopeX-ASU/LiDAR/blob/main/LICENSE">
+        <img alt="License" src="https://img.shields.io/github/license/ScopeX-ASU/LiDAR">
+    </a>
+</p>
 
 By [Hongjian Zhou](https://scopex-asu.github.io/index.html), [Keren Zhu](https://krz.engineer/) and [Jiaqi Gu<sup>†</sup>](https://scopex-asu.github.io/index.html).
 
-This repo is the official implementation of ["LiDAR:Automated Curvy Waveguide Detailed Routing for Large-Scale Photonic Integrated Circuits"](https://arxiv.org/abs/2410.01260).
+This repo is the official implementation of ["LiDAR:Automated Curvy Waveguide Detailed Routing for Large-Scale Photonic Integrated Circuits"](https://arxiv.org/abs/2410.01260), ISPD 2025.
 <p align="center">
   <img src="figs/LiDAR_logo.png" width="350" height="400"/>
 </p>
