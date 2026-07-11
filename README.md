@@ -73,14 +73,21 @@ To further enhance overall port accessibility, several port access assignment te
 ## Installation
 
 ### Prerequisites
-- Python >=3.11
-- [GDSFactory](https://github.com/gdsfactory/gdsfactory) ==9.45.0
-- [KFactory](https://github.com/gdsfactory/kfactory) ==2.6.1
+- Python >=3.12
+- Local [GDSFactory](https://github.com/gdsfactory/gdsfactory) checkout at `../gdsfactory`
+- Local [KFactory](https://github.com/gdsfactory/kfactory) checkout at `../kfactory`
 - Other required Python packages (listed in requirements.txt)
 - klayout and klive (Optional)
 
 ### Get the LiDAR Source
 ```git clone https://github.com/ScopeX-ASU/PICRoute.git```
+
+Install from the LiDAR directory so the editable sibling paths in
+`requirements.txt` resolve correctly:
+
+```bash
+python -m pip install -r requirements.txt
+```
 
 ### Usage
 #### 1. How to get benchmarks

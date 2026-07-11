@@ -1,7 +1,7 @@
-gdsfactory==9.45.0
-kfactory==2.6.1
+-e ../gdsfactory
+-e ../kfactory
 numpy>=2.0
 ryaml>=0.5.1
 numba>=0.66.0
 multimethod>=2.0.2
-pydantic>=2.12.5,<2.13
+pydantic>=2.13.4,<2.14
