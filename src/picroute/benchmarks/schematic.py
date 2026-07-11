@@ -83,7 +83,7 @@ class Macro(BaseModel):
             gf_pin_offset_y = port.dy - component_yl
             gf_width = port.dwidth
             gf_orientation = port.orientation
-            gf_layer = port.layer
+            gf_layer = [port.layer_info.layer, port.layer_info.datatype]
             # Port (name o1, center [-10.     -0.625], width 0.5, orientation 180.0, layer (1, 0), port_type optical)
             pins[port.name] = dict(
                 pin_offset_x=float(gf_pin_offset_x),
@@ -539,8 +539,16 @@ class CustomSchematic(object):
         filepath = filename if isinstance(filename, Path) else Path(filename)
         self.path = filepath
 
-        self.pdk = pdk or gf.get_active_pdk()
-        self.component_list = list(gf.get_active_pdk().cells.keys())
+        if pdk is None:
+            try:
+                pdk = gf.get_active_pdk()
+            except ValueError:
+                pdk = gf.gpdk.get_generic_pdk()
+                pdk.activate()
+        else:
+            pdk.activate()
+        self.pdk = pdk
+        self.component_list = list(pdk.cells)
 
         self.on_instance_added = []
         self.on_instance_removed = []
@@ -666,16 +674,17 @@ class CustomSchematic(object):
 
         # construct blockage
         blk_index = 0
-        for name, reference in c.named_references.items():
+        for reference in c.insts:
+            name = reference.name
+            bbox = reference.dbbox()
+            bbox_coordinates = [bbox.left, bbox.bottom, bbox.right, bbox.top]
             if name in split_instance:
                 ports = reference.get_ports_list(port_type="optical")
                 port_nums = len(ports)
                 self._inst_blks[name] = Blockage(
                     idBlk=blk_index,
                     instanceName=name,
-                    bbox=reference.bbox.reshape(
-                        -1,
-                    ),
+                    bbox=bbox_coordinates,
                     ref=reference,
                 )
                 blk_index += port_nums
@@ -683,9 +692,7 @@ class CustomSchematic(object):
                 self._inst_blks[name] = Blockage(
                     idBlk=blk_index,
                     instanceName=name,
-                    bbox=reference.bbox.reshape(
-                        -1,
-                    ),
+                    bbox=bbox_coordinates,
                     ref=reference,
                 )
                 blk_index += 1
@@ -701,9 +708,11 @@ class CustomSchematic(object):
                 for net_name, ports in route_unit["nets"].items():
                     inst1_name, port1_id = ports[0].split(",")
                     inst2_name, port2_id = ports[1].split(",")
-                    port1 = c.named_references[inst1_name].ports[port1_id]
-                    port2 = c.named_references[inst2_name].ports[port2_id]
-                    EulerDist = np.linalg.norm(port1.center - port2.center, ord=2)
+                    port1 = c.insts[inst1_name].ports[port1_id]
+                    port2 = c.insts[inst2_name].ports[port2_id]
+                    EulerDist = np.linalg.norm(
+                        np.subtract(port1.dcenter, port2.dcenter), ord=2
+                    )
                     portID = inst_blks[inst1_name].idBlk
                     if inst1_name in split_instance:
                         portID += int(port1_id[1:]) - 1
@@ -744,9 +753,11 @@ class CustomSchematic(object):
             else:
                 inst1_name, port1_id = route_unit[0].split(",")
                 inst2_name, port2_id = route_unit[1].split(",")
-                port1 = c.named_references[inst1_name].ports[port1_id]
-                port2 = c.named_references[inst2_name].ports[port2_id]
-                EulerDist = np.linalg.norm(port1.center - port2.center, ord=2)
+                port1 = c.insts[inst1_name].ports[port1_id]
+                port2 = c.insts[inst2_name].ports[port2_id]
+                EulerDist = np.linalg.norm(
+                    np.subtract(port1.dcenter, port2.dcenter), ord=2
+                )
                 portID = inst_blks[inst1_name].idBlk
                 if inst1_name in split_instance:
                     portID += int(port1_id[1:]) - 1

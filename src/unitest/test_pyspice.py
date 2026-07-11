@@ -1,20 +1,12 @@
-"""
-Description: 
-Author: Jiaqi Gu (jqgu@utexas.edu)
-Date: 2023-07-16 11:16:59
-LastEditors: Jiaqi Gu (jqgu@utexas.edu)
-LastEditTime: 2023-07-16 11:20:46
+"""Legacy PySpice experiment.
+
+The SPICE fixture referenced by the original script was never included in the
+repository, so this is not an executable LiDAR test.
 """
 
-from PySpice.Spice.Parser import SpiceParser
+import pytest
 
-# from src.Parser import Netlist_parser
-p = SpiceParser(
-    path="./unitest/netlist_mzi.sp",
-    source=None,
-    end_of_line_comment="$",
+pytest.skip(
+    "manual PySpice experiment: netlist_mzi.sp is not included",
+    allow_module_level=True,
 )
-c = p.build_circuit()
-print(c)
-
-# p = Netlist_parser()

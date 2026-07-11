@@ -74,7 +74,8 @@ To further enhance overall port accessibility, several port access assignment te
 
 ### Prerequisites
 - Python >=3.11
-- [GDSFactory](https://github.com/gdsfactory/gdsfactory) ==8.26.1
+- [GDSFactory](https://github.com/gdsfactory/gdsfactory) ==9.45.0
+- [KFactory](https://github.com/gdsfactory/kfactory) ==2.6.1
 - Other required Python packages (listed in requirements.txt)
 - klayout and klive (Optional)
 

@@ -12,7 +12,7 @@ from typing import List
 
 import gdsfactory as gf
 import numpy as np
-from gdsfactory.generic_tech import get_generic_pdk
+from gdsfactory.gpdk import get_generic_pdk
 
 gf.config.rich_output()
 PDK = get_generic_pdk()
@@ -47,7 +47,7 @@ def add_splitter_tree(
     output_ports = []
     device = gf.components.mmi1x2()
     # y_offset = float(device.bbox[0][1])
-    y_offset = device.ymin
+    y_offset = device.dymin
     device_names = []
     se.schematic.placements[yb_name].x = placement_cfg["offset"][0]
     se.schematic.placements[yb_name].y = placement_cfg["offset"][1] + y_offset
@@ -97,7 +97,7 @@ def add_splitter_tree(
         )
 
         placement_offset = [
-            float(se.schematic.placements[yb_name].x + device.xsize),
+            float(se.schematic.placements[yb_name].x + device.dxsize),
             placement_cfg["offset"][1],
         ]
         placement_cfg["offset"] = placement_offset
@@ -138,7 +138,7 @@ def add_N_modulators_mzi1x2(
         ]
 
     placement_offset = [
-        float(se.schematic.placements[mzi_name].x + device.xsize),
+        float(se.schematic.placements[mzi_name].x + device.dxsize),
         placement_cfg["offset"][1],
     ]
     placement_cfg["offset"] = placement_offset
@@ -188,7 +188,7 @@ def add_multiport_mmi(
                 (mmi_name, p[0].name)
                 for p in sorted(
                     [
-                        (port, port.center[1])
+                        (port, port.dcenter[1])
                         for port in device.get_ports_list(
                             port_type="optical", orientation=180.0
                         )
@@ -202,7 +202,7 @@ def add_multiport_mmi(
                 (mmi_name, p[0].name)
                 for p in sorted(
                     [
-                        (port, port.center[1])
+                        (port, port.dcenter[1])
                         for port in device.get_ports_list(
                             port_type="optical", orientation=0.0
                         )
@@ -245,7 +245,7 @@ def add_multiport_mmi(
                 (mmi_name, p[0].name)
                 for p in sorted(
                     [
-                        (port, port.center[1])
+                        (port, port.dcenter[1])
                         for port in device.get_ports_list(
                             port_type="optical", orientation=180.0
                         )
@@ -259,7 +259,7 @@ def add_multiport_mmi(
                 (mmi_name, p[0].name)
                 for p in sorted(
                     [
-                        (port, port.center[1])
+                        (port, port.dcenter[1])
                         for port in device.get_ports_list(
                             port_type="optical", orientation=0.0
                         )
@@ -284,7 +284,7 @@ def add_multiport_mmi(
         ]
 
         placement_offset = [
-            float(se.schematic.placements[mmi_name].x + device.size[0]),
+            float(se.schematic.placements[mmi_name].x + device.dxsize),
             placement_cfg["offset"][1],
         ]
         placement_cfg["offset"] = placement_offset
@@ -323,7 +323,7 @@ def add_multiport_mmi(
                 (mmi_name, p[0].name)
                 for p in sorted(
                     [
-                        (port, port.center[1])
+                        (port, port.dcenter[1])
                         for port in device.get_ports_list(
                             port_type="optical", orientation=180.0
                         )
@@ -337,7 +337,7 @@ def add_multiport_mmi(
                 (mmi_name, p[0].name)
                 for p in sorted(
                     [
-                        (port, port.center[1])
+                        (port, port.dcenter[1])
                         for port in device.get_ports_list(
                             port_type="optical", orientation=0.0
                         )
@@ -392,7 +392,7 @@ def add_multiport_mmi(
                 (mmi_name, p[0].name)
                 for p in sorted(
                     [
-                        (port, port.center[1])
+                        (port, port.dcenter[1])
                         for port in device.get_ports_list(
                             port_type="optical", orientation=180.0
                         )
@@ -406,7 +406,7 @@ def add_multiport_mmi(
                 (mmi_name, p[0].name)
                 for p in sorted(
                     [
-                        (port, port.center[1])
+                        (port, port.dcenter[1])
                         for port in device.get_ports_list(
                             port_type="optical", orientation=0.0
                         )
@@ -431,7 +431,7 @@ def add_multiport_mmi(
         ]
 
         placement_offset = [
-            float(se.schematic.placements[mmi_name].x + device.size[0]),
+            float(se.schematic.placements[mmi_name].x + device.dxsize),
             placement_cfg["offset"][1],
         ]
         placement_cfg["offset"] = placement_offset
@@ -456,7 +456,7 @@ def add_N_devices(
     electrical_ports = []
     device_names = []
     # y_offset = float(devices[0].bbox[0][1])
-    y_offset = devices[0].ymin
+    y_offset = devices[0].dymin
     for i, device in enumerate(devices):
         if "mzi" in device.name:
             device_name, iloss = f"{prefix}_mzi_{i}", 1.2
@@ -478,7 +478,7 @@ def add_N_devices(
                 (device_name, p[0].name)
                 for p in sorted(
                     [
-                        (port, port.center[1])
+                        (port, port.dcenter[1])
                         for port in device.get_ports_list(
                             port_type="optical", orientation=180.0
                         )
@@ -492,7 +492,7 @@ def add_N_devices(
                 (device_name, p[0].name)
                 for p in sorted(
                     [
-                        (port, port.center[1])
+                        (port, port.dcenter[1])
                         for port in device.get_ports_list(
                             port_type="optical", orientation=0.0
                         )
@@ -531,7 +531,7 @@ def add_N_devices(
         ]
 
     placement_offset = [
-        float(se.schematic.placements[device_name].x + device.xsize),
+        float(se.schematic.placements[device_name].x + device.dxsize),
         placement_cfg["offset"][1],
     ]
     placement_cfg["offset"] = placement_offset
@@ -571,7 +571,7 @@ def add_IO_pads(
         ]
 
         placement_offset = [
-            float(se.schematic.placements[device_name].x + device.xsize),
+            float(se.schematic.placements[device_name].x + device.dxsize),
             placement_cfg["offset"][1],
         ]
         placement_cfg["offset"] = placement_offset
@@ -838,7 +838,7 @@ def generate_matrix(
                         (mmi_name, p[0].name)
                         for p in sorted(
                             [
-                                (port, port.center[1])
+                                (port, port.dcenter[1])
                                 for port in device.get_ports_list(
                                     port_type="optical", orientation=180.0
                                 )
@@ -852,7 +852,7 @@ def generate_matrix(
                         (mmi_name, p[0].name)
                         for p in sorted(
                             [
-                                (port, port.center[1])
+                                (port, port.dcenter[1])
                                 for port in device.get_ports_list(
                                     port_type="optical", orientation=0.0
                                 )

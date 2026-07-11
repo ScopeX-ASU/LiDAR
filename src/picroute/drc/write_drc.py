@@ -322,7 +322,7 @@ deep
     return script
 
 
-from gdsfactory.generic_tech import LAYER
+from gdsfactory.gpdk import LAYER
 
 if __name__ == "__main__":
     rules = [

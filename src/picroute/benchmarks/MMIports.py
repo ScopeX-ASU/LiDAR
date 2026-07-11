@@ -24,7 +24,7 @@ from func import (
     connect_ports,
     generate_matrix,
 )
-from gdsfactory.generic_tech import get_generic_pdk
+from gdsfactory.gpdk import get_generic_pdk
 
 from picroute.benchmarks.schematic import CustomSchematic
 
@@ -60,7 +60,6 @@ def generate_netlist(N: int = 4, die_area=[1000, 1000], seed=4321) -> CustomSche
         f"Only support input size to be a power of 2, but got {N}"
     )
 
-    # gf8
     y_offset = gf.components.grating_coupler_elliptical_lumerical().dymin
     # y_offset  = float(gf.components.grating_coupler_elliptical_lumerical().bbox()[0][1])
     # input light GC, fixed cell

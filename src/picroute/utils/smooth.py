@@ -9,7 +9,7 @@ PathFactory = Callable[..., Path]
 
 
 def _compute_segments(points):
-    points = np.asfarray(points)
+    points = np.asarray(points, dtype=float)
     normals = np.diff(points, axis=0)
     normals = (normals.T / np.linalg.norm(normals, axis=1)).T
     dx = np.diff(points[:, 0])

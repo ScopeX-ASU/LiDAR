@@ -66,17 +66,17 @@ class Macro(BaseModel):
         """
         pins = dict()
         ports = component.get_ports_list(port_type="optical")
-        component_xl = component.size_info.west
-        component_yl = component.size_info.south
+        component_xl = component.dsize_info.west
+        component_yl = component.dsize_info.south
         # component.x, .y means the center, but we want left lower corner
         for port in ports:
             # Port (name o1, center [-10.     -0.625], width 0.5, orientation 180.0, layer (1, 0), port_type optical)
             pins[port.name] = dict(
-                pin_offset_x=float(port.center[0] - component_xl),
-                pin_offset_y=float(port.center[1] - component_yl),
-                pin_width=float(port.width),
+                pin_offset_x=float(port.dcenter[0] - component_xl),
+                pin_offset_y=float(port.dcenter[1] - component_yl),
+                pin_width=float(port.dwidth),
                 pin_orient=float(port.orientation),
-                pin_layer=list(port.layer),
+                pin_layer=[port.layer_info.layer, port.layer_info.datatype],
             )
         return pins
 
@@ -123,7 +123,7 @@ class dBPort(BaseModel):
 
     # port attribute
     port_name: str
-    center: np.array
+    center: np.ndarray
     width: float
     orientation: float
 
@@ -369,7 +369,7 @@ class CustomSchematicConfiguration(SchematicConfiguration):
         new_macro = Macro(
             type="CORE",
             origin=[0, 0],
-            size=list(map(float, component.size)),
+            size=[float(component.dxsize), float(component.dysize)],
             site="core",
             pins=Macro.extract_pins(component),
         )
@@ -518,8 +518,16 @@ class CustomSchematic(object):
         filepath = filename if isinstance(filename, Path) else Path(filename)
         self.path = filepath
 
-        self.pdk = pdk or gf.get_active_pdk()
-        self.component_list = list(gf.get_active_pdk().cells.keys())
+        if pdk is None:
+            try:
+                pdk = gf.get_active_pdk()
+            except ValueError:
+                pdk = gf.gpdk.get_generic_pdk()
+                pdk.activate()
+        else:
+            pdk.activate()
+        self.pdk = pdk
+        self.component_list = list(pdk.cells)
 
         self.on_instance_added = []
         self.on_instance_removed = []
@@ -771,8 +779,8 @@ class CustomSchematic(object):
             """
             inst1_name, port1_id = route_unit[0].split(",")
             inst2_name, port2_id = route_unit[1].split(",")
-            port1.gf_port = c.named_references[inst1_name].ports[port1_id]
-            port2.gf_port = c.named_references[inst2_name].ports[port2_id]
+            port1.gf_port = c.insts[inst1_name].ports[port1_id]
+            port2.gf_port = c.insts[inst2_name].ports[port2_id]
 
             dbNets[unit_name] = Nets(
                 netName=unit_name,

@@ -568,11 +568,11 @@ class DrGridRoute(object):
                 ref1 = final_component << access_waveguide1
                 ref2 = final_component << access_waveguide2
                 if rotation_angle1 is not None:
-                    ref1.rotate(
+                    ref1.drotate(
                         rotation_angle1[0], (rotation_angle1[1], rotation_angle1[2])
                     )
                 if rotation_angle2 is not None:
-                    ref2.rotate(
+                    ref2.drotate(
                         rotation_angle2[0], (rotation_angle2[1], rotation_angle2[2])
                     )
                 current_net.wirelength += component_length1
@@ -818,11 +818,11 @@ class DrGridRoute(object):
                 ref1 = final_component << access_waveguide1
                 ref2 = final_component << access_waveguide2
                 if rotation_angle1 is not None:
-                    ref1.rotate(
+                    ref1.drotate(
                         rotation_angle1[0], (rotation_angle1[1], rotation_angle1[2])
                     )
                 if rotation_angle2 is not None:
-                    ref2.rotate(
+                    ref2.drotate(
                         rotation_angle2[0], (rotation_angle2[1], rotation_angle2[2])
                     )
                 current_net.wirelength += component_length1
@@ -935,8 +935,8 @@ class DrGridRoute(object):
         point, ori = crossing
         c = gf.Component()
         ref1 = c << gf.components.crossing()
-        ref1.rotate(ori)
-        ref1.move(point)
+        ref1.drotate(ori)
+        ref1.dmove(point)
         c.add_ports(ref1.ports)
         self._cirdb.layout.add_ref(c)
 

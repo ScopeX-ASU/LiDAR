@@ -23,7 +23,7 @@ from func import (
     add_splitter_tree,
     connect_ports,
 )
-from gdsfactory.generic_tech import get_generic_pdk
+from gdsfactory.gpdk import get_generic_pdk
 
 from picroute.benchmarks.schematic import CustomSchematic
 
@@ -160,7 +160,7 @@ def generate_netlist(N: int = 4, die_area=[1000, 1000]) -> CustomSchematic:
 
     gc = gf.components.grating_coupler_elliptical_lumerical()
     placement_cfg["offset"][0] = float(
-        die_area[0] - gc.xsize - placement_cfg["pitch"][0]
+        die_area[0] - gc.dxsize - placement_cfg["pitch"][0]
     )
     gc_names, gc_array_in_ports, _, _, _ = add_N_devices(
         se,
@@ -174,7 +174,7 @@ def generate_netlist(N: int = 4, die_area=[1000, 1000]) -> CustomSchematic:
             placement=[
                 "FIXED",
                 [
-                    float(die_area[0] - gc.xsize),
+                    float(die_area[0] - gc.dxsize),
                     float(se.schematic.placements[gc_name].y),
                 ],
                 "N",
