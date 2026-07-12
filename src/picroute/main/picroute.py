@@ -12,16 +12,10 @@ FilePath: /PICRoute/src/picroute/main/picroute.py
 @brief the PICRoute flow
 """
 
-import os
-import sys
 import warnings
 
 warnings.filterwarnings("ignore")
 
-
-sys.path.insert(
-    0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-)
 
 from picroute.config.config import configs
 from picroute.config.parser import Parser
@@ -109,7 +103,7 @@ def profile(router):
     profile_result.print_stats(20)
 
 
-if __name__ == "__main__":
+def main() -> None:
     argp = Parser()
     args, opts = argp.parser.parse_known_args()
     configs.load(args.config, recursive=False)
@@ -119,3 +113,7 @@ if __name__ == "__main__":
     router.run()
 
     # profile(router)
+
+
+if __name__ == "__main__":
+    main()

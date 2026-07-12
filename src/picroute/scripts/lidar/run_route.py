@@ -9,24 +9,19 @@ import os
 import subprocess
 import sys
 from multiprocessing import Pool
+from pathlib import Path
 
-# from pyutils.general import ensure_dir, logger
-sys.path.insert(
-    0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-)
-
-# print(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-from utils.general import ensure_dir, logger
+from picroute.utils.general import ensure_dir, logger
 
 method = "LiDAR"
 exp_name = "main_results"
-root = f"log/{method}/{exp_name}"
-script = "main/picroute.py"
-benchmark_root = "./benchmarks"
-result_root = f"result/{method}/{exp_name}"
+package_root = Path(__file__).resolve().parents[2]
+root = package_root / "log" / method / exp_name
+benchmark_root = package_root / "benchmarks"
+result_root = package_root / "result" / method / exp_name
 
-comp_config = f"./config/comp_{method}.yml"
-noc_config = f"./config/noc_{method}.yml"
+comp_config = package_root / "config" / f"comp_{method}.yml"
+noc_config = package_root / "config" / f"noc_{method}.yml"
 
 
 def task_launcher(args):
@@ -36,18 +31,15 @@ def task_launcher(args):
         id,
     ) = args
     env = os.environ.copy()
-    benchmark_name = os.path.basename(benchmark).split(".")[0]
-    method_name = os.path.basename(config).split(".")[0]
-    result_path = os.path.join(
-        result_root, f"{benchmark_name}_{method_name}_id-{id}.gds"
-    )
-    pres = ["python3", script]
+    benchmark = Path(benchmark)
+    config = Path(config)
+    benchmark_name = benchmark.stem
+    method_name = config.stem
+    result_path = result_root / f"{benchmark_name}_{method_name}_id-{id}.gds"
+    pres = [sys.executable, "-m", "picroute.main.picroute"]
 
     with open(
-        os.path.join(
-            root,
-            f"{benchmark_name}_{method_name}_id-{id}.log",
-        ),
+        root / f"{benchmark_name}_{method_name}_id-{id}.log",
         "w",
     ) as wfid:
         exp = [
@@ -59,13 +51,14 @@ def task_launcher(args):
         subprocess.call(pres + exp, stderr=wfid, stdout=wfid)
 
 
-if __name__ == "__main__":
+def main() -> None:
     ensure_dir(root)
+    ensure_dir(result_root)
 
     tasks = [
         # [f"{benchmark_root}/clements_8x8/clements_8x8.yml", comp_config, 2],
         # [f"{benchmark_root}/clements_16x16/clements_16x16.yml", comp_config, 2],
-        [f"{benchmark_root}/multiportmmi_8x8/multiportmmi_8x8.yml", comp_config, 2],
+        [benchmark_root / "multiportmmi_8x8" / "multiportmmi_8x8.yml", comp_config, 2],
         # [f"{benchmark_root}/multiportmmi_16x16/multiportmmi_16x16.yml", comp_config, 2],
         # [f"{benchmark_root}/multiportmmi_32x32/multiportmmi_32x32.yml", comp_config, 2],
         # [f"{benchmark_root}/router/router8x8_north.yml", noc_config, 1],
@@ -76,3 +69,7 @@ if __name__ == "__main__":
 
     with Pool(1) as p:
         p.map(task_launcher, tasks)
+
+
+if __name__ == "__main__":
+    main()

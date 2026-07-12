@@ -1,17 +1,23 @@
 import argparse
+from pathlib import Path
 
 
-class Parser(object):
+DEFAULT_CONFIG = Path(__file__).with_name("comp_LiDAR.yml")
+
+
+class Parser:
     def __init__(self):
         self.parser = argparse.ArgumentParser()
         self.parser.add_argument(
             "--benchmark",
-            default="/home/hzhou144/projects/PICRoute/src/picroute/benchmarks/clements_8x8/clements_8x8.yml",
+            required=True,
+            type=Path,
             help="path to benchmark",
         )
         self.parser.add_argument(
             "--config",
-            default="/home/hzhou144/projects/PICRoute/src/picroute/config/comp_LiDAR.yml",
+            default=DEFAULT_CONFIG,
+            type=Path,
             metavar="File",
             help="the router config",
         )

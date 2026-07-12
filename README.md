@@ -72,20 +72,23 @@ To further enhance overall port accessibility, several port access assignment te
 ## Installation
 
 ### Prerequisites
-- Python >=3.12
-- Local [GDSFactory](https://github.com/gdsfactory/gdsfactory) checkout at `../gdsfactory`
-- Local [KFactory](https://github.com/gdsfactory/kfactory) checkout at `../kfactory`
-- Other required Python packages (listed in requirements.txt)
+- Python 3.12 or 3.13
+- Other required Python packages (declared in `pyproject.toml`)
 - klayout and klive (Optional)
 
 ### Get the LiDAR Source
 ```git clone https://github.com/ScopeX-ASU/PICRoute.git```
 
-Install from the LiDAR directory so the editable sibling paths in
-`requirements.txt` resolve correctly:
+Install LiDAR and its dependencies from the LiDAR directory:
 
 ```bash
 python -m pip install -r requirements.txt
+```
+
+For development against sibling GDSFactory and KFactory checkouts:
+
+```bash
+python -m pip install -e ../kfactory -e ../gdsfactory -e .
 ```
 
 ### Usage
@@ -107,8 +110,7 @@ The ouput log files: log/LiDAR/main_results
 
 or
 ```bash
-cd src/picroute
-python main/picroute.py --benchmark path-to-benchmark --config path to router config
+picroute --benchmark path-to-benchmark --config path-to-router-config
 ```
 The input to LiDAR is formatted as a netlist, and the tool's configuration is as yaml, similar to LEF/DEF.
 
