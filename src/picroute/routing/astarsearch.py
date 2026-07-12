@@ -498,21 +498,30 @@ class AstarSearch:
             return True
 
     def route(self):
+        start_port = self._net.NetPort1
+        end_port = self._net.NetPort2
         if (
             self._net.distance["Euler"] < 10
-            and abs(self.startNode[0].pos[2] - self.endNode.pos[2]) == 180
+            and (start_port.orientation - end_port.orientation) % 360 == 180
         ):
-            start_port = self.start_port.port
             access_waveguide, access_route = (
                 self._route_geometry.connect_ports_all_angle(
-                    start_port, self.end_port.port
+                    start_port.port, end_port.port
                 )
             )
-            self._net.wirelength += self._route_geometry.route_length_um(
+            self._net.wirelength = self._route_geometry.route_length_um(
                 access_waveguide, access_route
             )
             self._net.wg_component.append(access_waveguide)
-            self._cirdb.layout.add_ref(access_waveguide)
+            occupied = self._route_geometry.occupied_grid_cells(
+                access_waveguide, self._drcmgr.bitMap
+            )
+            # Treat a prebuilt all-angle connection conservatively as bend cells;
+            # unlike an A* backbone, it has no waypoint record that can be split
+            # safely when inserting a crossing during post-processing.
+            self._net.rect_route = (occupied, set(), set(), set(), set())
+            self._net.prebuilt_route = True
+            self._net.routed = True
             return True
 
         if not self.findAcsPts():

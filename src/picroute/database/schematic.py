@@ -187,6 +187,7 @@ class RouteState(BaseModel):
     routed_path: list = Field(default_factory=list)
     origin_path: list = Field(default_factory=list)
     rect_route: list = Field(default_factory=list)
+    prebuilt_route: bool = False
 
     groups: list = Field(default_factory=list)
     group_name: str = None
@@ -230,6 +231,7 @@ class RouteState(BaseModel):
         self.wg_component.clear()
         self.rwguide.clear()
         self.routed_path.clear()
+        self.prebuilt_route = False
         self.bending = 0
         for net_name in self.crossing_nets:
             net = cirdb.dbNets[net_name]

@@ -69,15 +69,18 @@ class NetlistGraph:
         current_level = {
             index for index in graph.node_indices() if graph.in_degree(index) == 0
         }
+        expanded: set[int] = set()
         visited: set[str] = set()
         orders: list[list[str]] = []
 
         while current_level:
             labels: list[str] = []
             next_level: set[int] = set()
-            for node in current_level:
+            for node in current_level - expanded:
+                expanded.add(node)
                 for _source, neighbor, data in graph.out_edges(node):
-                    next_level.add(neighbor)
+                    if neighbor not in expanded:
+                        next_level.add(neighbor)
                     label = data["label"]
                     if label not in visited:
                         labels.append(label)

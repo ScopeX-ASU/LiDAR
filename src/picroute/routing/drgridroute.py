@@ -211,6 +211,22 @@ class DrGridRoute(object):
             groups=groups,
         ).route()
 
+    def _reroute_with_crossings(
+        self, cur_net, *, strict_drc, net_config=None, groups=None
+    ) -> bool:
+        """Retry a net with its normal crossing budget and register only success."""
+        cur_net.crossing_budget = 10
+        cur_net.current_budget = 10
+        succeeded = self._run_astar(
+            cur_net,
+            strict_drc=strict_drc,
+            net_config=net_config,
+            groups=groups,
+        )
+        if succeeded:
+            self.registar_net(cur_net)
+        return succeeded
+
     def routeSingleNet(
         self, cur_net: RouteState, strictDRC=True, net_config=None, groups=None
     ):
@@ -256,16 +272,12 @@ class DrGridRoute(object):
                             cur_net.clearNet(self._cirdb)
                             self.ripuplocalnets(bkp[1])
                             # cur_net.failed_count += 1
-                            cur_net.crossing_budget = 10
-                            cur_net.current_budget = 10
-                            bSuccess1 = self._run_astar(
+                            return self._reroute_with_crossings(
                                 cur_net,
                                 strict_drc=strictDRC,
                                 net_config=net_config,
                                 groups=groups,
                             )
-                            self.registar_net(cur_net)
-                            return True
                         else:
                             # do not ripup
                             loss1 = self.eval_net(cur_net)
@@ -294,15 +306,12 @@ class DrGridRoute(object):
                         else:
                             # too much detour, use the crossing solution
                             cur_net.clearNet(self._cirdb, increase=False)
-                            cur_net.crossing_budget = 10
-                            cur_net.current_budget = 10
-                            bSuccess1 = self._run_astar(
+                            return self._reroute_with_crossings(
                                 cur_net,
                                 strict_drc=strictDRC,
                                 net_config=net_config,
                                 groups=groups,
                             )
-                            self.registar_net(cur_net)
                     else:
                         # fail to route with crossing disable
                         if bkp[0] == 0:
@@ -310,17 +319,12 @@ class DrGridRoute(object):
                             self.ripuplocalnets(bkp[1])
                             cur_net.failed_count += 1
                         cur_net.clearNet(self._cirdb, increase=False)
-                        cur_net.crossing_budget = 10
-                        cur_net.current_budget = 10
-                        bSuccess1 = self._run_astar(
+                        return self._reroute_with_crossings(
                             cur_net,
                             strict_drc=strictDRC,
                             net_config=net_config,
                             groups=groups,
                         )
-                        cur_net.crossing_budget = 10
-                        cur_net.current_budget = 10
-                        self.registar_net(cur_net)
 
                     return True
                 else:
@@ -420,6 +424,10 @@ class DrGridRoute(object):
 
     def _materialize_routes(self):
         for current_net in self._cirdb.dbNets.values():
+            if current_net.prebuilt_route:
+                for component in current_net.wg_component:
+                    self._cirdb.layout.add_ref(component)
+                continue
             current_net.wirelength = 0
             current_net.wg_component.clear()
             for path_record in current_net.routed_path:
@@ -622,6 +630,11 @@ class DrGridRoute(object):
                 ):  # Only one time crossing is allowed
                     distance_to_intersection1 = segment1.project(intersection)
                     distance_to_intersection2 = segment2.project(intersection)
+                    if not (
+                        0 < distance_to_intersection1 < segment1.length
+                        and 0 < distance_to_intersection2 < segment2.length
+                    ):
+                        continue
                     segment1_parts, ports1, ori = self.spilt_line_string(
                         segment1, distance_to_intersection1
                     )
@@ -631,12 +644,12 @@ class DrGridRoute(object):
                     return (
                         [index1, segment1_parts, ports1],
                         [index2, segment2_parts, ports2],
-                        [intersection.coords._coords[0], ori],
+                        [intersection.coords[0], ori],
                     )
 
     def spilt_line_string(self, line, distance):
         if distance <= 0.0 or distance >= line.length:
-            return [LineString(line)]
+            raise ValueError("A crossing must lie inside the routed line")
         coords = list(line.coords)
         CL_0 = 4.5
         CL_45 = 4.5

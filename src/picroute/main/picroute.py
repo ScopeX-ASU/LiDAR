@@ -5,7 +5,7 @@ from picroute.config.parser import Parser
 from picroute.database.schematic import CustomSchematic
 from picroute.drc.drcmanager import DrcManager
 from picroute.routing.drmanager import DrManager
-from picroute.utils.general import TimerCtx, logger, seed_random
+from picroute.utils.general import TimerCtx, ensure_directory, logger, seed_random
 from picroute.version import __version__
 
 
@@ -62,7 +62,9 @@ class PICRoute:
         logger.info(f"detailed routing takes {t.interval:.2f} seconds")
 
         # visualize the routed layout
-        self.cirdb.layout.write_gds(self.config.run.output_layout_gds_path)
+        output_path = self.config.run.output_layout_gds_path
+        ensure_directory(output_path.parent)
+        self.cirdb.layout.write_gds(output_path)
 
         # self.cirdb.layout = self.cirdb.layout.flatten()
         # gdspath = self.cirdb.layout.write_gds(

@@ -2,6 +2,7 @@ from types import SimpleNamespace
 
 import gdsfactory as gf
 import numpy as np
+import pytest
 
 from picroute.drc.bitmap import Bitmap
 
@@ -36,3 +37,16 @@ def test_bitmap_coordinates_are_relative_to_die_origin() -> None:
     bitmap.initMap([blockage])
     assert bitmap.bitMap[0, 0].type == "blk"
     assert bitmap.bitMap[0, 0].blkID == "partly-outside"
+
+
+@pytest.mark.parametrize(
+    ("die_size", "resolution", "match"),
+    [
+        ([[0, 0], [10, 10]], 0, "resolution"),
+        ([[0, 0], [0, 10]], 1, "upper die coordinate"),
+        ([[0, 0, 0], [10, 10, 10]], 1, "two 2D coordinates"),
+    ],
+)
+def test_bitmap_rejects_invalid_geometry(die_size, resolution, match) -> None:
+    with pytest.raises(ValueError, match=match):
+        Bitmap(die_size, resolution=resolution)

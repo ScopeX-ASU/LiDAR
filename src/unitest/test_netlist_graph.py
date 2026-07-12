@@ -36,3 +36,12 @@ def test_weighted_longest_path_and_edge_update() -> None:
         "weight": 7.25,
         "label": "replacement",
     }
+
+
+def test_topology_orders_terminates_for_a_reachable_cycle() -> None:
+    graph = NetlistGraph()
+    graph.add_edge(1, 2, weight=1, label="entry")
+    graph.add_edge(2, 3, weight=1, label="forward")
+    graph.add_edge(3, 2, weight=1, label="feedback")
+
+    assert graph.topology_orders() == [["entry"], ["forward"], ["feedback"]]

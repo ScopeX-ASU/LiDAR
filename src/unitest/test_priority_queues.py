@@ -1,6 +1,7 @@
 from heapq import heappop
 from itertools import count
 from types import SimpleNamespace
+from unittest.mock import Mock
 
 from picroute.routing.astarsearch import AstarSearch, GridAstarNode
 from picroute.routing.drgridroute import DrGridRoute
@@ -87,3 +88,29 @@ def test_net_frontier_is_stable_and_rejects_duplicate_objects() -> None:
         "first",
         "second",
     ]
+
+
+def test_failed_crossing_retry_is_not_registered_as_success() -> None:
+    route = DrGridRoute.__new__(DrGridRoute)
+    route._config = SimpleNamespace(dr=SimpleNamespace(net_order="naive", group=True))
+    crossing_net = SimpleNamespace(distance={"Euler": 2_000})
+    current_net = SimpleNamespace(
+        netName="current",
+        crossing_budget=10,
+        current_budget=10,
+        crossing_num=1,
+        crossing_nets={"long"},
+        failed_count=0,
+        distance={"Euler": 10},
+        backup_net=Mock(return_value=(0, {"long"}, 1)),
+        clearNet=Mock(),
+    )
+    route._cirdb = SimpleNamespace(dbNets={"long": crossing_net})
+    route._run_astar = Mock(side_effect=[True, False])
+    route.ripuplocalnets = Mock()
+    route.registar_net = Mock()
+
+    succeeded = route.routeSingleNet(current_net, strictDRC=True)
+
+    assert succeeded is False
+    route.registar_net.assert_not_called()

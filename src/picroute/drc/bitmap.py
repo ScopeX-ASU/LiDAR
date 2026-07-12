@@ -144,6 +144,16 @@ class Bitmap:
         self.origin = np.asarray(die_size[0], dtype=float)
         upper = np.asarray(die_size[1], dtype=float)
         self._resolution = float(resolution)
+        if self.origin.shape != (2,) or upper.shape != (2,):
+            raise ValueError("Bitmap die_size must contain two 2D coordinates")
+        if not np.all(np.isfinite([*self.origin, *upper])):
+            raise ValueError("Bitmap die_size coordinates must be finite")
+        if not math.isfinite(self._resolution) or self._resolution <= 0:
+            raise ValueError("Bitmap resolution must be a positive finite number")
+        if np.any(upper <= self.origin):
+            raise ValueError("Bitmap upper die coordinate must exceed its origin")
+        if distance < 0:
+            raise ValueError("Bitmap blockage distance cannot be negative")
         self.width = math.ceil((upper[0] - self.origin[0]) / self._resolution)
         self.height = math.ceil((upper[1] - self.origin[1]) / self._resolution)
         self._distance = float(distance)
