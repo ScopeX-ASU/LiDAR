@@ -47,3 +47,28 @@ def test_all_angle_placement_matches_smoothed_route_region(points) -> None:
         geometry.layer, merge=True
     )
     assert xor.is_empty()
+
+
+def test_all_angle_access_uses_native_route_result() -> None:
+    config = Config()
+    config.dr = Config()
+    config.dr.cross_section = "strip"
+    config.dr.bend_radius = 5
+    geometry = RouteGeometry(config)
+    layer = gf.get_layer(geometry.layer)
+    port1 = gf.Port(
+        name="o1", center=(0, 0), width=geometry.width, orientation=0, layer=layer
+    )
+    port2 = gf.Port(
+        name="o2",
+        center=(30, 15),
+        width=geometry.width,
+        orientation=210,
+        layer=layer,
+    )
+
+    component, route = geometry.connect_ports_all_angle(port1, port2)
+
+    assert component.routes["access"] is route
+    assert route.length > 0
+    assert not component.get_region(geometry.layer).is_empty()

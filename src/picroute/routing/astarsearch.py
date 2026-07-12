@@ -675,23 +675,13 @@ class AstarSearch:
             self._net.distance["Euler"] < 10
             and abs(self.startNode[0].pos[2] - self.endNode.pos[2]) == 180
         ):
-            access_waveguide = gf.Component()
             start_port = self.start_port.port
-            layer_info = start_port.layer_info
-            routes = gf.routing.route_bundle(
-                access_waveguide,
-                [start_port],
-                [self.end_port.port],
-                layer=(layer_info.layer, layer_info.datatype),
-                route_width=start_port.dwidth,
-                sbend="bend_s",
-                raise_on_error=True,
+            access_waveguide, access_route = (
+                self._route_geometry.connect_ports_all_angle(
+                    start_port, self.end_port.port
+                )
             )
-            waveguide_length = sum(
-                float(instance.cell.info.get("length", 0))
-                for instance in routes[0].instances
-            )
-            self._net.wirelength += waveguide_length
+            self._net.wirelength += float(access_route.length)
             self._net.wg_component.append(access_waveguide)
             self._cirdb.layout.add_ref(access_waveguide)
             return True

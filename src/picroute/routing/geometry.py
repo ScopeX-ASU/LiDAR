@@ -3,10 +3,7 @@
 from __future__ import annotations
 
 from functools import partial
-from typing import cast
-
 import gdsfactory as gf
-import numpy as np
 from kfactory.routing.aa.optical import route as route_all_angle
 
 
@@ -91,86 +88,57 @@ class RouteGeometry:
                 orientation=port.orientation,
                 layer=port.layer,
             )
+        component.routes["backbone"] = route
         component.insert_vinsts()
         return component
+
+    def connect_ports_all_angle(self, port1, port2):
+        """Connect two arbitrary-angle ports using the configured optical geometry."""
+        component = gf.Component()
+        route = gf.routing.route_bundle_all_angle(
+            component=component,
+            ports1=[port1],
+            ports2=[port2],
+            straight=partial(gf.components.straight_all_angle),
+            bend=partial(
+                gf.components.bend_euler_all_angle,
+                radius=self.radius,
+            ),
+            cross_section=self.cross_section_spec,
+        )[0]
+        component.routes["access"] = route
+        component.insert_vinsts()
+        return component, route
 
     def _access_waveguide(
         self,
         route: gf.Component,
         endpoint,
         index: int,
-    ) -> tuple[gf.Component, tuple[float, float, float] | None, float]:
-        access_waveguide = gf.Component()
-        port1 = endpoint
-        orientation = round(port1.orientation) % 360
-        port2 = cast(
-            gf.Port, route.ports["o1"] if index == 1 else route.ports["o2"]
+    ) -> tuple[gf.Component, float]:
+        internal_port = route.ports["o1"] if index == 1 else route.ports["o2"]
+        access_waveguide, access_route = self.connect_ports_all_angle(
+            endpoint, internal_port
         )
-        rotation = None
-
-        if orientation not in {0, 90, 180, 270}:
-            x1, y1 = port1.dcenter
-            x2, y2 = port2.dcenter
-            distance = float(np.hypot(x2 - x1, y2 - y1))
-            if orientation in {45, 315}:
-                port1_orientation, port2_orientation = 0, 180
-                direction = 1
-            elif orientation in {135, 225}:
-                port1_orientation, port2_orientation = 180, 0
-                direction = -1
-            else:
-                raise ValueError(f"Unsupported access-port orientation {orientation}")
-            port1 = gf.Port(
-                name="o1",
-                orientation=port1_orientation,
-                center=(x1, y1),
-                width=self.width,
-                layer=self.layer,
-            )
-            port2 = gf.Port(
-                name="o2",
-                orientation=port2_orientation,
-                center=(x1 + direction * distance, y1),
-                width=self.width,
-                layer=self.layer,
-            )
-            rotation_angle = 45 if orientation in {45, 225} else -45
-            rotation = (rotation_angle, float(x1), float(y1))
-
-        routes = gf.routing.route_bundle(
-            access_waveguide,
-            [port1],
-            [port2],
-            cross_section=self.cross_section_spec,
-            radius=self.radius,
-            sbend="bend_s",
-            on_collision=None,
-            on_placer_error="error",
-        )
-        length = sum(
-            float(instance.cell.info.get("length", 0))
-            for instance in routes[0].instances
-        )
-        return access_waveguide, rotation, length
+        return access_waveguide, float(access_route.length)
 
     def materialize_record(self, path_record) -> tuple[gf.Component, float]:
         """Create one routed component and return it with its physical length."""
         path = self.smooth(path_record[0])
         route_shape = self.extrude(path)
-        access1, rotation1, length1 = self._access_waveguide(
+        access1, length1 = self._access_waveguide(
             route_shape, path_record[1], index=1
         )
-        access2, rotation2, length2 = self._access_waveguide(
+        access2, length2 = self._access_waveguide(
             route_shape, path_record[2], index=2
         )
         route = self.place_all_angle(path_record[0])
 
         component = gf.Component()
-        ref1 = component << access1
-        ref2 = component << access2
-        if rotation1 is not None:
-            ref1.drotate(rotation1[0], (rotation1[1], rotation1[2]))
-        if rotation2 is not None:
-            ref2.drotate(rotation2[0], (rotation2[1], rotation2[2]))
+        component << access1
+        component << access2
         component.add_ref(route)
+        component.routes["access1"] = access1.routes["access"]
+        component.routes["access2"] = access2.routes["access"]
+        component.routes["backbone"] = route.routes["backbone"]
         return component, length1 + length2 + float(path.length())

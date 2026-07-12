@@ -629,14 +629,10 @@ class DrGridRoute(object):
 
     def add_crossing_component(self, crossing):
         point, ori = crossing
-        c = gf.Component()
-        ref1 = c << gf.components.crossing()
-        ref1.drotate(ori)
-        ref1.dmove(point)
-        c.add_ports(ref1.ports)
-        self._cirdb.layout.add_ref(c)
-
-        return c.ports
+        reference = self._cirdb.layout << gf.components.crossing()
+        reference.drotate(ori)
+        reference.dmove(point)
+        return reference.ports
 
     def spilt_path(self, net1_path, net2_path):
         for index1, subpath1 in enumerate(net1_path):
