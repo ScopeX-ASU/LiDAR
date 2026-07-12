@@ -24,7 +24,6 @@ dependencies = [
   "numpy>=2,<3",
   "pydantic>=2.13.4,<2.14",
   "PyYAML>=6,<7",
-  "rtree>=1.4,<2",
   "ryaml>=0.5.1,<0.6",
   "shapely>=2.1,<3",
 ]
@@ -58,4 +57,3 @@ pythonpath = ["src"]
 [tool.ruff]
 target-version = "py312"
 line-length = 88
-
