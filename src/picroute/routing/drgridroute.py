@@ -6,7 +6,6 @@ from shapely.geometry import LineString, Point
 from picroute.database.schematic import CustomSchematic, Nets
 from picroute.drc.drcmanager import DrcManager
 from picroute.utils.general import logger
-from picroute.utils.route_bundle_sbend import route_bundle_sbend
 from picroute.utils.smooth import alignment, smooth
 
 from ..queue.pqueue import AdvancedPriorityQueue
@@ -435,23 +434,11 @@ class DrGridRoute(object):
                     port1 = path[index]
                     orient = round(port1.orientation)
                     port2 = route.ports["o1"] if index == 1 else route.ports["o2"]
-                    # rotation_angle = None
+                    rotation_angle = None
 
                     match orient:
-                        case 0 | 180:
-                            waveguide_length = route_bundle_sbend(
-                                access_waveguide,
-                                [port1],
-                                [port2],
-                            )
-                            return None, waveguide_length
-                        case 90 | 270:
-                            waveguide_length = route_bundle_sbend(
-                                access_waveguide,
-                                [port1],
-                                [port2],
-                            )
-                            return None, waveguide_length
+                        case 0 | 90 | 180 | 270:
+                            pass
                         case 45:
                             x1, y1 = port1.dcenter
                             x2, y2 = port2.dcenter
@@ -471,14 +458,7 @@ class DrGridRoute(object):
                                 width=0.5,
                                 layer=1,
                             )
-                            # generate fake component
-                            #
-                            waveguide_length = route_bundle_sbend(
-                                access_waveguide,
-                                [port1],
-                                [port2],
-                            )
-                            return (45, x1, y1), waveguide_length
+                            rotation_angle = (45, x1, y1)
                         case 135:
                             x1, y1 = port1.dcenter
                             x2, y2 = port2.dcenter
@@ -498,12 +478,7 @@ class DrGridRoute(object):
                                 width=0.5,
                                 layer=1,
                             )
-                            waveguide_length = route_bundle_sbend(
-                                access_waveguide,
-                                [port1],
-                                [port2],
-                            )
-                            return (-45, x1, y1), waveguide_length
+                            rotation_angle = (-45, x1, y1)
                         case 225:
                             x1, y1 = port1.dcenter
                             x2, y2 = port2.dcenter
@@ -523,12 +498,7 @@ class DrGridRoute(object):
                                 width=0.5,
                                 layer=1,
                             )
-                            waveguide_length = route_bundle_sbend(
-                                access_waveguide,
-                                [port1],
-                                [port2],
-                            )
-                            return (45, x1, y1), waveguide_length
+                            rotation_angle = (45, x1, y1)
                         case 315:
                             x1, y1 = port1.dcenter
                             x2, y2 = port2.dcenter
@@ -548,12 +518,23 @@ class DrGridRoute(object):
                                 width=0.5,
                                 layer=1,
                             )
-                            waveguide_length = route_bundle_sbend(
-                                access_waveguide,
-                                [port1],
-                                [port2],
-                            )
-                            return (-45, x1, y1), waveguide_length
+                            rotation_angle = (-45, x1, y1)
+
+                    layer_info = port1.layer_info
+                    routes = gf.routing.route_bundle(
+                        access_waveguide,
+                        [port1],
+                        [port2],
+                        layer=(layer_info.layer, layer_info.datatype),
+                        route_width=port1.dwidth,
+                        sbend="bend_s",
+                        raise_on_error=True,
+                    )
+                    waveguide_length = sum(
+                        float(instance.cell.info.get("length", 0))
+                        for instance in routes[0].instances
+                    )
+                    return rotation_angle, waveguide_length
 
                 access_waveguide1 = gf.Component()
                 access_waveguide2 = gf.Component()
@@ -684,23 +665,11 @@ class DrGridRoute(object):
                     port1 = path[index]
                     orient = round(port1.orientation)
                     port2 = route.ports["o1"] if index == 1 else route.ports["o2"]
-                    # rotation_angle = None
+                    rotation_angle = None
 
                     match orient:
-                        case 0 | 180:
-                            waveguide_length = route_bundle_sbend(
-                                access_waveguide,
-                                [port1],
-                                [port2],
-                            )
-                            return None, waveguide_length
-                        case 90 | 270:
-                            waveguide_length = route_bundle_sbend(
-                                access_waveguide,
-                                [port1],
-                                [port2],
-                            )
-                            return None, waveguide_length
+                        case 0 | 90 | 180 | 270:
+                            pass
                         case 45:
                             x1, y1 = port1.dcenter
                             x2, y2 = port2.dcenter
@@ -720,13 +689,7 @@ class DrGridRoute(object):
                                 width=0.5,
                                 layer=1,
                             )
-                            # generate fake component
-                            waveguide_length = route_bundle_sbend(
-                                access_waveguide,
-                                [port1],
-                                [port2],
-                            )
-                            return (45, x1, y1), waveguide_length
+                            rotation_angle = (45, x1, y1)
                         case 135:
                             x1, y1 = port1.dcenter
                             x2, y2 = port2.dcenter
@@ -746,12 +709,7 @@ class DrGridRoute(object):
                                 width=0.5,
                                 layer=1,
                             )
-                            waveguide_length = route_bundle_sbend(
-                                access_waveguide,
-                                [port1],
-                                [port2],
-                            )
-                            return (-45, x1, y1), waveguide_length
+                            rotation_angle = (-45, x1, y1)
                         case 225:
                             x1, y1 = port1.dcenter
                             x2, y2 = port2.dcenter
@@ -771,12 +729,7 @@ class DrGridRoute(object):
                                 width=0.5,
                                 layer=1,
                             )
-                            waveguide_length = route_bundle_sbend(
-                                access_waveguide,
-                                [port1],
-                                [port2],
-                            )
-                            return (45, x1, y1), waveguide_length
+                            rotation_angle = (45, x1, y1)
                         case 315:
                             x1, y1 = port1.dcenter
                             x2, y2 = port2.dcenter
@@ -798,12 +751,23 @@ class DrGridRoute(object):
                                 layer=1,
                                 # cross_section="xs"
                             )
-                            waveguide_length = route_bundle_sbend(
-                                access_waveguide,
-                                [port1],
-                                [port2],
-                            )
-                            return (-45, x1, y1), waveguide_length
+                            rotation_angle = (-45, x1, y1)
+
+                    layer_info = port1.layer_info
+                    routes = gf.routing.route_bundle(
+                        access_waveguide,
+                        [port1],
+                        [port2],
+                        layer=(layer_info.layer, layer_info.datatype),
+                        route_width=port1.dwidth,
+                        sbend="bend_s",
+                        raise_on_error=True,
+                    )
+                    waveguide_length = sum(
+                        float(instance.cell.info.get("length", 0))
+                        for instance in routes[0].instances
+                    )
+                    return rotation_angle, waveguide_length
 
                 access_waveguide1 = gf.Component()
                 access_waveguide2 = gf.Component()

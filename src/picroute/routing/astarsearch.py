@@ -10,7 +10,6 @@ import shapely.geometry as sg
 
 from picroute.database.schematic import CustomSchematic, Nets
 from picroute.drc.drcmanager import DrcManager
-from picroute.utils.route_bundle_sbend import route_bundle_sbend
 from picroute.utils.smooth import smooth
 
 from ..queue.heapdict import heapdict
@@ -686,10 +685,20 @@ class AstarSearch:
             and abs(self.startNode[0].pos[2] - self.endNode.pos[2]) == 180
         ):
             access_waveguide = gf.Component()
-            waveguide_length = route_bundle_sbend(
+            start_port = self.start_port.gf_port
+            layer_info = start_port.layer_info
+            routes = gf.routing.route_bundle(
                 access_waveguide,
-                [self.start_port.gf_port],
+                [start_port],
                 [self.end_port.gf_port],
+                layer=(layer_info.layer, layer_info.datatype),
+                route_width=start_port.dwidth,
+                sbend="bend_s",
+                raise_on_error=True,
+            )
+            waveguide_length = sum(
+                float(instance.cell.info.get("length", 0))
+                for instance in routes[0].instances
             )
             self._net.wirelength += waveguide_length
             self._net.wg_component.append(access_waveguide)
