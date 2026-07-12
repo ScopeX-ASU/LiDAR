@@ -46,9 +46,12 @@ class Macro(BaseModel):
     iloss: float = 0.1
     type: str = Field("CORE", description="Class type of the macro")
     origin: List[float] = Field(
-        [0, 0], description="Coordinate of the lower-left corner"
+        default_factory=lambda: [0, 0],
+        description="Coordinate of the lower-left corner",
     )
-    size: List[float] = Field([1, 1], description="dimension in x and y directions")
+    size: List[float] = Field(
+        default_factory=lambda: [1, 1], description="dimension in x and y directions"
+    )
     site: str = "core"
     pins: Optional[Dict[str, Any]] = Field(
         None, description="pin difinitions as a dictionary"
@@ -128,7 +131,7 @@ class dBPort(BaseModel):
     orientation: float
 
     netName: str = None
-    port_grids: list = []
+    port_grids: list = Field(default_factory=list)
     idBlk: int
     instanceName: str  # Used to locate the instance box
 
@@ -144,10 +147,10 @@ class Blockage(BaseModel):
     )
 
     bbox: Any
-    port_0: list = []
-    port_90: list = []
-    port_180: list = []
-    port_270: list = []
+    port_0: list = Field(default_factory=list)
+    port_90: list = Field(default_factory=list)
+    port_180: list = Field(default_factory=list)
+    port_270: list = Field(default_factory=list)
 
     def get_ports_list(self, orientation):
         match orientation:
@@ -170,13 +173,13 @@ class Nets(BaseModel):
     failed_count: int = 0
     enable_45: bool = True
     routed: bool = False
-    wg_component: list = []
-    rwguide: set = set()  # bitmap nodes' index
-    routed_path: list = []
-    origin_path: list = []
-    rect_route: list = []
+    wg_component: list = Field(default_factory=list)
+    rwguide: set = Field(default_factory=set)  # bitmap nodes' index
+    routed_path: list = Field(default_factory=list)
+    origin_path: list = Field(default_factory=list)
+    rect_route: list = Field(default_factory=list)
 
-    groups: list = []
+    groups: list = Field(default_factory=list)
     group_name: str = None
     NetPort1: dBPort
     NetPort2: dBPort
@@ -184,7 +187,7 @@ class Nets(BaseModel):
     earlyaccess: bool = False
 
     # crossing feature
-    width: int = 0.5
+    width: float = 0.5
     wavelength: int = 143
     material: str = "WG"
     half_size: float = 5
@@ -193,13 +196,13 @@ class Nets(BaseModel):
     maximum_crossing: int = 0
     crossing_budget: int = 100
     current_budget: int = crossing_budget
-    crossing_nets: set = set()
+    crossing_nets: set = Field(default_factory=set)
 
     vionets: int = 0
-    vioNets: set = set()
+    vioNets: set = Field(default_factory=set)
     # evaluation
     insertion_loss: float = 0
-    wirelength: int = 0
+    wirelength: float = 0
     bending: float = 0
     crossing_num: int = 0
 
@@ -210,7 +213,7 @@ class Nets(BaseModel):
     routing_order: int = 10000
     comp_dist: float = 100000
     distance: Optional[Dict[str, Any]] = Field(
-        {"Euler": 1}, description="used for net ordering"
+        default_factory=lambda: {"Euler": 1}, description="used for net ordering"
     )
 
     def clearNet(self, cirdb, routed=False, increase=True):
@@ -298,7 +301,9 @@ class Settings(BaseModel):
     version: str = "1.0"
     design: str = "default_design"
     units_distance_microns: float = 1  # 1 unit = 1 micro
-    die_area: List[List[float]] = [[0, 0], [100, 100]]
+    die_area: List[List[float]] = Field(
+        default_factory=lambda: [[0, 0], [100, 100]]
+    )
     num_instances: int = 0
     num_nets: int = 0
     num_ports: int = 0
@@ -314,8 +319,8 @@ class SchematicConfiguration(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
     schema_: AnyUrl | None = Field(None, alias="$schema")
-    instances: dict[str, Instance] | None = {}
-    schematic_placements: dict[str, Placement] | None = {}
+    instances: dict[str, Instance] | None = Field(default_factory=dict)
+    schematic_placements: dict[str, Placement] | None = Field(default_factory=dict)
     nets: list[list[str]] | None = None
     ports: dict[str, str] | None = None
     schema_version: int = Field(
@@ -354,10 +359,8 @@ class SchematicConfiguration(BaseModel):
 class CustomSchematicConfiguration(SchematicConfiguration):
     settings: Optional[Settings] = None
     instances: Optional[Dict[str, Instance]] = None
-    library: Optional[Dict[str, Macro]] = {}
-    schematic_placements: Optional[
-        Dict[str, Placement]
-    ] = {}  # i.e., initial placement, not final placement solution
+    library: Optional[Dict[str, Macro]] = Field(default_factory=dict)
+    schematic_placements: Optional[Dict[str, Placement]] = Field(default_factory=dict)
     nets: Any
     ports: Optional[Dict[str, str]] = None
     constraints: Optional[Dict[str, Any]] = None
@@ -818,10 +821,14 @@ class CustomSchematic(object):
 
     def add_constraints(
         self,
-        constraints_cfg: Dict = dict(
-            type="alignment", settings={"anchor": "left"}, objects=[]
-        ),
+        constraints_cfg: Dict | None = None,
     ):
+        if constraints_cfg is None:
+            constraints_cfg = {
+                "type": "alignment",
+                "settings": {"anchor": "left"},
+                "objects": [],
+            }
         if constraints_cfg is not None:
             constraint_name = f"constr_{len(self._schematic.constraints)}"
             # all instances indicated by names are aligned (left, lower corner)
