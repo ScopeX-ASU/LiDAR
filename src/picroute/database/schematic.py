@@ -654,7 +654,7 @@ class CustomSchematic(object):
         )
 
         c = gf.read.from_yaml(netlist_conf.model_dump())
-        self._gdsfactoryC = gf.Component("layout")
+        self._gdsfactoryC = gf.Component()
         self._gdsfactoryC.add_ref(c)
         self.tempLayout = None
 

@@ -450,10 +450,8 @@ class DrGridRoute(object):
         for current_net in self._cirdb.dbNets.values():
             current_net.wirelength = 0
             current_net.wg_component.clear()
-            for index, path_record in enumerate(current_net.routed_path):
-                component, length = self.route_geometry.materialize_record(
-                    path_record, name=f"{current_net.netName}{index}"
-                )
+            for path_record in current_net.routed_path:
+                component, length = self.route_geometry.materialize_record(path_record)
                 current_net.wirelength += length
                 current_net.wg_component.append(component)
                 self._cirdb.layout.add_ref(component)

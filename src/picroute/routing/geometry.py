@@ -118,7 +118,7 @@ class RouteGeometry:
         )
         return access_waveguide, rotation, length
 
-    def materialize_record(self, path_record, name: str) -> tuple[gf.Component, float]:
+    def materialize_record(self, path_record) -> tuple[gf.Component, float]:
         """Create one routed component and return it with its physical length."""
         path = self.smooth(path_record[0])
         route = self.extrude(path)
@@ -129,7 +129,7 @@ class RouteGeometry:
             route, path_record[2], index=2
         )
 
-        component = gf.Component(name=name)
+        component = gf.Component()
         ref1 = component << access1
         ref2 = component << access2
         if rotation1 is not None:
