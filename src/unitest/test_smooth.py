@@ -2,7 +2,7 @@ import gdsfactory as gf
 import numpy as np
 import pytest
 
-from picroute.utils.smooth import prepare_waypoints
+from picroute.utils.smooth import alignment, prepare_waypoints
 
 
 @pytest.mark.parametrize(
@@ -67,3 +67,20 @@ def test_prepared_waypoints_preserve_extruded_geometry_xor(
         (1, 0), merge=True
     )
     assert xor.is_empty()
+
+
+def test_alignment_uses_x_coordinate_for_vertical_destination() -> None:
+    layer = gf.get_layer("WG")
+    port1 = gf.Port(
+        name="start", center=(0, 0), width=0.5, orientation=0, layer=layer
+    )
+    port2 = gf.Port(
+        name="end", center=(25, 20), width=0.5, orientation=90, layer=layer
+    )
+    points = [[0, 0], [10, 0], [10, 10], [20, 20]]
+
+    result = alignment(points, port1, port2, radius=1, bend=gf.path.euler)
+
+    assert result is not None
+    assert result[-1][0] == 25
+    assert result[-2][0] == 25

@@ -50,8 +50,8 @@ def alignment(origin_path, port1, port2, radius, bend):
         path[-1][1] = port2.dcenter[1]
         path[-2][1] = port2.dcenter[1]
     else:
-        path[-1][1] = port2.dcenter[1]
-        path[-2][1] = port2.dcenter[1]
+        path[-1][0] = port2.dcenter[0]
+        path[-2][0] = port2.dcenter[0]
     try:
         smooth_path(
             points=path,
