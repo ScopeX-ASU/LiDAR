@@ -1,4 +1,7 @@
 # from pyutils.general import logger, TimerCtx
+from heapq import heappop, heappush
+from itertools import count
+
 import gdsfactory as gf
 import numpy as np
 from shapely.geometry import LineString, Point
@@ -7,8 +10,6 @@ from picroute.database.schematic import CustomSchematic, Nets
 from picroute.drc.drcmanager import DrcManager
 from picroute.utils.general import logger
 from picroute.utils.smooth import alignment
-
-from ..queue.pqueue import AdvancedPriorityQueue
 
 
 class DrGridRoute(object):
@@ -39,7 +40,9 @@ class DrGridRoute(object):
             self._drcmgr.bitMap.initPorts(self._cirdb.dbNets)
 
         # initialize net routing priority queue
-        self.net_PQ = AdvancedPriorityQueue()
+        self.net_PQ = []
+        self._net_pq_ids = set()
+        self._net_pq_counter = count()
         self.unrouted = 0
 
         # To do:
@@ -91,19 +94,30 @@ class DrGridRoute(object):
 
     def addUnroutedNetsToPQ(self):
         for _, value in self._cirdb._dbNets.items():
-            if not value.routed and not self.net_PQ.exist(value):
-                self.net_PQ.put(value)
+            net_id = id(value)
+            if not value.routed and net_id not in self._net_pq_ids:
+                heappush(
+                    self.net_PQ,
+                    (
+                        value.comp_dist,
+                        value.routing_order,
+                        next(self._net_pq_counter),
+                        value,
+                    ),
+                )
+                self._net_pq_ids.add(net_id)
 
     def solveDR(self):
         # routing with ripup and reroute
-        if self.runNRR(self.net_PQ, self._config.dr.maxIteration):
+        if self.runNRR(self._config.dr.maxIteration):
             logger.info(f"{self.__class__.__name__} succeed")
             return True
         else:
             logger.warning(f"{self.__class__.__name__} fail")
             return False
 
-    def runNRR(self, net_pq, maxIteration):
+    def runNRR(self, maxIteration):
+        net_pq = self.net_PQ
         for iter in range(maxIteration):
             logger.info(
                 f"{self.__class__.__name__}: Iteration: {iter + 1:4d} / {maxIteration:4d}, Unrouted nets: Todo"
@@ -111,8 +125,9 @@ class DrGridRoute(object):
             if self._config.show_temp:
                 self.show_templayout()
 
-            while not net_pq.empty():
-                cur_net = net_pq.get()
+            while net_pq:
+                _, _, _, cur_net = heappop(net_pq)
+                self._net_pq_ids.remove(id(cur_net))
                 if cur_net.routed:
                     continue
                 if self._config.dr.group:
@@ -121,15 +136,24 @@ class DrGridRoute(object):
                         nets = self._cirdb._group_Nets[groupID]["nets"]
                         group_len = max(group_len, len(nets))
                     for groupID in cur_net.groups:
-                        local_PQ = AdvancedPriorityQueue()
+                        local_PQ = []
+                        local_pq_counter = count()
                         group = self._cirdb._group_Nets[groupID]
                         nets = group["nets"]
                         for i, netName in enumerate(nets.keys()):
                             net = self._cirdb._dbNets[netName]
                             net.routing_order = i
-                            local_PQ.put(net)
-                        while not local_PQ.empty():
-                            local_net = local_PQ.get()
+                            heappush(
+                                local_PQ,
+                                (
+                                    net.comp_dist,
+                                    net.routing_order,
+                                    next(local_pq_counter),
+                                    net,
+                                ),
+                            )
+                        while local_PQ:
+                            _, _, _, local_net = heappop(local_PQ)
                             self.unrouted = group_len - local_net.routing_order + 1
                             if local_net.routed:
                                 continue
@@ -159,7 +183,7 @@ class DrGridRoute(object):
                 return False
             self.ripupfailedNets()
             self.addUnroutedNetsToPQ()
-            if net_pq.empty():
+            if not net_pq:
                 return True
         return False
 

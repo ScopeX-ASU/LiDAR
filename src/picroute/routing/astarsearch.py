@@ -2,6 +2,8 @@ import math
 from collections import Counter
 from copy import deepcopy
 from functools import partial
+from heapq import heappop, heappush
+from itertools import count
 from typing import Dict, List, Optional, Tuple, Union
 
 import gdsfactory as gf
@@ -12,7 +14,6 @@ from picroute.database.schematic import CustomSchematic, Nets
 from picroute.drc.drcmanager import DrcManager
 from picroute.utils.smooth import prepare_waypoints
 
-from ..queue.heapdict import heapdict
 from .drgridroute import DrGridRoute
 from .utils import EulerDist, customH, manhattanDH
 
@@ -125,22 +126,10 @@ class GridAstarNode:
     def addNeighbors(self, key, value):
         self._neighbors[key] = value
 
-    ### This __eq__ and __lt__ function is to make the Node object comparable, so the priority queue knows how to sort nodes.
-    ### A node with smaller cost_f will have higher priority.
-    ### If two nodes have the same cost_f, a node with smaller bend_count will have higher priotity
-    ### If two nodes have the same cost_f and same bend_count. The one pushed into the queue first will have higher priority.
-    ### You do not need to explicitly call __eq__ or __lt__. The priority queue will handle the 'sorting' internally. You just need to push a GridAstarNode into the queue 'queue.put(node)', and pop the lowest cost node out of the queue: 'node = queue.get()'.
-    # def __eq__(self, other):
-    #     return (self._cost_f, self._bend_count) == (other._cost_f, other._bend_count)
-
-    # def __lt__(self, other):
-    #     return (self._cost_f, self._bend_count) < (other._cost_f, other._bend_count)
-
     def __eq__(self, other):
-        return self._cost_f == other._cost_f
-
-    def __lt__(self, other):
-        return self._cost_f < other._cost_f
+        if not isinstance(other, GridAstarNode):
+            return NotImplemented
+        return self._pos == other._pos
 
     def __hash__(self):
         return hash(self._pos)
@@ -233,7 +222,8 @@ class AstarSearch:
         CurrentNet.current_budget = CurrentNet.crossing_budget
         self.crossing_budget = CurrentNet.crossing_budget
 
-        self.nodepq = heapdict()
+        self.nodepq = []
+        self._nodepq_counter = count()
 
         if net_config and not net_config["customH"]:
             self.costH = self.scaledMDist
@@ -708,11 +698,9 @@ class AstarSearch:
         if not self.findAcsPts():
             return False
         for node in self.startNode:
-            # self.nodepq.put(node)
-            self.nodepq[node] = node.costF
+            self._push_node(node)
 
-        while not self.nodepq.empty():  # Need to check the _param.maxExplore
-            current_node, _ = self.nodepq.popitem()
+        while (current_node := self._pop_node()) is not None:
             current_node.visited = True
 
             if self.check_connection(
@@ -802,9 +790,24 @@ class AstarSearch:
                     neighbor.costG = costG
                     neighbor.costF = costF
                     neighbor.parent = current_node
-                    self.nodepq[neighbor] = neighbor.costF
+                    self._push_node(neighbor)
 
         return False
+
+    def _push_node(self, node: GridAstarNode) -> None:
+        """Add a node snapshot, preserving insertion order for equal costs."""
+        heappush(
+            self.nodepq,
+            (node.costF, next(self._nodepq_counter), node),
+        )
+
+    def _pop_node(self) -> Optional[GridAstarNode]:
+        """Return the cheapest current node, discarding stale heap entries."""
+        while self.nodepq:
+            priority, _, node = heappop(self.nodepq)
+            if not node.visited and priority == node.costF:
+                return node
+        return None
 
     def findNeighbors(self, currentNode: GridAstarNode):
         currentX, currentY, orientation = currentNode.pos

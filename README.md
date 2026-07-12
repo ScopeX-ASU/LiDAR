@@ -63,8 +63,7 @@ To further enhance overall port accessibility, several port access assignment te
 | database/        | Script for netlist loading and LiDAR database construction |
 | drc/             | Scripts for design rule checking |
 | main/            | Main function |
-| queue/           | Queue data structure for A star search |
-| routing/         | Implementation of routing algorithm|
+| routing/         | Routing algorithms and standard-library priority frontiers |
 | scripts/         | Script for batch execution of benchmarks |
 | utils/           | Utilities for post-processing and logging|
 
