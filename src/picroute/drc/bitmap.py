@@ -172,16 +172,17 @@ class Bitmap:
 
     def initMap(self, blockages) -> None:
         for blockage in blockages:
+            bbox = blockage.bbox
             lower = self.to_grid(
                 [
-                    blockage.bbox[0] - self._distance,
-                    blockage.bbox[1] - self._distance,
+                    bbox.left - self._distance,
+                    bbox.bottom - self._distance,
                 ]
             )
             upper = self.to_grid(
                 [
-                    blockage.bbox[2] + self._distance,
-                    blockage.bbox[3] + self._distance,
+                    bbox.right + self._distance,
+                    bbox.top + self._distance,
                 ]
             )
             xmin, ymin = np.maximum(lower, 0)

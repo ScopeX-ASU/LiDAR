@@ -27,15 +27,21 @@ def test_database_uses_transformed_instance_geometry(tmp_path: Path) -> None:
     loaded.load_gp()
 
     for db_port in loaded._dbPorts.values():
-        np.testing.assert_allclose(db_port.center, db_port.gf_port.dcenter)
-        assert db_port.width == db_port.gf_port.dwidth
-        assert db_port.orientation == round(db_port.gf_port.orientation) % 360
+        np.testing.assert_allclose(db_port.center, db_port.port.dcenter)
+        assert db_port.width == db_port.port.dwidth
+        assert db_port.orientation == round(db_port.port.orientation) % 360
 
     placed_layout = loaded.layout.insts[0].cell
     for name, blockage in loaded.initBlk.items():
         bbox = placed_layout.insts[name].dbbox()
         np.testing.assert_allclose(
-            blockage.bbox, [bbox.left, bbox.bottom, bbox.right, bbox.top]
+            [
+                blockage.bbox.left,
+                blockage.bbox.bottom,
+                blockage.bbox.right,
+                blockage.bbox.top,
+            ],
+            [bbox.left, bbox.bottom, bbox.right, bbox.top],
         )
 
 
@@ -52,4 +58,3 @@ def test_split_instance_port_ids_are_contiguous(tmp_path: Path) -> None:
     loaded.load_gp()
 
     assert [loaded._dbPorts[f"mmi,o{i}"].idBlk for i in (1, 2, 3)] == [0, 1, 2]
-

@@ -29,6 +29,7 @@ from pydantic import AnyUrl, BaseModel, ConfigDict, Field
 __all__ = [
     "Macro",
     "Instance",
+    "EndpointState",
     "Nets",
     "Constraints",
     "Settings",
@@ -121,47 +122,53 @@ class Instance(BaseModel):
         return True
 
 
-class dBPort(BaseModel):
+class EndpointState(BaseModel):
+    """LiDAR routing state attached to one native transformed port."""
+
     model_config = ConfigDict(extra="forbid", arbitrary_types_allowed=True)
 
-    # port attribute
     port_name: str
-    center: np.ndarray
-    width: float
-    orientation: float
+    port: gf.Port
 
-    netName: str = None
+    netName: str | None = None
     port_grids: list = Field(default_factory=list)
     idBlk: int
     instanceName: str  # Used to locate the instance box
 
-    gf_port: Any = None
+    @property
+    def center(self) -> np.ndarray:
+        return np.asarray(self.port.dcenter, dtype=float)
+
+    @property
+    def width(self) -> float:
+        return float(self.port.dwidth)
+
+    @property
+    def orientation(self) -> float:
+        return float(round(self.port.orientation) % 360)
 
 
 class Blockage(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    """Routing blockage backed by a native transformed component reference."""
+
+    model_config = ConfigDict(extra="forbid", arbitrary_types_allowed=True)
 
     idBlk: Optional[int]
     instanceName: Optional[str] = Field(
         None, description="Used to locate the instance port"
     )
 
-    bbox: Any
-    port_0: list = Field(default_factory=list)
-    port_90: list = Field(default_factory=list)
-    port_180: list = Field(default_factory=list)
-    port_270: list = Field(default_factory=list)
+    reference: gf.ComponentReference
+    ports_by_orientation: dict[int, list[EndpointState]] = Field(
+        default_factory=dict
+    )
+
+    @property
+    def bbox(self):
+        return self.reference.dbbox()
 
     def get_ports_list(self, orientation):
-        match orientation:
-            case 0:
-                return self.port_0
-            case 90:
-                return self.port_90
-            case 180:
-                return self.port_180
-            case 270:
-                return self.port_270
+        return self.ports_by_orientation.get(orientation, [])
 
 
 class Nets(BaseModel):
@@ -181,8 +188,8 @@ class Nets(BaseModel):
 
     groups: list = Field(default_factory=list)
     group_name: str = None
-    NetPort1: dBPort
-    NetPort2: dBPort
+    NetPort1: EndpointState
+    NetPort2: EndpointState
     reverse: bool = False
     earlyaccess: bool = False
 
@@ -663,7 +670,6 @@ class CustomSchematic(object):
         blk_index = 0
         for reference in c.insts:
             name = reference.name
-            bbox = reference.dbbox()
             orientation_ports = {0: [], 90: [], 180: [], 270: []}
             optical_ports = list(reference.ports.filter(port_type="optical"))
 
@@ -678,14 +684,11 @@ class CustomSchematic(object):
                 if name in split_instance:
                     port_id += int(port.name[1:]) - 1
                 port_name = f"{name},{port.name}"
-                db_port = dBPort(
+                db_port = EndpointState(
                     port_name=port_name,
-                    center=np.asarray(port.dcenter, dtype=float),
-                    width=float(port.dwidth),
-                    orientation=float(orientation),
+                    port=port,
                     instanceName=name,
                     idBlk=port_id,
-                    gf_port=port,
                 )
                 self._dbPorts[port_name] = db_port
                 orientation_ports[orientation].append(db_port)
@@ -694,11 +697,8 @@ class CustomSchematic(object):
             self._inst_blks[name] = Blockage(
                 idBlk=blk_index,
                 instanceName=name,
-                bbox=[bbox.left, bbox.bottom, bbox.right, bbox.top],
-                port_0=orientation_ports[0],
-                port_90=orientation_ports[90],
-                port_180=orientation_ports[180],
-                port_270=orientation_ports[270],
+                reference=reference,
+                ports_by_orientation=orientation_ports,
             )
             blk_index += len(optical_ports) if name in split_instance else 1
 

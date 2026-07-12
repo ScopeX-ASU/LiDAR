@@ -97,15 +97,7 @@ class DrcManager(object):
                     net = self._cirdb.dbNets[Port.netName]
                     inst = self._cirdb._inst_blks[net.NetPort2.instanceName]
                     orient = net.NetPort2.orientation
-                    match orient:
-                        case 0:
-                            port_len = len(inst.port_0)
-                        case 90:
-                            port_len = len(inst.port_90)
-                        case 180:
-                            port_len = len(inst.port_180)
-                        case 270:
-                            port_len = len(inst.port_270)
+                    port_len = len(inst.get_ports_list(orient))
 
                     if net.NetPort1 == Port and port_len <= 2:
                         net.reverse = True

@@ -621,7 +621,7 @@ class AstarSearch:
             else:
                 pass
 
-            """ gf_ports are used for access waveguide gerneration
+            """Native ports are used for access-waveguide generation.
             """
             if self._bStrictDRC:
                 # align = alignment(segments, self.start_port.port, self.end_port.port, radius=radius-1e-3, bend=gf.path.euler)
@@ -632,7 +632,7 @@ class AstarSearch:
                 # self._net.wg_component.append(temp1.flatten())
                 # self._net.wg_component.append(temp2.flatten())
                 self._net.routed_path = [
-                    [segments.tolist(), self.start_port.gf_port, self.end_port.gf_port]
+                    [segments.tolist(), self.start_port.port, self.end_port.port]
                 ]
                 self._net.crossing_nets = self._crossing_nets
                 # self._net.current_budget -= len(self._crossing_nets)
@@ -647,7 +647,7 @@ class AstarSearch:
                 # self._net.wg_component.append(temp1.flatten())
                 # self._net.wg_component.append(temp2.flatten())
                 self._net.routed_path = [
-                    [segments.tolist(), self.start_port.gf_port, self.end_port.gf_port]
+                    [segments.tolist(), self.start_port.port, self.end_port.port]
                 ]
                 self._net.wirelength = P.length()
                 self._net.bending = accumulated_bend
@@ -676,12 +676,12 @@ class AstarSearch:
             and abs(self.startNode[0].pos[2] - self.endNode.pos[2]) == 180
         ):
             access_waveguide = gf.Component()
-            start_port = self.start_port.gf_port
+            start_port = self.start_port.port
             layer_info = start_port.layer_info
             routes = gf.routing.route_bundle(
                 access_waveguide,
                 [start_port],
-                [self.end_port.gf_port],
+                [self.end_port.port],
                 layer=(layer_info.layer, layer_info.datatype),
                 route_width=start_port.dwidth,
                 sbend="bend_s",
