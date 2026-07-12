@@ -19,4 +19,6 @@ def test_se_load_netlist(tmp_path: Path) -> None:
 
     assert len(schematic.initBlk) == 6
     assert len(schematic.dbNets) == 2
-    assert len(schematic.layout.insts) == 1
+    assert len(schematic.layout.insts) == 6
+    assert len(schematic.native_schematic.instances) == 6
+    assert len(schematic.native_schematic.nets) == 2

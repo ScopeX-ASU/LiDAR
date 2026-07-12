@@ -17,13 +17,7 @@ import gdsfactory as gf
 import networkx as nx
 import numpy as np
 import yaml
-from gdsfactory.schematic import (
-    Bundle,
-    Net,
-    Netlist,
-    # Instance,
-    Placement,
-)
+from gdsfactory.schematic import Placement
 from pydantic import AnyUrl, BaseModel, ConfigDict, Field
 
 __all__ = [
@@ -499,27 +493,6 @@ class CustomSchematicConfiguration(SchematicConfiguration):
         return placement, node_size_x, node_size_y
 
 
-class CustomNetlist(Netlist):
-    pdk: str = ""
-    instances: dict[str, Instance] = Field(default_factory=dict)
-    placements: dict[str, Placement] = Field(default_factory=dict)
-    connections: dict[str, str] = Field(default_factory=dict)
-    routes: dict[str, Bundle] = Field(default_factory=dict)
-    name: str | None = None
-    info: dict[str, Any] = Field(default_factory=dict)
-    ports: dict[str, str] = Field(default_factory=dict)
-    settings: dict[str, Any] = Field(default_factory=dict, exclude=True)
-    nets: list[Net] = Field(default_factory=list)
-    warnings: dict[str, Any] = Field(default_factory=dict)
-
-    model_config = {"extra": "forbid"}
-
-    def to_yaml(self, filename) -> None:
-        netlist = self.model_dump()
-        with open(filename, mode="w") as f:
-            yaml.safe_dump(netlist, f, default_flow_style=None, sort_keys=False)
-
-
 class CustomSchematic(object):
     def __init__(
         self, filename: Union[str, Path], pdk: Optional[gf.Pdk] = None
@@ -560,6 +533,7 @@ class CustomSchematic(object):
             None  # high-level gdsfactory component, which is used for visualization
         )
         self.device_loss = {}
+        self._native_schematic = gf.Schematic()
 
         if 0 and filepath.is_file():
             self.load_netlist()
@@ -576,7 +550,13 @@ class CustomSchematic(object):
 
     @property
     def schematic(self):
+        """Return the GP compatibility model used by benchmark generators."""
         return self._schematic
+
+    @property
+    def native_schematic(self) -> gf.Schematic:
+        """Return the canonical gdsfactory/kfactory schematic."""
+        return self._build_native_schematic()
 
     @property
     def layout(self):
@@ -612,6 +592,74 @@ class CustomSchematic(object):
             name=instance_name, component=component, iloss=iloss, placement=placement
         )
 
+    @staticmethod
+    def _factory_settings(instance: Instance) -> dict[str, Any]:
+        """Return only settings accepted by the component factory."""
+        settings = dict(instance.settings or {})
+        for key in ("macro_type", "placement", "split"):
+            settings.pop(key, None)
+        return settings
+
+    def _build_native_schematic(self) -> gf.Schematic:
+        """Translate the GP interchange model into a native micron schematic."""
+        gp = self._schematic
+        native = gf.Schematic(
+            name=gp.settings.design,
+            info={"gp_settings": gp.settings.model_dump()},
+        )
+
+        for name, instance in gp.instances.items():
+            native_instance = native.create_inst(
+                name=name,
+                component=instance.component,
+                settings=self._factory_settings(instance),
+            )
+            placement_data = (instance.settings or {}).get("placement")
+            if placement_data is None:
+                placement_data = ["UNPLACED", [0, 0], "N", [0, 0, 0, 0]]
+            placement, _, _ = gp.convert_pl_lefdef_to_gf(
+                (instance.settings or {})["macro_type"], placement_data
+            )
+            native_instance.place(
+                x=float(placement.x or 0),
+                y=float(placement.y or 0),
+                orientation=float(placement.rotation),
+                mirror=bool(placement.mirror),
+                anchor={"x": "left", "y": "bottom"},
+            )
+
+        for endpoints in gp.nets.values():
+            instance1, port1 = endpoints[0].split(",", maxsplit=1)
+            instance2, port2 = endpoints[1].split(",", maxsplit=1)
+            native.connect(
+                native.instances[instance1].ports[port1],
+                native.instances[instance2].ports[port2],
+                virtual=True,
+            )
+
+        self._native_schematic = native
+        return native
+
+    def _materialize_native_schematic(self) -> gf.Component:
+        """Create the placed component and enforce transformed GP lower-left anchors."""
+        native = self._build_native_schematic()
+        component = native.create_cell(
+            output_type=gf.Component,
+            factories=self.pdk.cells,
+        )
+
+        # GP/LEF placements locate the lower-left corner after transformation.
+        # DSchematic fixed anchors refer to the pre-rotation bbox, so normalize the
+        # resulting native references to the GP convention.
+        for name, instance in self._schematic.instances.items():
+            placement_data = (instance.settings or {}).get("placement")
+            if placement_data is None:
+                continue
+            reference = component.insts[name]
+            reference.dxmin = float(placement_data[1][0])
+            reference.dymin = float(placement_data[1][1])
+        return component
+
     def load_gp(self):
         # load netlist
         path = self.path
@@ -622,47 +670,21 @@ class CustomSchematic(object):
         self._schematic = schematic
 
         split_instance = set()
-        # Process logical instances first. Physical geometry is read from the
-        # transformed GDSFactory instances below.
-        instances = {}
         instance_macros = {}
-        for name, inst in netlist["instances"].items():
-            instances[name] = Instance(
-                component=inst["component"], settings=inst["settings"]
-            )
-
-            macro_type = inst["settings"]["macro_type"]
-            inst_placement = inst["settings"]["placement"]
-            pl, _, _ = self._schematic.convert_pl_lefdef_to_gf(
-                macro_type, inst_placement
-            )
-            self._schematic.placements[name] = pl
+        for name, instance in schematic.instances.items():
+            settings = instance.settings or {}
+            macro_type = settings["macro_type"]
             instance_macros[name] = self._schematic.library[macro_type]
-
-            if instances[name].settings.get("split", None):
+            if settings.get("split", False):
                 split_instance.add(name)
-                del instances[name].settings["split"]
-
-            del instances[name].settings["placement"]
-            del instances[name].settings["macro_type"]
 
         ports = netlist.get("ports", {})
-        nets = netlist.get("nets", [])
-        self._schematic.instances = instances
+        nets = netlist.get("nets", {})
         self._schematic.ports = ports
         self._schematic.nets = nets
-        routes = {}
 
-        netlist_conf = CustomNetlist(
-            instances=schematic.instances,
-            placements=schematic.placements,
-            routes=routes,
-            ports=schematic.ports,
-        )
-
-        c = gf.read.from_yaml(netlist_conf.model_dump())
-        self._gdsfactoryC = gf.Component()
-        self._gdsfactoryC.add_ref(c)
+        c = self._materialize_native_schematic()
+        self._gdsfactoryC = c
         self.tempLayout = None
 
         # Use GDSFactory/KFactory as the source of truth for transformed
@@ -780,21 +802,7 @@ class CustomSchematic(object):
 
         schematic = CustomSchematicConfiguration.model_validate(netlist)
         self._schematic = schematic
-
-        # process instances
-        instances = {
-            name: Instance(component=inst["component"], settings=inst["settings"])
-            for name, inst in netlist["instances"].items()
-        }
-
-        nets = netlist.get("nets", [])
-
-        self._schematic.instances = instances
-        self._schematic.nets = nets
-
-        # process ports
-        ports = netlist.get("ports", {})
-        self._schematic.ports = ports
+        self._build_native_schematic()
 
     def add_net(self, inst1, port1, inst2, port2):
         p1 = f"{inst1},{port1}"
@@ -835,6 +843,7 @@ class CustomSchematic(object):
             self._schematic.constraints[constraint_name] = deepcopy(constraints_cfg)
 
     def commit(self) -> None:
+        self._build_native_schematic()
         self.write_netlist()
 
     def get_netlist(self):
@@ -887,10 +896,11 @@ class CustomSchematic(object):
 
     def to_component(self, filename: str | None = None) -> gf.Component:
         if filename is not None and os.path.exists(filename):
-            c = gf.read.from_yaml(filename)
-        else:
-            c = gf.read.from_yaml(self.get_netlist)
-        return c
+            with open(filename, "r") as stream:
+                self._schematic = CustomSchematicConfiguration.model_validate(
+                    yaml.safe_load(stream)
+                )
+        return self._materialize_native_schematic()
 
     def print_benchmark(self):
         s = "\n================================== Benchmark Statistics ===================================\n\n"

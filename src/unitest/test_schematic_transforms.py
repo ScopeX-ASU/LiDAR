@@ -31,7 +31,7 @@ def test_database_uses_transformed_instance_geometry(tmp_path: Path) -> None:
         assert db_port.width == db_port.port.dwidth
         assert db_port.orientation == round(db_port.port.orientation) % 360
 
-    placed_layout = loaded.layout.insts[0].cell
+    placed_layout = loaded.layout
     for name, blockage in loaded.initBlk.items():
         bbox = placed_layout.insts[name].dbbox()
         np.testing.assert_allclose(
