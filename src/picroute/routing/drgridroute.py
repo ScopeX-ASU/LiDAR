@@ -422,175 +422,41 @@ class DrGridRoute(object):
             return False
 
     def checkFailed(self):
-        for _, value in self._cirdb._dbNets.items():
+        for value in self._cirdb._dbNets.values():
             if value.vionets == 0:
                 value.crossing_num = len(value.crossing_nets)
-        for _, value in self._cirdb._dbNets.items():
+        for value in self._cirdb._dbNets.values():
             if value.vionets != 0:
                 value.crossing_num = value.vionets
                 for net in value.vioNets:
                     self._cirdb._dbNets[net].crossing_num += 1
 
+        self._align_routed_paths()
+        self._materialize_routes()
+
+    def _align_routed_paths(self):
         radius = self._config.dr.bend_radius
-        for net_name, current_net in self._cirdb.dbNets.items():
+        for current_net in self._cirdb.dbNets.values():
+            if not current_net.routed_path:
+                continue
             segments, start_port, end_port = current_net.routed_path[0]
-            align = alignment(
+            aligned = alignment(
                 segments, start_port, end_port, radius, bend=gf.path.euler
             )
-            if align is not None:
-                current_net.routed_path[0][0] = align
+            if aligned is not None:
+                current_net.routed_path[0][0] = aligned
 
-        for net_name, current_net in self._cirdb.dbNets.items():
-            path_count = len(current_net.routed_path)
-            crossing_number = path_count - 1
-            current_net.crossing_num += crossing_number
+    def _materialize_routes(self):
+        for current_net in self._cirdb.dbNets.values():
             current_net.wirelength = 0
-            for i, path in enumerate(current_net.routed_path):
-                P = gf.path.smooth(
-                    points=path[0],
-                    radius=self._config.dr.bend_radius - 1e-9,
-                    bend=gf.path.euler,
-                    # bend=gf.path.arc,
-                    use_eff=True,
+            current_net.wg_component.clear()
+            for index, path_record in enumerate(current_net.routed_path):
+                component, length = self.route_geometry.materialize_record(
+                    path_record, name=f"{current_net.netName}{index}"
                 )
-                route = self.route_geometry.extrude(P)
-                # Rotate the accessing waveguide
-
-                def generate_accessing_waveguide(route, path, index, access_waveguide):
-                    port1 = path[index]
-                    orient = round(port1.orientation)
-                    port2 = route.ports["o1"] if index == 1 else route.ports["o2"]
-                    rotation_angle = None
-
-                    match orient:
-                        case 0 | 90 | 180 | 270:
-                            pass
-                        case 45:
-                            x1, y1 = port1.dcenter
-                            x2, y2 = port2.dcenter
-                            dist = np.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
-
-                            port1 = gf.Port(
-                                name="o1",
-                                orientation=0,
-                                center=(x1, y1),
-                                width=self.route_geometry.width,
-                                layer=self.route_geometry.layer,
-                            )
-                            port2 = gf.Port(
-                                name="o2",
-                                orientation=180,
-                                center=(x1 + dist, y1),
-                                width=self.route_geometry.width,
-                                layer=self.route_geometry.layer,
-                            )
-                            rotation_angle = (45, x1, y1)
-                        case 135:
-                            x1, y1 = port1.dcenter
-                            x2, y2 = port2.dcenter
-                            dist = np.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
-
-                            port1 = gf.Port(
-                                name="o1",
-                                orientation=180,
-                                center=(x1, y1),
-                                width=self.route_geometry.width,
-                                layer=self.route_geometry.layer,
-                            )
-                            port2 = gf.Port(
-                                name="o2",
-                                orientation=0,
-                                center=(x1 - dist, y1),
-                                width=self.route_geometry.width,
-                                layer=self.route_geometry.layer,
-                            )
-                            rotation_angle = (-45, x1, y1)
-                        case 225:
-                            x1, y1 = port1.dcenter
-                            x2, y2 = port2.dcenter
-                            dist = np.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
-
-                            port1 = gf.Port(
-                                name="o1",
-                                orientation=180,
-                                center=(x1, y1),
-                                width=self.route_geometry.width,
-                                layer=self.route_geometry.layer,
-                            )
-                            port2 = gf.Port(
-                                name="o2",
-                                orientation=0,
-                                center=(x1 - dist, y1),
-                                width=self.route_geometry.width,
-                                layer=self.route_geometry.layer,
-                            )
-                            rotation_angle = (45, x1, y1)
-                        case 315:
-                            x1, y1 = port1.dcenter
-                            x2, y2 = port2.dcenter
-                            dist = np.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
-
-                            port1 = gf.Port(
-                                name="o1",
-                                orientation=0,
-                                center=(x1, y1),
-                                width=self.route_geometry.width,
-                                layer=self.route_geometry.layer,
-                            )
-                            port2 = gf.Port(
-                                name="o2",
-                                orientation=180,
-                                center=(x1 + dist, y1),
-                                width=self.route_geometry.width,
-                                layer=self.route_geometry.layer,
-                            )
-                            rotation_angle = (-45, x1, y1)
-
-                    routes = gf.routing.route_bundle(
-                        access_waveguide,
-                        [port1],
-                        [port2],
-                        cross_section=self.route_geometry.cross_section_spec,
-                        radius=self.route_geometry.radius,
-                        sbend="bend_s",
-                        raise_on_error=True,
-                    )
-                    waveguide_length = sum(
-                        float(instance.cell.info.get("length", 0))
-                        for instance in routes[0].instances
-                    )
-                    return rotation_angle, waveguide_length
-
-                access_waveguide1 = gf.Component()
-                access_waveguide2 = gf.Component()
-                rotation_angle1, component_length1 = generate_accessing_waveguide(
-                    route, path, index=1, access_waveguide=access_waveguide1
-                )
-                rotation_angle2, component_length2 = generate_accessing_waveguide(
-                    route, path, index=2, access_waveguide=access_waveguide2
-                )
-
-                final_component = gf.Component(name=(current_net.netName + str(i)))
-                ref1 = final_component << access_waveguide1
-                ref2 = final_component << access_waveguide2
-                if rotation_angle1 is not None:
-                    ref1.drotate(
-                        rotation_angle1[0], (rotation_angle1[1], rotation_angle1[2])
-                    )
-                if rotation_angle2 is not None:
-                    ref2.drotate(
-                        rotation_angle2[0], (rotation_angle2[1], rotation_angle2[2])
-                    )
-                current_net.wirelength += component_length1
-                current_net.wirelength += component_length2
-                current_net.wirelength += route.info.model_extra.get("length", 0)
-                final_component.add_ref(route)
-
-                components = current_net.wg_component
-                components.clear()
-                components.append(final_component)
-                self._cirdb.layout.add_ref(final_component)
-
+                current_net.wirelength += length
+                current_net.wg_component.append(component)
+                self._cirdb.layout.add_ref(component)
     def clearHistoryMap(self):
         self.historyMap = np.zeros(
             (self._drcmgr.bitMap_width, self._drcmgr.bitMap_height, 8), dtype=np.int32
@@ -618,14 +484,7 @@ class DrGridRoute(object):
 
     def post_processing(self):
         """post-processing after routing sucessfully"""
-        radius = self._config.dr.bend_radius
-        for net_name, current_net in self._cirdb.dbNets.items():
-            segments, start_port, end_port = current_net.routed_path[0]
-            align = alignment(
-                segments, start_port, end_port, radius, bend=gf.path.euler
-            )
-            if align is not None:
-                current_net.routed_path[0][0] = align
+        self._align_routed_paths()
 
         for cur_net_name, current_net in self._cirdb.dbNets.items():
             for crossing_net_name in current_net.crossing_nets:
@@ -671,158 +530,9 @@ class DrGridRoute(object):
                     path2[index2] = subpath2_1
                     path2.append(subpath2_2)
 
-        for net_name, current_net in self._cirdb.dbNets.items():
-            path_count = len(current_net.routed_path)
-            crossing_number = max(0, path_count - 1)
-            current_net.crossing_num = crossing_number
-            current_net.wirelength = 0
-            for i, path in enumerate(current_net.routed_path):
-                P = gf.path.smooth(
-                    points=path[0],
-                    radius=self._config.dr.bend_radius - 1e-9,
-                    bend=gf.path.euler,
-                    # bend=gf.path.arc,
-                    use_eff=True,
-                )
-                route = self.route_geometry.extrude(P)
-
-                def generate_accessing_waveguide(route, path, index, access_waveguide):
-                    port1 = path[index]
-                    orient = round(port1.orientation)
-                    port2 = route.ports["o1"] if index == 1 else route.ports["o2"]
-                    rotation_angle = None
-
-                    match orient:
-                        case 0 | 90 | 180 | 270:
-                            pass
-                        case 45:
-                            x1, y1 = port1.dcenter
-                            x2, y2 = port2.dcenter
-                            dist = np.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
-
-                            port1 = gf.Port(
-                                name="o1",
-                                orientation=0,
-                                center=(x1, y1),
-                                width=self.route_geometry.width,
-                                layer=self.route_geometry.layer,
-                            )
-                            port2 = gf.Port(
-                                name="o2",
-                                orientation=180,
-                                center=(x1 + dist, y1),
-                                width=self.route_geometry.width,
-                                layer=self.route_geometry.layer,
-                            )
-                            rotation_angle = (45, x1, y1)
-                        case 135:
-                            x1, y1 = port1.dcenter
-                            x2, y2 = port2.dcenter
-                            dist = np.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
-
-                            port1 = gf.Port(
-                                name="o1",
-                                orientation=180,
-                                center=(x1, y1),
-                                width=self.route_geometry.width,
-                                layer=self.route_geometry.layer,
-                            )
-                            port2 = gf.Port(
-                                name="o2",
-                                orientation=0,
-                                center=(x1 - dist, y1),
-                                width=self.route_geometry.width,
-                                layer=self.route_geometry.layer,
-                            )
-                            rotation_angle = (-45, x1, y1)
-                        case 225:
-                            x1, y1 = port1.dcenter
-                            x2, y2 = port2.dcenter
-                            dist = np.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
-
-                            port1 = gf.Port(
-                                name="o1",
-                                orientation=180,
-                                center=(x1, y1),
-                                width=self.route_geometry.width,
-                                layer=self.route_geometry.layer,
-                            )
-                            port2 = gf.Port(
-                                name="o2",
-                                orientation=0,
-                                center=(x1 - dist, y1),
-                                width=self.route_geometry.width,
-                                layer=self.route_geometry.layer,
-                            )
-                            rotation_angle = (45, x1, y1)
-                        case 315:
-                            x1, y1 = port1.dcenter
-                            x2, y2 = port2.dcenter
-                            dist = np.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
-
-                            port1 = gf.Port(
-                                name="o1",
-                                orientation=0,
-                                center=(x1, y1),
-                                width=self.route_geometry.width,
-                                layer=self.route_geometry.layer,
-                                # cross_section="xs"
-                            )
-                            port2 = gf.Port(
-                                name="o2",
-                                orientation=180,
-                                center=(x1 + dist, y1),
-                                width=self.route_geometry.width,
-                                layer=self.route_geometry.layer,
-                                # cross_section="xs"
-                            )
-                            rotation_angle = (-45, x1, y1)
-
-                    routes = gf.routing.route_bundle(
-                        access_waveguide,
-                        [port1],
-                        [port2],
-                        cross_section=self.route_geometry.cross_section_spec,
-                        radius=self.route_geometry.radius,
-                        sbend="bend_s",
-                        raise_on_error=True,
-                    )
-                    waveguide_length = sum(
-                        float(instance.cell.info.get("length", 0))
-                        for instance in routes[0].instances
-                    )
-                    return rotation_angle, waveguide_length
-
-                access_waveguide1 = gf.Component()
-                access_waveguide2 = gf.Component()
-                rotation_angle1, component_length1 = generate_accessing_waveguide(
-                    route, path, index=1, access_waveguide=access_waveguide1
-                )
-                rotation_angle2, component_length2 = generate_accessing_waveguide(
-                    route, path, index=2, access_waveguide=access_waveguide2
-                )
-
-                final_component = gf.Component(name=(current_net.netName + str(i)))
-                ref1 = final_component << access_waveguide1
-                ref2 = final_component << access_waveguide2
-                if rotation_angle1 is not None:
-                    ref1.drotate(
-                        rotation_angle1[0], (rotation_angle1[1], rotation_angle1[2])
-                    )
-                if rotation_angle2 is not None:
-                    ref2.drotate(
-                        rotation_angle2[0], (rotation_angle2[1], rotation_angle2[2])
-                    )
-                current_net.wirelength += component_length1
-                current_net.wirelength += component_length2
-                current_net.wirelength += route.info.model_extra.get("length", 0)
-                final_component.add_ref(route)
-
-                components = current_net.wg_component
-                components.clear()
-                components.append(final_component)
-                self._cirdb.layout.add_ref(final_component)
-
+        for current_net in self._cirdb.dbNets.values():
+            current_net.crossing_num = max(0, len(current_net.routed_path) - 1)
+        self._materialize_routes()
         """
             1. Align the segments
             2. Spilit the segments 
