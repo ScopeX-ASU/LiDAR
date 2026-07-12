@@ -7,17 +7,9 @@ LastEditTime: 2023-07-16 19:33:30
 """
 
 import os
-import sys
-
-
-# from bokeh.io import output_notebook
-
-sys.path.insert(
-    0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-)
 import gdsfactory as gf
 import numpy as np
-from func import (
+from picroute.benchmarks.func import (
     add_N_devices,
     add_N_modulators_mzi1x2,
     add_splitter_tree,
@@ -27,7 +19,6 @@ from gdsfactory.gpdk import get_generic_pdk
 
 from picroute.benchmarks.schematic import CustomSchematic
 
-sys.path.pop(0)
 gf.config.rich_output()
 PDK = get_generic_pdk()
 PDK.activate()
@@ -91,9 +82,7 @@ def generate_netlist(N: int = 4, die_area=[1000, 1000]) -> CustomSchematic:
     )
 
     placement_cfg["pitch"] = [80, 100]
-    wg_type = gf.components.straight
     mzi_type = gf.components.mzi2x2_2x2_phase_shifter
-    mzi = mzi_type()
 
     mzi_array_ports_list = [
         [("gc1", "o1")],

@@ -94,19 +94,18 @@ python -m pip install -e ../kfactory -e ../gdsfactory -e .
 ### Usage
 #### 1. How to get benchmarks
 ```bash
-cd src/picroute
-python benchmarks/clements.py
-python benchmarks/MMIports.py
+python -m picroute.benchmarks.clements
+python -m picroute.benchmarks.MMIports
 ```
 Benchmark currently provides photonic computing circuits. Users can generate different sizes and configurations of benchmarks based on these scripts. 
 
 #### 2. How to run
 ```bash
-cd src/picroute
-python scripts/lidar/run_route.py
+picroute-batch
 ```
-The output layout gdsii files: result/LiDAR/main_results  
-The ouput log files: log/LiDAR/main_results
+By default this routes the packaged 8x8 multi-port MMI benchmark. Pass one or
+more benchmark paths, select a configuration with `--config`, and use `--jobs`
+for parallel runs. Layouts and logs default to `result/LiDAR` and `log/LiDAR`.
 
 or
 ```bash

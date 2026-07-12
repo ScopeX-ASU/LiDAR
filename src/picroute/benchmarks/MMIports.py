@@ -7,17 +7,9 @@ LastEditTime: 2023-07-16 19:33:30
 """
 
 import os
-import sys
-
-# import matplotlib.pyplot as plt
-# from bokeh.io import output_notebook
-
-sys.path.insert(
-    0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-)
 import gdsfactory as gf
 import numpy as np
-from func import (
+from picroute.benchmarks.func import (
     add_N_devices,
     add_splitter_tree,
     connect_crossing_ports,
@@ -28,7 +20,6 @@ from gdsfactory.gpdk import get_generic_pdk
 
 from picroute.benchmarks.schematic import CustomSchematic
 
-sys.path.pop(0)
 gf.config.rich_output()
 PDK = get_generic_pdk()
 PDK.activate()
@@ -86,9 +77,7 @@ def generate_netlist(N: int = 4, die_area=[1000, 1000], seed=4321) -> CustomSche
 
     crossing_layer = set()
     count = 0
-    wg_type = gf.components.straight
     mzi_type = gf.components.mzi_phase_shifter
-    phase_shifter = gf.components.straight_heater_metal_undercut
 
     ports_list = [
         [("gc1", "o1")],
@@ -164,7 +153,6 @@ def generate_netlist(N: int = 4, die_area=[1000, 1000], seed=4321) -> CustomSche
 
     placement_cfg["pitch"] = [60 + 2 * pitch_x, 100]
 
-    gc = gf.components.grating_coupler_elliptical_lumerical()
     # placement_cfg["offset"][0] = float(
     #     die_area[0] - gc.size[0] - placement_cfg["pitch"][0]
     # )

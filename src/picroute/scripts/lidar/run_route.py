@@ -1,11 +1,8 @@
-"""
-Date: 1969-12-31 17:00:00
-LastEditors: Jiaqi Gu && jiaqigu@asu.edu
-LastEditTime: 2024-09-28 05:02:20
-FilePath: /PICRoute/src/picroute/scripts/APR/run_route.py
-"""
+"""Batch entry point for routing one or more benchmark netlists."""
 
-import os
+from __future__ import annotations
+
+import argparse
 import subprocess
 import sys
 from multiprocessing import Pool
@@ -13,62 +10,68 @@ from pathlib import Path
 
 from picroute.utils.general import ensure_directory, logger
 
-method = "LiDAR"
-exp_name = "main_results"
 package_root = Path(__file__).resolve().parents[2]
-root = package_root / "log" / method / exp_name
-benchmark_root = package_root / "benchmarks"
-result_root = package_root / "result" / method / exp_name
+default_config = package_root / "config" / "comp_LiDAR.yml"
+default_benchmark = (
+    package_root / "benchmarks" / "multiportmmi_8x8" / "multiportmmi_8x8.yml"
+)
 
-comp_config = package_root / "config" / f"comp_{method}.yml"
-noc_config = package_root / "config" / f"noc_{method}.yml"
+type BatchTask = tuple[Path, Path, Path, Path, int]
 
 
-def task_launcher(args):
-    (
-        benchmark,
-        config,
-        id,
-    ) = args
-    env = os.environ.copy()
-    benchmark = Path(benchmark)
-    config = Path(config)
+def task_launcher(task: BatchTask) -> Path:
+    benchmark, config, output_directory, log_directory, task_id = task
     benchmark_name = benchmark.stem
-    method_name = config.stem
-    result_path = result_root / f"{benchmark_name}_{method_name}_id-{id}.gds"
-    pres = [sys.executable, "-m", "picroute.main.picroute"]
+    run_name = f"{benchmark_name}_{config.stem}_id-{task_id}"
+    result_path = output_directory / f"{run_name}.gds"
+    log_path = log_directory / f"{run_name}.log"
+    command = [
+        sys.executable,
+        "-m",
+        "picroute.main.picroute",
+        f"--benchmark={benchmark}",
+        f"--config={config}",
+        f"--run.output_layout_gds_path={result_path}",
+    ]
+    logger.info("running command %s", " ".join(map(str, command)))
+    with log_path.open("w", encoding="utf-8") as logfile:
+        subprocess.run(
+            command,
+            check=True,
+            stdout=logfile,
+            stderr=subprocess.STDOUT,
+        )
+    return result_path
 
-    with open(
-        root / f"{benchmark_name}_{method_name}_id-{id}.log",
-        "w",
-    ) as wfid:
-        exp = [
-            f"--benchmark={benchmark}",
-            f"--config={config}",
-            f"--run.output_layout_gds_path={result_path}",
-        ]
-        logger.info(f"running command {' '.join(pres + exp)}")
-        subprocess.call(pres + exp, stderr=wfid, stdout=wfid)
+
+def _parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("benchmarks", nargs="*", type=Path, metavar="BENCHMARK")
+    parser.add_argument("--config", type=Path, default=default_config)
+    parser.add_argument("--output-dir", type=Path, default=Path("result/LiDAR"))
+    parser.add_argument("--log-dir", type=Path, default=Path("log/LiDAR"))
+    parser.add_argument("--jobs", type=int, default=1)
+    return parser
 
 
-def main() -> None:
-    ensure_directory(root)
-    ensure_directory(result_root)
-
+def main(argv: list[str] | None = None) -> None:
+    args = _parser().parse_args(argv)
+    if args.jobs < 1:
+        raise ValueError("--jobs must be at least 1")
+    benchmarks = args.benchmarks or [default_benchmark]
+    output_directory = ensure_directory(args.output_dir)
+    log_directory = ensure_directory(args.log_dir)
     tasks = [
-        # [f"{benchmark_root}/clements_8x8/clements_8x8.yml", comp_config, 2],
-        # [f"{benchmark_root}/clements_16x16/clements_16x16.yml", comp_config, 2],
-        [benchmark_root / "multiportmmi_8x8" / "multiportmmi_8x8.yml", comp_config, 2],
-        # [f"{benchmark_root}/multiportmmi_16x16/multiportmmi_16x16.yml", comp_config, 2],
-        # [f"{benchmark_root}/multiportmmi_32x32/multiportmmi_32x32.yml", comp_config, 2],
-        # [f"{benchmark_root}/router/router8x8_north.yml", noc_config, 1],
-        # [f"{benchmark_root}/router/router8x8_oneside.yml", noc_config, 1],
-        # [f"{benchmark_root}/router/router8x8_corner.yml", noc_config, 1],
-        # [f"{benchmark_root}/router/router8x8_pairwise.yml", noc_config, 1],
+        (benchmark, args.config, output_directory, log_directory, task_id)
+        for task_id, benchmark in enumerate(benchmarks, start=1)
     ]
 
-    with Pool(1) as p:
-        p.map(task_launcher, tasks)
+    if args.jobs == 1:
+        for task in tasks:
+            task_launcher(task)
+    else:
+        with Pool(args.jobs) as pool:
+            pool.map(task_launcher, tasks)
 
 
 if __name__ == "__main__":

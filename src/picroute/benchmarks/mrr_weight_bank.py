@@ -1,5 +1,5 @@
 """
-Description: 
+Description:
 Author: Jiaqi Gu (jqgu@utexas.edu)
 Date: 2023-07-16 18:25:30
 LastEditors: Jiaqi Gu (jqgu@utexas.edu)
@@ -7,28 +7,16 @@ LastEditTime: 2023-07-16 19:33:30
 """
 
 import os
-import sys
-
-import matplotlib.pyplot as plt
-from bokeh.io import output_notebook
-
-sys.path.insert(
-    0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-)
 import gdsfactory as gf
-import numpy as np
-from func import (
+from picroute.benchmarks.func import (
     add_N_devices,
-    add_N_modulators_mzi1x2,
     add_splitter_tree,
     connect_ports,
 )
-from gdsfactory.config import rich_output
 from gdsfactory.gpdk import get_generic_pdk
 
 from picroute.benchmarks.schematic import CustomSchematic
 
-sys.path.pop(0)
 gf.config.rich_output()
 PDK = get_generic_pdk()
 PDK.activate()
