@@ -1,105 +1,135 @@
-"""
-Date: 2024-06-05 00:15:56
-LastEditors: Jiaqi Gu && jiaqigu@asu.edu
-LastEditTime: 2025-02-05 01:04:56
-FilePath: /PICRoute/src/picroute/drc/bitmap.py
-"""
+"""Compact directional occupancy grid used by LiDAR's A* router."""
 
+from __future__ import annotations
+
+import math
 from typing import Any
 
 import numpy as np
 
+EMPTY = -1
+BLOCKAGE = -2
+PORT = -3
+COMPOUND = -4
+
+_TYPE_TO_CODE = {
+    "empty": EMPTY,
+    "blk": BLOCKAGE,
+    "port": PORT,
+    "compound": COMPOUND,
+}
+_CODE_TO_TYPE = {value: key for key, value in _TYPE_TO_CODE.items()}
+
 
 class bitmapNode:
-    """Support empty, blockage, waveguide, compound(multiple waveguide in one grid) and port type now.
-    blkID: record the blockage instance ID when type is blk or the netID when type is port type.
-    self.netID: a list that record the nets the grid containing
-    self._wgtype: a list that record the wgtype the grid containing
-    self.length: length of self.netID
+    """Lightweight view of one cell in a :class:`Bitmap`."""
 
-    """
+    __slots__ = ("_grid", "_x", "_y")
 
-    __slots__ = ["nodetype", "blkID", "_wgtype", "length", "_netID"]
-
-    def __init__(self, nodetype: str = "empty"):
-        self.nodetype = nodetype
+    def __init__(self, grid: Bitmap, x: int, y: int) -> None:
+        self._grid = grid
+        self._x = int(x)
+        self._y = int(y)
 
     @property
-    def netID(self):
-        if not hasattr(self, "_netID"):
-            assert isinstance(self.nodetype, str) and self.nodetype in {
-                "empty",
-                "blk",
-                "waveguide",
-                "compound",
-                "port",
-            }
-            if hasattr(self, "blkID"):
-                pass
-            else:
-                self.blkID = None
-            self._netID = []  # netID
-            self._wgtype = {}  # 1: bend, 45, 90, 135, 180
-            self.length = 0
-        return self._netID
-
-    def update(self, nodetype, id=0, wgtype=None):
-        assert type(nodetype) == str and nodetype in {
-            "empty",
-            "blk",
-            "waveguide",
-            "port",
-        }
-        if nodetype == "waveguide":
-            # assert wgtype is not None and wgtype in {1, 45, 90, 135, 180}
-            if self.type == "blk" or self.type == "port":
-                return
-            self.netID.append(id)
-            self._wgtype[id] = wgtype
-            self.length += 1
-            if self.length > 1:
-                self.nodetype = "compound"
-            else:
-                self.nodetype = wgtype  # str / int
-        elif nodetype == "blk":
-            self.nodetype = nodetype
-            self.blkID = id
-        elif nodetype == "empty" and self.nodetype != "blk" and self.nodetype != "port":
-            self.nodetype = nodetype
-            self._netID = []
-            self._wgtype = {}
-            self.length = 0
-
-        elif nodetype == "port":
-            if self.nodetype == "empty":
-                self.nodetype = nodetype
-                self.blkID = id
-
-    def delete(self, netName):
-        match self.nodetype:
-            case "blk":
-                pass
-            case "port":
-                pass
-            case "compound":
-                del self._wgtype[netName]
-                self.length -= 1
-                if self.length == 1:
-                    for netID, value in self._wgtype.items():
-                        self.nodetype = value
-                        self._netID = [netID]
-            case _:
-                del self._wgtype[netName]
-                self.length = 0
-                self.nodetype = "empty"
-                self._netID = []
+    def _key(self) -> tuple[int, int]:
+        return self._x, self._y
 
     @property
     def type(self):
-        return self.nodetype
+        code = int(self._grid._types[self._x, self._y])
+        return _CODE_TO_TYPE.get(code, code)
+
+    @property
+    def nodetype(self):
+        return self.type
+
+    @property
+    def blkID(self):
+        return self._grid._owners.get(self._key)
+
+    @property
+    def netID(self) -> list[Any]:
+        return list(self._grid._routes.get(self._key, {}))
+
+    @property
+    def _wgtype(self) -> dict[Any, int]:
+        return self._grid._routes.get(self._key, {})
+
+    @property
+    def length(self) -> int:
+        return len(self._grid._routes.get(self._key, {}))
+
+    def update(self, nodetype: str, id=0, wgtype=None) -> None:
+        if nodetype not in {"empty", "blk", "waveguide", "port"}:
+            raise ValueError(f"Unsupported bitmap node type {nodetype!r}")
+
+        current_type = self.type
+        if nodetype == "waveguide":
+            if current_type in {"blk", "port"}:
+                return
+            routes = self._grid._routes.setdefault(self._key, {})
+            routes[id] = wgtype
+            self._grid._types[self._x, self._y] = (
+                COMPOUND if len(routes) > 1 else int(wgtype)
+            )
+        elif nodetype == "blk":
+            self._grid._types[self._x, self._y] = BLOCKAGE
+            self._grid._owners[self._key] = id
+            self._grid._routes.pop(self._key, None)
+        elif nodetype == "port":
+            if current_type == "empty":
+                self._grid._types[self._x, self._y] = PORT
+                self._grid._owners[self._key] = id
+        elif current_type not in {"blk", "port"}:
+            self._grid._types[self._x, self._y] = EMPTY
+            self._grid._routes.pop(self._key, None)
+
+    def delete(self, net_name) -> None:
+        if self.type in {"blk", "port", "empty"}:
+            return
+        routes = self._grid._routes.get(self._key)
+        if not routes:
+            self._grid._types[self._x, self._y] = EMPTY
+            return
+        routes.pop(net_name, None)
+        if not routes:
+            self._grid._routes.pop(self._key, None)
+            self._grid._types[self._x, self._y] = EMPTY
+        elif len(routes) == 1:
+            self._grid._types[self._x, self._y] = next(iter(routes.values()))
+        else:
+            self._grid._types[self._x, self._y] = COMPOUND
 
     def __str__(self) -> str:
-        return self.type
+        return str(self.type)
+
+
+class _BitmapRow:
+    __slots__ = ("_grid", "_x")
+
+    def __init__(self, grid: Bitmap, x: int) -> None:
+        self._grid = grid
+        self._x = int(x)
+
+    def __getitem__(self, y: int) -> bitmapNode:
+        return self._grid.node(self._x, y)
+
+
+class _BitmapView:
+    __slots__ = ("_grid",)
+
+    def __init__(self, grid: Bitmap) -> None:
+        self._grid = grid
+
+    def __getitem__(self, index):
+        if isinstance(index, tuple):
+            return self._grid.node(index[0], index[1])
+        return _BitmapRow(self._grid, index)
+
+    @property
+    def shape(self) -> tuple[int, int]:
+        return self._grid.width, self._grid.height
 
 
 class Bitmap:
@@ -109,118 +139,93 @@ class Bitmap:
         resolution: float = 1,
         distance: int = 1,
     ) -> None:
-        self.width = round((die_size[1][0] - die_size[0][0]) / resolution)
-        self.height = round((die_size[1][1] - die_size[0][1]) / resolution)
-        self._distance = distance
-        self._resolution = resolution
-        self._bitmap = np.empty((self.width, self.height), dtype=object)
-        self._bitmap = np.vectorize(lambda _: bitmapNode())(self._bitmap)
+        self.origin = np.asarray(die_size[0], dtype=float)
+        upper = np.asarray(die_size[1], dtype=float)
+        self._resolution = float(resolution)
+        self.width = math.ceil((upper[0] - self.origin[0]) / self._resolution)
+        self.height = math.ceil((upper[1] - self.origin[1]) / self._resolution)
+        self._distance = float(distance)
+        self._types = np.full((self.width, self.height), EMPTY, dtype=np.int16)
+        self._owners: dict[tuple[int, int], Any] = {}
+        self._routes: dict[tuple[int, int], dict[Any, int]] = {}
+        self._view = _BitmapView(self)
 
-    def initMap(self, blockages):
-        for blk in blockages:
-            xmin = int(abs(blk.bbox[0] - self._distance) / self._resolution)
-            xmax = int(abs(blk.bbox[2] + self._distance) / self._resolution)
-            ymin = int(abs(blk.bbox[1] - self._distance) / self._resolution)
-            ymax = int(abs(blk.bbox[3] + self._distance) / self._resolution)
-            for x in range(xmin, xmax + 1):
-                for y in range(ymin, ymax + 1):
-                    try:
-                        self._bitmap[x][y].update("blk", blk.instanceName)
-                    except:
-                        pass
+    def in_bounds(self, x: int, y: int) -> bool:
+        return 0 <= x < self.width and 0 <= y < self.height
 
-    def initPorts(self, dbNets, port_length=5):
+    def node(self, x: int, y: int) -> bitmapNode:
+        x, y = int(x), int(y)
+        if not self.in_bounds(x, y):
+            raise IndexError(f"Bitmap index {(x, y)} outside {(self.width, self.height)}")
+        return bitmapNode(self, x, y)
+
+    def to_grid(self, point) -> np.ndarray:
+        return np.floor(
+            (np.asarray(point, dtype=float) - self.origin) / self._resolution
+        ).astype(np.int32)
+
+    def to_world(self, point, *, center: bool = True) -> np.ndarray:
+        offset = self._resolution / 2 if center else 0
+        return self.origin + np.asarray(point, dtype=float) * self._resolution + offset
+
+    def initMap(self, blockages) -> None:
+        for blockage in blockages:
+            lower = self.to_grid(
+                [
+                    blockage.bbox[0] - self._distance,
+                    blockage.bbox[1] - self._distance,
+                ]
+            )
+            upper = self.to_grid(
+                [
+                    blockage.bbox[2] + self._distance,
+                    blockage.bbox[3] + self._distance,
+                ]
+            )
+            xmin, ymin = np.maximum(lower, 0)
+            xmax, ymax = np.minimum(upper, [self.width - 1, self.height - 1])
+            for x in range(int(xmin), int(xmax) + 1):
+                for y in range(int(ymin), int(ymax) + 1):
+                    self.node(x, y).update("blk", blockage.instanceName)
+
+    def _is_empty(self, location: np.ndarray) -> bool:
+        x, y = map(int, location)
+        return self.in_bounds(x, y) and self.node(x, y).type == "empty"
+
+    def _reserve_port(self, port, net_name: str, port_length: int) -> None:
         orientations = {
             0.0: np.array([1, 0]),
             90.0: np.array([0, 1]),
             180.0: np.array([-1, 0]),
             270.0: np.array([0, -1]),
         }
+        step = orientations[float(port.orientation)]
+        location = self.to_grid(port.center)
+        while self.in_bounds(*location) and self.node(*location).type == "blk":
+            location += step
+        if not self.in_bounds(*location):
+            return
 
+        perpendicular = np.array([step[1], step[0]])
+        positive = location + perpendicular
+        negative = location - perpendicular
+        if not self._is_empty(positive) and self._is_empty(negative):
+            location = negative
+        elif not self._is_empty(negative) and self._is_empty(positive):
+            location = positive
+
+        for _ in range(port_length):
+            if not self.in_bounds(*location):
+                break
+            self.node(*location).update("port", net_name)
+            port.port_grids.append(tuple(map(int, location)))
+            location += step
+
+    def initPorts(self, dbNets, port_length=5) -> None:
         for net_name, net in dbNets.items():
-            Port1 = net.NetPort1
-            Port2 = net.NetPort2
-
-            ori = orientations[Port1.port.orientation]
-            loc = (np.array(Port1.port.center) / self._resolution).astype(np.int32)
-
-            while self._bitmap[loc[0]][loc[1]].type == "blk":
-                loc += ori
-            if Port1.port.orientation == 0 or Port1.port.orientation == 180:
-                if (
-                    self._bitmap[loc[0]][loc[1] + 1].type == "empty"
-                    and self._bitmap[loc[0]][loc[1] - 1].type == "empty"
-                ):
-                    pass
-                elif (
-                    self._bitmap[loc[0]][loc[1] + 1].type != "empty"
-                    and self._bitmap[loc[0]][loc[1] - 1].type != "empty"
-                ):
-                    assert 0
-                elif self._bitmap[loc[0]][loc[1] + 1].type != "empty":
-                    loc += np.array([0, -1])
-                else:
-                    loc += np.array([0, 1])
-            else:
-                if (
-                    self._bitmap[loc[0] + 1][loc[1]].type == "empty"
-                    and self._bitmap[loc[0] - 1][loc[1]].type == "empty"
-                ):
-                    pass
-                elif (
-                    self._bitmap[loc[0] + 1][loc[1]].type != "empty"
-                    and self._bitmap[loc[0] - 1][loc[1]].type != "empty"
-                ):
-                    assert 0
-                elif self._bitmap[loc[0] + 1][loc[1]].type != "empty":
-                    loc += np.array([-1, 0])
-                else:
-                    loc += np.array([1, 0])
-            for _ in range(port_length):
-                self._bitmap[loc[0]][loc[1]].update("port", net_name)
-                Port1.port_grids.append((loc[0], loc[1]))
-                loc += ori
-
-            ori = orientations[Port2.port.orientation]
-            loc = (np.array(Port2.port.center) / self._resolution).astype(np.int32)
-            while self._bitmap[loc[0]][loc[1]].type == "blk":
-                loc += ori
-            # only support 0/90/180/270 orientaion now
-            if Port2.port.orientation == 0 or Port2.port.orientation == 180:
-                if (
-                    self._bitmap[loc[0]][loc[1] + 1].type == "empty"
-                    and self._bitmap[loc[0]][loc[1] - 1].type == "empty"
-                ):
-                    pass
-                elif (
-                    self._bitmap[loc[0]][loc[1] + 1].type != "empty"
-                    and self._bitmap[loc[0]][loc[1] - 1].type != "empty"
-                ):
-                    assert 0
-                elif self._bitmap[loc[0]][loc[1] + 1].type != "empty":
-                    loc += np.array([0, -1])
-                else:
-                    loc += np.array([0, 1])
-            else:
-                if (
-                    self._bitmap[loc[0] + 1][loc[1]].type == "empty"
-                    and self._bitmap[loc[0] - 1][loc[1]].type == "empty"
-                ):
-                    pass
-                elif (
-                    self._bitmap[loc[0] + 1][loc[1]].type != "empty"
-                    and self._bitmap[loc[0] - 1][loc[1]].type != "empty"
-                ):
-                    assert 0
-                elif self._bitmap[loc[0] + 1][loc[1]].type != "empty":
-                    loc += np.array([-1, 0])
-                else:
-                    loc += np.array([1, 0])
-            for _ in range(port_length):
-                self._bitmap[loc[0]][loc[1]].update("port", net_name)
-                Port2.port_grids.append((loc[0], loc[1]))
-                loc += ori
+            self._reserve_port(net.NetPort1, net_name, port_length)
+            self._reserve_port(net.NetPort2, net_name, port_length)
 
     @property
-    def bitMap(self):
-        return self._bitmap
+    def bitMap(self) -> _BitmapView:
+        return self._view
