@@ -60,12 +60,14 @@ class bitmapNode:
     def length(self) -> int:
         return len(self._grid._routes.get(self._key, {}))
 
-    def update(self, nodetype: str, id=0, wgtype=None) -> None:
+    def update(self, nodetype: str, id=0, wgtype: int | None = None) -> None:
         if nodetype not in {"empty", "blk", "waveguide", "port"}:
             raise ValueError(f"Unsupported bitmap node type {nodetype!r}")
 
         current_type = self.type
         if nodetype == "waveguide":
+            if wgtype is None:
+                raise ValueError("Waveguide bitmap updates require a direction")
             if current_type in {"blk", "port"}:
                 return
             routes = self._grid._routes.setdefault(self._key, {})

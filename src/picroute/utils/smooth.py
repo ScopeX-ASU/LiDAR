@@ -25,15 +25,15 @@ def prepare_waypoints(points: Coordinates | Path) -> tuple[np.ndarray, float]:
     :func:`gdsfactory.path.smooth`. The returned points are routing state, not the
     densely sampled centerline stored in ``Path.points``.
     """
-    if isinstance(points, Path):
-        points = points.points
-
-    points, _, _, _, dtheta = _compute_segments(points)
+    coordinates = points.points if isinstance(points, Path) else points
+    point_array, _, _, _, dtheta = _compute_segments(coordinates)
     collinear = np.concatenate([[False], np.abs(dtheta) < 1e-6, [False]])
     if np.any(collinear):
-        points, _, _, _, dtheta = _compute_segments(points[~collinear, :])
+        point_array, _, _, _, dtheta = _compute_segments(
+            point_array[~collinear, :]
+        )
 
-    return points, float(np.sum(np.abs(dtheta)))
+    return point_array, float(np.sum(np.abs(dtheta)))
 
 
 def alignment(origin_path, port1, port2, radius, bend):

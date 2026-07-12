@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from functools import partial
+from typing import cast
 
 import gdsfactory as gf
 import numpy as np
@@ -102,7 +103,9 @@ class RouteGeometry:
         access_waveguide = gf.Component()
         port1 = endpoint
         orientation = round(port1.orientation) % 360
-        port2 = route.ports["o1"] if index == 1 else route.ports["o2"]
+        port2 = cast(
+            gf.Port, route.ports["o1"] if index == 1 else route.ports["o2"]
+        )
         rotation = None
 
         if orientation not in {0, 90, 180, 270}:
