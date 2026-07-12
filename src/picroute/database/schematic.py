@@ -16,7 +16,6 @@ from typing import Any, Dict, List, Optional, Union
 import gdsfactory as gf
 import networkx as nx
 import numpy as np
-import ryaml
 import yaml
 from gdsfactory.schematic import (
     Bundle,
@@ -508,7 +507,7 @@ class CustomNetlist(Netlist):
     def to_yaml(self, filename) -> None:
         netlist = self.model_dump()
         with open(filename, mode="w") as f:
-            yaml.dump(netlist, f, default_flow_style=None, sort_keys=False)
+            yaml.safe_dump(netlist, f, default_flow_style=None, sort_keys=False)
 
 
 class CustomSchematic(object):
@@ -607,9 +606,7 @@ class CustomSchematic(object):
         # load netlist
         path = self.path
         with open(path, "r") as f:
-            # netlist = yaml.safe_load(f)
-            # netlist = yaml.load(f, Loader=yaml.FullLoader)
-            netlist = ryaml.load(f)
+            netlist = yaml.safe_load(f)
 
         schematic = CustomSchematicConfiguration.model_validate(netlist)
         self._schematic = schematic
@@ -776,8 +773,7 @@ class CustomSchematic(object):
     def load_netlist(self, path=None) -> None:
         path = path or self.path
         with open(path, "r") as f:
-            # netlist = yaml.safe_load(f)
-            netlist = ryaml.load(f)
+            netlist = yaml.safe_load(f)
 
         schematic = CustomSchematicConfiguration.model_validate(netlist)
         self._schematic = schematic
@@ -840,7 +836,7 @@ class CustomSchematic(object):
     def write_netlist(self) -> None:
         netlist = self.get_netlist()
         with open(self.path, mode="w") as f:
-            yaml.dump(netlist, f, default_flow_style=None, sort_keys=False)
+            yaml.safe_dump(netlist, f, default_flow_style=None, sort_keys=False)
 
     def plot_netlist(
         self,
