@@ -15,7 +15,7 @@ from __future__ import annotations
 import pathlib
 from dataclasses import asdict, is_dataclass
 
-import gdsfactory as gf
+from gdsfactory.gpdk import LAYER
 from gdsfactory.install import get_klayout_path
 from gdsfactory.typings import Layer, PathType
 
@@ -61,7 +61,7 @@ print "run time #{(time_end-time_start).round(3)} seconds \n"
 def rule_not_inside(layer: str, not_inside: str) -> str:
     """Checks for that a layer is not inside another layer."""
     error = f"{layer} not inside {not_inside}"
-    return f"{layer}.not_inside({not_inside})" f".output({error!r}, {error!r})"
+    return f"{layer}.not_inside({not_inside}).output({error!r}, {error!r})"
 
 
 def rule_width(value: float, layer: str, angle_limit: float = 90) -> str:
@@ -297,8 +297,6 @@ deep
     print(f"Wrote DRC deck to {str(filepath)!r} with shortcut {shortcut!r}")
     return script
 
-
-from gdsfactory.gpdk import LAYER
 
 if __name__ == "__main__":
     rules = [

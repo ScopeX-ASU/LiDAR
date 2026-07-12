@@ -12,14 +12,13 @@ from typing import List
 
 import gdsfactory as gf
 import numpy as np
+from gdsfactory.components.mmis.mmi import mmi
+from gdsfactory.components.mzis.mzi import mzi1x2
 from gdsfactory.gpdk import get_generic_pdk
 
 gf.config.rich_output()
 PDK = get_generic_pdk()
 PDK.activate()
-
-from gdsfactory.components.mmis.mmi import mmi
-from gdsfactory.components.mzis.mzi import mzi1x2
 
 __all__ = [
     "add_splitter_tree",

@@ -5,4 +5,4 @@ New code should import it from there directly.
 """
 
 from picroute.database.schematic import *  # noqa: F403
-from picroute.database.schematic import __all__
+from picroute.database.schematic import __all__ as __all__

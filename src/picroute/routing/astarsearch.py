@@ -2,7 +2,6 @@ import math
 from collections import Counter
 from copy import deepcopy
 from dataclasses import dataclass, field
-from functools import partial
 from heapq import heappop, heappush
 from itertools import count
 from typing import List, Optional, Self, Tuple
@@ -435,10 +434,6 @@ class AstarSearch:
             return False
 
         Plength = len(path)
-        # bend_circular has some problem...
-        bend_circular = partial(gf.components.bend_circular, radius=radius)
-        bend_euler = partial(gf.components.bend_euler, radius=radius)
-        bend = bend_euler
         for _ in range(self.radius):
             try:
                 segments, accumulated_bend = prepare_waypoints(path[0:Plength])
@@ -463,11 +458,6 @@ class AstarSearch:
             )
             # save result into net and update the bitmap
             if self.resolution == 1:
-                expanded_route = self._route_geometry.extrude(P, width=2)
-                expanded_rect_route = self.fast_split_polygon_to_rectangles(
-                    expanded_route, self._drcmgr.resolution
-                )
-                rect_union = self.sets_union(expanded_rect_route, rect_route)
                 self._drcmgr.updateBitmap(rect_route, self._net.netName)
             else:
                 pass
@@ -506,20 +496,6 @@ class AstarSearch:
                 self._net.vioNets = violatedNets
                 self._net.vionets = len(violatedNets)
             return True
-
-    def sets_union(self, sets1, sets2):
-        curve_rects_1, straight_90_1, straight_0_1, straight_45_1, straight_135_1 = (
-            sets1
-        )
-        curve_rects_2, straight_90_2, straight_0_2, straight_45_2, straight_135_2 = (
-            sets2
-        )
-        curve_rects = curve_rects_1.union(curve_rects_2)
-        straight_90 = straight_90_1.union(straight_90_2)
-        straight_0 = straight_0_1.union(straight_0_2)
-        straight_45 = straight_45_1.union(straight_45_2)
-        straight_135 = straight_135_1.union(straight_135_2)
-        return (curve_rects, straight_90, straight_0, straight_45, straight_135)
 
     def route(self):
         if (

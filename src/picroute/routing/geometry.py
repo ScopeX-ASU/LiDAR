@@ -39,7 +39,9 @@ class RouteGeometry:
             return gf.path.extrude(path, cross_section=self.cross_section_spec)
         return gf.path.extrude(path, width=width, layer=self.layer)
 
-    def occupied_grid_cells(self, component: gf.Component, bitmap) -> set[tuple[int, int]]:
+    def occupied_grid_cells(
+        self, component: gf.Component, bitmap
+    ) -> set[tuple[int, int]]:
         """Return grid cells intersecting the routed layer's filled KLayout region."""
         region = component.get_region(self.layer, merge=True)
         if region.is_empty():
@@ -211,12 +213,8 @@ class RouteGeometry:
         """Create one routed component and return it with its physical length."""
         path = self.smooth(path_record[0])
         route_shape = self.extrude(path)
-        access1, length1 = self._access_waveguide(
-            route_shape, path_record[1], index=1
-        )
-        access2, length2 = self._access_waveguide(
-            route_shape, path_record[2], index=2
-        )
+        access1, length1 = self._access_waveguide(route_shape, path_record[1], index=1)
+        access2, length2 = self._access_waveguide(route_shape, path_record[2], index=2)
         route = self.place_all_angle(path_record[0])
 
         component = gf.Component()

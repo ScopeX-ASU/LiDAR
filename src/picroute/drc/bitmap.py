@@ -158,7 +158,9 @@ class Bitmap:
     def node(self, x: int, y: int) -> bitmapNode:
         x, y = int(x), int(y)
         if not self.in_bounds(x, y):
-            raise IndexError(f"Bitmap index {(x, y)} outside {(self.width, self.height)}")
+            raise IndexError(
+                f"Bitmap index {(x, y)} outside {(self.width, self.height)}"
+            )
         return bitmapNode(self, x, y)
 
     def to_grid(self, point) -> np.ndarray:

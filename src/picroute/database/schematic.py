@@ -93,16 +93,23 @@ class Instance(BaseModel):
         # LOCATION [x, y]
         # ORIENTATION
         # HALO [l, d, r, u]
-        assert len(placement) == 4
-        assert type(placement[0]) == str and placement[0] in {
+        if len(placement) != 4:
+            raise ValueError(
+                "Placement requires status, location, orientation, and halo"
+            )
+        if not isinstance(placement[0], str) or placement[0] not in {
             "PLACED",
             "UNPLACED",
             "FIXED",
-        }
-        assert type(placement[1]) == list
-        assert isinstance(placement[1][0], (float, int))
-        assert isinstance(placement[1][1], (float, int))
-        assert type(placement[2]) == str and placement[2] in {
+        }:
+            raise ValueError(f"Invalid placement status {placement[0]!r}")
+        if not (
+            isinstance(placement[1], list)
+            and len(placement[1]) == 2
+            and all(isinstance(value, (float, int)) for value in placement[1])
+        ):
+            raise ValueError("Placement location must contain two numbers")
+        if not isinstance(placement[2], str) or placement[2] not in {
             "N",
             "W",
             "E",
@@ -111,8 +118,10 @@ class Instance(BaseModel):
             "FW",
             "FE",
             "FS",
-        }
-        assert type(placement[3]) == list and len(placement[3]) == 4
+        }:
+            raise ValueError(f"Invalid placement orientation {placement[2]!r}")
+        if not isinstance(placement[3], list) or len(placement[3]) != 4:
+            raise ValueError("Placement halo must contain four values")
         return True
 
 
@@ -153,9 +162,7 @@ class Blockage(BaseModel):
     )
 
     reference: gf.ComponentReference
-    ports_by_orientation: dict[int, list[EndpointState]] = Field(
-        default_factory=dict
-    )
+    ports_by_orientation: dict[int, list[EndpointState]] = Field(default_factory=dict)
 
     @property
     def bbox(self):
@@ -302,9 +309,7 @@ class Settings(BaseModel):
     version: str = "1.0"
     design: str = "default_design"
     units_distance_microns: float = 1  # 1 unit = 1 micro
-    die_area: List[List[float]] = Field(
-        default_factory=lambda: [[0, 0], [100, 100]]
-    )
+    die_area: List[List[float]] = Field(default_factory=lambda: [[0, 0], [100, 100]])
     num_instances: int = 0
     num_nets: int = 0
     num_ports: int = 0

@@ -1,16 +1,4 @@
-"""
-Date: 2024-06-04 22:52:57
-LastEditors: Jiaqi Gu && jiaqigu@asu.edu
-LastEditTime: 2024-06-04 23:11:00
-FilePath: /PICRoute/src/picroute/main/picroute.py
-"""
-
-"""
-@file flow.py
-@author Hongjian ZHOu 
-@date 04/21/2024
-@brief the PICRoute flow
-"""
+"""LiDAR routing flow and command-line entry point."""
 
 from picroute.config.config import RouterConfig
 from picroute.config.parser import Parser
@@ -21,7 +9,7 @@ from picroute.utils.general import TimerCtx, logger, seed_random
 from picroute.version import __version__
 
 
-class PICRoute(object):
+class PICRoute:
     def __init__(self, path, config):
         self.path = path
         self.config = config

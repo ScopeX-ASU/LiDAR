@@ -59,7 +59,9 @@ class RouterConfig(_ConfigModel):
             raise FileNotFoundError(config_path)
         data = yaml.safe_load(config_path.read_text(encoding="utf-8")) or {}
         if not isinstance(data, dict):
-            raise TypeError(f"Configuration root must be a mapping, got {type(data).__name__}")
+            raise TypeError(
+                f"Configuration root must be a mapping, got {type(data).__name__}"
+            )
         _apply_overrides(data, overrides or [])
         return cls.model_validate(data)
 

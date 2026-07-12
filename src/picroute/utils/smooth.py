@@ -29,9 +29,7 @@ def prepare_waypoints(points: Coordinates | Path) -> tuple[np.ndarray, float]:
     point_array, _, _, _, dtheta = _compute_segments(coordinates)
     collinear = np.concatenate([[False], np.abs(dtheta) < 1e-6, [False]])
     if np.any(collinear):
-        point_array, _, _, _, dtheta = _compute_segments(
-            point_array[~collinear, :]
-        )
+        point_array, _, _, _, dtheta = _compute_segments(point_array[~collinear, :])
 
     return point_array, float(np.sum(np.abs(dtheta)))
 
