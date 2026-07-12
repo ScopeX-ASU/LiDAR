@@ -35,6 +35,7 @@ def test_toy_route_end_to_end(tmp_path: Path, shift: tuple[int, int]) -> None:
     router.run()
 
     assert output.is_file()
+    assert router.cirdb.connectivity_report is not None
     lengths = {
         name: round(net.wirelength, 3) for name, net in router.cirdb.dbNets.items()
     }
@@ -43,4 +44,3 @@ def test_toy_route_end_to_end(tmp_path: Path, shift: tuple[int, int]) -> None:
         for path_record in net.routed_path:
             assert all(dx <= point[0] <= dx + 200 for point in path_record[0])
             assert all(dy <= point[1] <= dy + 200 for point in path_record[0])
-

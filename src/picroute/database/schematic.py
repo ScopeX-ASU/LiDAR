@@ -534,6 +534,7 @@ class CustomSchematic(object):
         )
         self.device_loss = {}
         self._native_schematic = gf.Schematic()
+        self.connectivity_report = None
 
         if 0 and filepath.is_file():
             self.load_netlist()
@@ -901,6 +902,17 @@ class CustomSchematic(object):
                     yaml.safe_load(stream)
                 )
         return self._materialize_native_schematic()
+
+    def verify_connectivity(self):
+        """Run kfactory's native optical connectivity checks on the layout."""
+        if self.layout is None:
+            raise RuntimeError("Cannot verify connectivity before materializing layout")
+        self.connectivity_report = self.layout.connectivity_check(
+            port_types=["optical"],
+            recursive=True,
+            add_cell_ports=True,
+        )
+        return self.connectivity_report
 
     def print_benchmark(self):
         s = "\n================================== Benchmark Statistics ===================================\n\n"

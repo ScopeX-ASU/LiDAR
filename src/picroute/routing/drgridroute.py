@@ -455,6 +455,8 @@ class DrGridRoute(object):
                 current_net.wirelength += length
                 current_net.wg_component.append(component)
                 self._cirdb.layout.add_ref(component)
+        self._cirdb.verify_connectivity()
+
     def clearHistoryMap(self):
         self.historyMap = np.zeros(
             (self._drcmgr.bitMap_width, self._drcmgr.bitMap_height, 8), dtype=np.int32
