@@ -125,6 +125,7 @@ The input to LiDAR is formatted as a netlist, and the tool's configuration is as
 | ripup_times         |   maximum ripup and reroute times                     |
 | grid_resolution     |    resolution of routing grid >=2             |
 | bend_radius         |    radius of bend                                      |
+| cross_section       |    active-PDK cross-section used for routed waveguides |
 | net_default_bound   |    minimum routing boundary (um)                 |
 | net_bound_scale_factor   |   scale factor of the routing boundary                                    |
 | loss        |       loss for the propagation, bending, and crossing                     |

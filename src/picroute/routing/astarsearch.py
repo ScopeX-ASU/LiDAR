@@ -148,6 +148,7 @@ class AstarSearch:
         groups: dict = None,
     ):
         self._Dr = Dr
+        self._route_geometry = Dr.route_geometry
         self._cirdb = CirDB
         self._net = CurrentNet
         self._drcmgr = Drc
@@ -604,14 +605,14 @@ class AstarSearch:
             """can change the orther
             """
             # only support 0.5 width cross section now
-            route = gf.path.extrude(P, width=0.5, layer=(1, 0))  ### To be continued
+            route = self._route_geometry.extrude(P)
 
             rect_route = self.fast_split_polygon_to_rectangles(
                 route, self._drcmgr.resolution
             )
             # save result into net and update the bitmap
             if self.resolution == 1:
-                expanded_route = gf.path.extrude(P, width=2, layer=(1, 0))
+                expanded_route = self._route_geometry.extrude(P, width=2)
                 expanded_rect_route = self.fast_split_polygon_to_rectangles(
                     expanded_route, self._drcmgr.resolution
                 )

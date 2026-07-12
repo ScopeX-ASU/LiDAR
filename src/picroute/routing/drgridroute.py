@@ -8,6 +8,7 @@ from shapely.geometry import LineString, Point
 
 from picroute.database.schematic import CustomSchematic, Nets
 from picroute.drc.drcmanager import DrcManager
+from picroute.routing.geometry import RouteGeometry
 from picroute.utils.general import logger
 from picroute.utils.smooth import alignment
 
@@ -27,6 +28,7 @@ class DrGridRoute(object):
 
         self.prop = self._config.dr.loss_propagation
         self.cross = self._config.il_cross
+        self.route_geometry = RouteGeometry(config)
 
     def solve(self) -> bool:
         bSuccess = True
@@ -451,7 +453,7 @@ class DrGridRoute(object):
                     # bend=gf.path.arc,
                     use_eff=True,
                 )
-                route = gf.path.extrude(P, width=0.5, layer=(1, 0))
+                route = self.route_geometry.extrude(P)
                 # Rotate the accessing waveguide
 
                 def generate_accessing_waveguide(route, path, index, access_waveguide):
@@ -472,15 +474,15 @@ class DrGridRoute(object):
                                 name="o1",
                                 orientation=0,
                                 center=(x1, y1),
-                                width=0.5,
-                                layer=1,
+                                width=self.route_geometry.width,
+                                layer=self.route_geometry.layer,
                             )
                             port2 = gf.Port(
                                 name="o2",
                                 orientation=180,
                                 center=(x1 + dist, y1),
-                                width=0.5,
-                                layer=1,
+                                width=self.route_geometry.width,
+                                layer=self.route_geometry.layer,
                             )
                             rotation_angle = (45, x1, y1)
                         case 135:
@@ -492,15 +494,15 @@ class DrGridRoute(object):
                                 name="o1",
                                 orientation=180,
                                 center=(x1, y1),
-                                width=0.5,
-                                layer=1,
+                                width=self.route_geometry.width,
+                                layer=self.route_geometry.layer,
                             )
                             port2 = gf.Port(
                                 name="o2",
                                 orientation=0,
                                 center=(x1 - dist, y1),
-                                width=0.5,
-                                layer=1,
+                                width=self.route_geometry.width,
+                                layer=self.route_geometry.layer,
                             )
                             rotation_angle = (-45, x1, y1)
                         case 225:
@@ -512,15 +514,15 @@ class DrGridRoute(object):
                                 name="o1",
                                 orientation=180,
                                 center=(x1, y1),
-                                width=0.5,
-                                layer=1,
+                                width=self.route_geometry.width,
+                                layer=self.route_geometry.layer,
                             )
                             port2 = gf.Port(
                                 name="o2",
                                 orientation=0,
                                 center=(x1 - dist, y1),
-                                width=0.5,
-                                layer=1,
+                                width=self.route_geometry.width,
+                                layer=self.route_geometry.layer,
                             )
                             rotation_angle = (45, x1, y1)
                         case 315:
@@ -532,25 +534,24 @@ class DrGridRoute(object):
                                 name="o1",
                                 orientation=0,
                                 center=(x1, y1),
-                                width=0.5,
-                                layer=1,
+                                width=self.route_geometry.width,
+                                layer=self.route_geometry.layer,
                             )
                             port2 = gf.Port(
                                 name="o2",
                                 orientation=180,
                                 center=(x1 + dist, y1),
-                                width=0.5,
-                                layer=1,
+                                width=self.route_geometry.width,
+                                layer=self.route_geometry.layer,
                             )
                             rotation_angle = (-45, x1, y1)
 
-                    layer_info = port1.layer_info
                     routes = gf.routing.route_bundle(
                         access_waveguide,
                         [port1],
                         [port2],
-                        layer=(layer_info.layer, layer_info.datatype),
-                        route_width=port1.dwidth,
+                        cross_section=self.route_geometry.cross_section_spec,
+                        radius=self.route_geometry.radius,
                         sbend="bend_s",
                         raise_on_error=True,
                     )
@@ -683,7 +684,7 @@ class DrGridRoute(object):
                     # bend=gf.path.arc,
                     use_eff=True,
                 )
-                route = gf.path.extrude(P, width=0.5, layer=(1, 0))
+                route = self.route_geometry.extrude(P)
 
                 def generate_accessing_waveguide(route, path, index, access_waveguide):
                     port1 = path[index]
@@ -703,15 +704,15 @@ class DrGridRoute(object):
                                 name="o1",
                                 orientation=0,
                                 center=(x1, y1),
-                                width=0.5,
-                                layer=1,
+                                width=self.route_geometry.width,
+                                layer=self.route_geometry.layer,
                             )
                             port2 = gf.Port(
                                 name="o2",
                                 orientation=180,
                                 center=(x1 + dist, y1),
-                                width=0.5,
-                                layer=1,
+                                width=self.route_geometry.width,
+                                layer=self.route_geometry.layer,
                             )
                             rotation_angle = (45, x1, y1)
                         case 135:
@@ -723,15 +724,15 @@ class DrGridRoute(object):
                                 name="o1",
                                 orientation=180,
                                 center=(x1, y1),
-                                width=0.5,
-                                layer=1,
+                                width=self.route_geometry.width,
+                                layer=self.route_geometry.layer,
                             )
                             port2 = gf.Port(
                                 name="o2",
                                 orientation=0,
                                 center=(x1 - dist, y1),
-                                width=0.5,
-                                layer=1,
+                                width=self.route_geometry.width,
+                                layer=self.route_geometry.layer,
                             )
                             rotation_angle = (-45, x1, y1)
                         case 225:
@@ -743,15 +744,15 @@ class DrGridRoute(object):
                                 name="o1",
                                 orientation=180,
                                 center=(x1, y1),
-                                width=0.5,
-                                layer=1,
+                                width=self.route_geometry.width,
+                                layer=self.route_geometry.layer,
                             )
                             port2 = gf.Port(
                                 name="o2",
                                 orientation=0,
                                 center=(x1 - dist, y1),
-                                width=0.5,
-                                layer=1,
+                                width=self.route_geometry.width,
+                                layer=self.route_geometry.layer,
                             )
                             rotation_angle = (45, x1, y1)
                         case 315:
@@ -763,27 +764,26 @@ class DrGridRoute(object):
                                 name="o1",
                                 orientation=0,
                                 center=(x1, y1),
-                                width=0.5,
-                                layer=1,
+                                width=self.route_geometry.width,
+                                layer=self.route_geometry.layer,
                                 # cross_section="xs"
                             )
                             port2 = gf.Port(
                                 name="o2",
                                 orientation=180,
                                 center=(x1 + dist, y1),
-                                width=0.5,
-                                layer=1,
+                                width=self.route_geometry.width,
+                                layer=self.route_geometry.layer,
                                 # cross_section="xs"
                             )
                             rotation_angle = (-45, x1, y1)
 
-                    layer_info = port1.layer_info
                     routes = gf.routing.route_bundle(
                         access_waveguide,
                         [port1],
                         [port2],
-                        layer=(layer_info.layer, layer_info.datatype),
-                        route_width=port1.dwidth,
+                        cross_section=self.route_geometry.cross_section_spec,
+                        radius=self.route_geometry.radius,
                         sbend="bend_s",
                         raise_on_error=True,
                     )
