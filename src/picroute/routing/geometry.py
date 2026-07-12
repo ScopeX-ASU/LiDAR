@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+from functools import partial
+
 import gdsfactory as gf
 import numpy as np
+from kfactory.routing.aa.optical import route as route_all_angle
 
 
 class RouteGeometry:
@@ -62,6 +65,34 @@ class RouteGeometry:
                     cells.add((x, y))
         return cells
 
+    def place_all_angle(self, points) -> gf.Component:
+        """Place an instance-based kfactory route along an exact LiDAR backbone."""
+        component = gf.Component()
+        route = route_all_angle(
+            component,
+            width=self.width,
+            backbone=[gf.kdb.DPoint(*point) for point in points],
+            straight_factory=partial(
+                gf.components.straight_all_angle,
+                cross_section=self.cross_section_spec,
+            ),
+            bend_factory=partial(
+                gf.components.bend_euler_all_angle,
+                radius=self.radius,
+                cross_section=self.cross_section_spec,
+            ),
+        )
+        for name, port in (("o1", route.start_port), ("o2", route.end_port)):
+            component.add_port(
+                name=name,
+                center=port.dcenter,
+                width=port.dwidth,
+                orientation=port.orientation,
+                layer=port.layer,
+            )
+        component.insert_vinsts()
+        return component
+
     def _access_waveguide(
         self,
         route: gf.Component,
@@ -110,7 +141,8 @@ class RouteGeometry:
             cross_section=self.cross_section_spec,
             radius=self.radius,
             sbend="bend_s",
-            raise_on_error=True,
+            on_collision=None,
+            on_placer_error="error",
         )
         length = sum(
             float(instance.cell.info.get("length", 0))
@@ -121,13 +153,14 @@ class RouteGeometry:
     def materialize_record(self, path_record) -> tuple[gf.Component, float]:
         """Create one routed component and return it with its physical length."""
         path = self.smooth(path_record[0])
-        route = self.extrude(path)
+        route_shape = self.extrude(path)
         access1, rotation1, length1 = self._access_waveguide(
-            route, path_record[1], index=1
+            route_shape, path_record[1], index=1
         )
         access2, rotation2, length2 = self._access_waveguide(
-            route, path_record[2], index=2
+            route_shape, path_record[2], index=2
         )
+        route = self.place_all_angle(path_record[0])
 
         component = gf.Component()
         ref1 = component << access1

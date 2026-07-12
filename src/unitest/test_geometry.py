@@ -1,4 +1,5 @@
 import gdsfactory as gf
+import pytest
 
 from picroute.config.config import Config
 from picroute.drc.bitmap import Bitmap
@@ -22,3 +23,27 @@ def test_occupied_grid_cells_use_filled_klayout_region() -> None:
     # part of the filled KLayout region and must be occupied.
     center_cell = tuple(bitmap.to_grid([2, 0]))
     assert center_cell in cells
+
+
+@pytest.mark.parametrize(
+    "points",
+    [
+        [(0, 0), (20, 0), (20, 20)],
+        [(0, 0), (15, 0), (25, 10), (40, 10)],
+    ],
+)
+def test_all_angle_placement_matches_smoothed_route_region(points) -> None:
+    config = Config()
+    config.dr = Config()
+    config.dr.cross_section = "strip"
+    config.dr.bend_radius = 5
+    geometry = RouteGeometry(config)
+
+    path = geometry.smooth(points)
+    extruded = geometry.extrude(path)
+    instance_route = geometry.place_all_angle(points)
+
+    xor = extruded.get_region(geometry.layer, merge=True) ^ instance_route.get_region(
+        geometry.layer, merge=True
+    )
+    assert xor.is_empty()
