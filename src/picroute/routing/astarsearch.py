@@ -1082,10 +1082,11 @@ class AstarSearch:
         return False
 
     def fast_split_polygon_to_rectangles(self, component: gf.Component, resolution=1):
-        """using the GDSFactory polygons"""
-        points = component.get_polygons_points()[1][0]
-        # assert component.polygons is not None
-        # points = component.polygons[0].points
+        """Classify filled route cells using GDSFactory/KLayout geometry."""
+        layer = gf.get_layer_tuple(self._route_geometry.layer)
+        points = component.get_polygons_points(
+            by="tuple", layers=[self._route_geometry.layer]
+        )[layer][0]
         grid_points = (
             points - self._drcmgr.bitMap.origin
         ) / self._drcmgr.resolution
@@ -1131,6 +1132,13 @@ class AstarSearch:
             if grid_dict.get(int_points[i]) is None:
                 grid_dict[int_points[i]] = []
             grid_dict[int_points[i]].append(slope[i])
+
+        # Boundary slopes provide direction; the KLayout region supplies the
+        # authoritative filled cells. Interior cells are conservatively bends.
+        for grid in self._route_geometry.occupied_grid_cells(
+            component, self._drcmgr.bitMap
+        ):
+            grid_dict.setdefault(grid, [np.nan])
 
         for grid, slope in grid_dict.items():
             mean_slope = np.mean(slope)

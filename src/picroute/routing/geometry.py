@@ -35,6 +35,33 @@ class RouteGeometry:
             return gf.path.extrude(path, cross_section=self.cross_section_spec)
         return gf.path.extrude(path, width=width, layer=self.layer)
 
+    def occupied_grid_cells(self, component: gf.Component, bitmap) -> set[tuple[int, int]]:
+        """Return grid cells intersecting the routed layer's filled KLayout region."""
+        region = component.get_region(self.layer, merge=True)
+        if region.is_empty():
+            return set()
+
+        dbu = component.kcl.dbu
+        bbox = region.bbox()
+        lower = bitmap.to_grid([bbox.left * dbu, bbox.bottom * dbu])
+        upper = bitmap.to_grid([bbox.right * dbu, bbox.top * dbu])
+        cells = set()
+        for x in range(max(0, int(lower[0])), min(bitmap.width - 1, int(upper[0])) + 1):
+            for y in range(
+                max(0, int(lower[1])), min(bitmap.height - 1, int(upper[1])) + 1
+            ):
+                world_min = bitmap.to_world([x, y], center=False)
+                world_max = world_min + bitmap._resolution
+                box = gf.kdb.Box(
+                    round(world_min[0] / dbu),
+                    round(world_min[1] / dbu),
+                    round(world_max[0] / dbu),
+                    round(world_max[1] / dbu),
+                )
+                if not (region & gf.kdb.Region(box)).is_empty():
+                    cells.add((x, y))
+        return cells
+
     def _access_waveguide(
         self,
         route: gf.Component,
