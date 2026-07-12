@@ -50,6 +50,17 @@ def test_astar_node_equality_and_hash_use_position() -> None:
     assert first != same_cost
 
 
+def test_astar_nodes_do_not_share_mutable_state() -> None:
+    first = GridAstarNode(pos=(1, 2, 90))
+    second = GridAstarNode(pos=(2, 2, 90))
+
+    first.addNeighbors(second, "straight_0")
+    first._violatedNet.add("n1")
+
+    assert second.neighbors == {}
+    assert second._violatedNet == set()
+
+
 def test_net_frontier_is_stable_and_rejects_duplicate_objects() -> None:
     route = DrGridRoute.__new__(DrGridRoute)
     route.net_PQ = []

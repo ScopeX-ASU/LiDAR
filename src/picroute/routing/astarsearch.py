@@ -41,10 +41,10 @@ class GridAstarNode:
         # bend_count: Union[float, int] = float("inf"),
         visited: bool = False,
         parent: Optional[object] = None,
-        neighbors: Dict = {},
+        neighbors: Optional[Dict] = None,
         crossing_budget: int = 0,
         crossing_net: str = None,
-        violatedNet: set = set(),
+        violatedNet: Optional[set] = None,
         bviolated: bool = False,
         straight_count: int = 0,
     ) -> None:
@@ -53,10 +53,10 @@ class GridAstarNode:
         self._cost_f = cost_f
         self._visited = visited
         self._parent = parent
-        self._neighbors = neighbors
+        self._neighbors = {} if neighbors is None else neighbors
         self._crossing_budget = crossing_budget
         self._crossing_net = crossing_net
-        self._violatedNet = violatedNet
+        self._violatedNet = set() if violatedNet is None else violatedNet
         self._bviolated = bviolated
         self._straightCount = straight_count
 
