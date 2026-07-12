@@ -31,7 +31,7 @@ def test_astar_frontier_discards_stale_priority_entries() -> None:
 
     search._push_node(updated)
     search._push_node(other)
-    updated.costF = 1
+    updated.cost_f = 1
     search._push_node(updated)
 
     assert search._pop_node() is updated
@@ -54,11 +54,11 @@ def test_astar_nodes_do_not_share_mutable_state() -> None:
     first = GridAstarNode(pos=(1, 2, 90))
     second = GridAstarNode(pos=(2, 2, 90))
 
-    first.addNeighbors(second, "straight_0")
-    first._violatedNet.add("n1")
+    first.add_neighbor(second, "straight_0")
+    first.violated_nets.add("n1")
 
     assert second.neighbors == {}
-    assert second._violatedNet == set()
+    assert second.violated_nets == set()
 
 
 def test_net_frontier_is_stable_and_rejects_duplicate_objects() -> None:
@@ -67,9 +67,7 @@ def test_net_frontier_is_stable_and_rejects_duplicate_objects() -> None:
     route._net_pq_ids = set()
     route._net_pq_counter = count()
 
-    first = SimpleNamespace(
-        netName="first", routed=False, comp_dist=1, routing_order=2
-    )
+    first = SimpleNamespace(netName="first", routed=False, comp_dist=1, routing_order=2)
     second = SimpleNamespace(
         netName="second", routed=False, comp_dist=1, routing_order=2
     )

@@ -197,43 +197,45 @@ class DrGridRoute(object):
                     self._cirdb.tempLayout.add_ref(ref)
         self._cirdb.tempLayout.show()
 
+    def _run_astar(self, net, *, strict_drc, net_config=None, groups=None) -> bool:
+        from .astarsearch import AstarSearch
+
+        return AstarSearch(
+            self,
+            self._cirdb,
+            net,
+            self._drcmgr,
+            self._config,
+            bStrictDRC=strict_drc,
+            net_config=net_config,
+            groups=groups,
+        ).route()
+
     def routeSingleNet(
         self, cur_net: RouteState, strictDRC=True, net_config=None, groups=None
     ):
-        from .astarsearch import AstarSearch
-
         print(
             f"route net: {cur_net.netName}, crossing_budget = {cur_net.crossing_budget}, strictDRC: {strictDRC}"
         )
 
         if self._config.dr.net_order == "topo":
-            kernel = AstarSearch(
-                self,
-                self._cirdb,
+            bSuccess = self._run_astar(
                 cur_net,
-                self._drcmgr,
-                self._config,
-                bStrictDRC=strictDRC,
+                strict_drc=strictDRC,
                 net_config=net_config,
                 groups=groups,
             )
-            bSuccess = kernel.route()
             if bSuccess:
                 self.registar_net(cur_net)
         else:
             if self._config.dr.group:
                 if strictDRC:
-                    kernel1 = AstarSearch(
-                        self,
-                        self._cirdb,
+                    bSuccess1 = self._run_astar(
                         cur_net,
-                        self._drcmgr,
-                        self._config,
-                        bStrictDRC=strictDRC,
+                        strict_drc=strictDRC,
                         net_config=net_config,
                         groups=groups,
                     )
-                    bSuccess1 = kernel1.route()
                     if bSuccess1:
                         if (
                             cur_net.crossing_num == 0
@@ -256,17 +258,12 @@ class DrGridRoute(object):
                             # cur_net.failed_count += 1
                             cur_net.crossing_budget = 10
                             cur_net.current_budget = 10
-                            kernel1 = AstarSearch(
-                                self,
-                                self._cirdb,
+                            bSuccess1 = self._run_astar(
                                 cur_net,
-                                self._drcmgr,
-                                self._config,
-                                bStrictDRC=strictDRC,
+                                strict_drc=strictDRC,
                                 net_config=net_config,
                                 groups=groups,
                             )
-                            bSuccess1 = kernel1.route()
                             self.registar_net(cur_net)
                             return True
                         else:
@@ -280,17 +277,12 @@ class DrGridRoute(object):
                     # have used crossing, route with crossing budget == 0
                     cur_net.crossing_budget = 0
                     cur_net.current_budget = 0
-                    kernel2 = AstarSearch(
-                        self,
-                        self._cirdb,
+                    bSuccess2 = self._run_astar(
                         cur_net,
-                        self._drcmgr,
-                        self._config,
-                        bStrictDRC=strictDRC,
+                        strict_drc=strictDRC,
                         net_config=net_config,
                         groups=groups,
                     )
-                    bSuccess2 = kernel2.route()
                     if bSuccess2:
                         # route successfully
                         loss2 = self.eval_net(cur_net)
@@ -304,17 +296,12 @@ class DrGridRoute(object):
                             cur_net.clearNet(self._cirdb, increase=False)
                             cur_net.crossing_budget = 10
                             cur_net.current_budget = 10
-                            kernel1 = AstarSearch(
-                                self,
-                                self._cirdb,
+                            bSuccess1 = self._run_astar(
                                 cur_net,
-                                self._drcmgr,
-                                self._config,
-                                bStrictDRC=strictDRC,
+                                strict_drc=strictDRC,
                                 net_config=net_config,
                                 groups=groups,
                             )
-                            bSuccess1 = kernel1.route()
                             self.registar_net(cur_net)
                     else:
                         # fail to route with crossing disable
@@ -325,48 +312,33 @@ class DrGridRoute(object):
                         cur_net.clearNet(self._cirdb, increase=False)
                         cur_net.crossing_budget = 10
                         cur_net.current_budget = 10
-                        kernel1 = AstarSearch(
-                            self,
-                            self._cirdb,
+                        bSuccess1 = self._run_astar(
                             cur_net,
-                            self._drcmgr,
-                            self._config,
-                            bStrictDRC=strictDRC,
+                            strict_drc=strictDRC,
                             net_config=net_config,
                             groups=groups,
                         )
-                        bSuccess1 = kernel1.route()
                         cur_net.crossing_budget = 10
                         cur_net.current_budget = 10
                         self.registar_net(cur_net)
 
                     return True
                 else:
-                    kernel = AstarSearch(
-                        self,
-                        self._cirdb,
+                    bSuccess = self._run_astar(
                         cur_net,
-                        self._drcmgr,
-                        self._config,
-                        bStrictDRC=strictDRC,
+                        strict_drc=strictDRC,
                         net_config=net_config,
                         groups=groups,
                     )
-                    bSuccess = kernel.route()
                     if bSuccess:
                         self.registar_net(cur_net)
             else:
-                kernel = AstarSearch(
-                    self,
-                    self._cirdb,
+                bSuccess = self._run_astar(
                     cur_net,
-                    self._drcmgr,
-                    self._config,
-                    bStrictDRC=strictDRC,
+                    strict_drc=strictDRC,
                     net_config=net_config,
                     groups=groups,
                 )
-                bSuccess = kernel.route()
                 if bSuccess:
                     self.registar_net(cur_net)
 

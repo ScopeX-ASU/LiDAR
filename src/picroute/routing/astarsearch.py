@@ -1,10 +1,11 @@
 import math
 from collections import Counter
 from copy import deepcopy
+from dataclasses import dataclass, field
 from functools import partial
 from heapq import heappop, heappush
 from itertools import count
-from typing import Dict, List, Optional, Tuple, Union
+from typing import List, Optional, Self, Tuple
 
 import gdsfactory as gf
 import numpy as np
@@ -17,122 +18,88 @@ from picroute.utils.smooth import prepare_waypoints
 from .drgridroute import DrGridRoute
 from .utils import EulerDist, customH, manhattanDH
 
+type Transition = tuple[int, int, int, str]
 
-class GridAstarNode:
-    __slots__ = [
-        "_pos",
-        "_cost_g",
-        "_cost_f",
-        "_visited",
-        "_parent",
-        "_neighbors",
-        "_crossing_budget",
-        "_crossing_net",
-        "_violatedNet",
-        "_bviolated",
-        "_straightCount",
+
+def _rotate_transition(transition: Transition, quarter_turns: int) -> Transition:
+    x, y, orientation, step_type = transition
+    for _ in range(quarter_turns % 4):
+        x, y = -y, x
+    return x, y, (orientation + 90 * quarter_turns) % 360, step_type
+
+
+def _build_transitions(
+    grid_radius: int,
+    bend45_1: int,
+    bend45_2: int,
+    *,
+    enable_45: bool,
+) -> dict[int, list[Transition]]:
+    bend_sum = bend45_1 + bend45_2
+    cardinal = [
+        (grid_radius, -grid_radius, 270, "bend_90"),
+        (1, 0, 0, "straight_0"),
+        (grid_radius, grid_radius, 90, "bend_90"),
     ]
+    diagonal = [
+        (bend_sum, bend45_2, 0, "bend_45_2"),
+        (1, 1, 45, "straight_45"),
+        (bend45_2, bend_sum, 90, "bend_45_2"),
+    ]
+    transitions = {
+        90 * turns: [_rotate_transition(step, turns) for step in cardinal]
+        for turns in range(4)
+    }
+    transitions.update(
+        {
+            45 + 90 * turns: [_rotate_transition(step, turns) for step in diagonal]
+            for turns in range(4)
+        }
+    )
 
-    def __init__(
-        self,
-        pos: List = (0, 0, "ori"),
-        cost_g: Union[float, int] = float("inf"),
-        cost_f: Union[float, int] = float("inf"),
-        # bend_count: Union[float, int] = float("inf"),
-        visited: bool = False,
-        parent: Optional[object] = None,
-        neighbors: Optional[Dict] = None,
-        crossing_budget: int = 0,
-        crossing_net: str = None,
-        violatedNet: Optional[set] = None,
-        bviolated: bool = False,
-        straight_count: int = 0,
-    ) -> None:
-        self._pos = tuple(pos)
-        self._cost_g = cost_g
-        self._cost_f = cost_f
-        self._visited = visited
-        self._parent = parent
-        self._neighbors = {} if neighbors is None else neighbors
-        self._crossing_budget = crossing_budget
-        self._crossing_net = crossing_net
-        self._violatedNet = set() if violatedNet is None else violatedNet
-        self._bviolated = bviolated
-        self._straightCount = straight_count
+    if enable_45:
+        extra = [
+            (bend_sum, -bend45_2, 315, "bend_45_1"),
+            (bend_sum, bend45_2, 45, "bend_45_1"),
+        ]
+        for turns in range(4):
+            rotated = [_rotate_transition(step, turns) for step in extra]
+            if turns == 1:
+                rotated.reverse()
+            transitions[90 * turns].extend(rotated)
+    return transitions
 
-    def reset(self):
-        self._cost_g = float("inf")
-        self._cost_f = float("inf")
-        # self._bend_count = float("inf")
-        self._visited = False
-        self._parent = None
 
-    @property
-    def pos(self):
-        return self._pos
+@dataclass(eq=False, slots=True)
+class GridAstarNode:
+    pos: tuple[int, int, int] = (0, 0, 0)
+    cost_g: float = float("inf")
+    cost_f: float = float("inf")
+    visited: bool = False
+    parent: Self | None = None
+    neighbors: dict[Self, str] = field(default_factory=dict)
+    crossing_budget: int = 0
+    crossing_net: str | None = None
+    violated_nets: set[str] = field(default_factory=set)
+    is_violated: bool = False
+    straight_count: int = 0
 
-    @pos.setter
-    def pos(self, value):
-        self._pos = value
+    def reset(self) -> None:
+        self.cost_g = float("inf")
+        self.cost_f = float("inf")
+        self.visited = False
+        self.parent = None
 
-    @property
-    def costG(self):
-        return self._cost_g
-
-    @costG.setter
-    def costG(self, value):
-        self._cost_g = value
-
-    @property
-    def costF(self):
-        return self._cost_f
-
-    @costF.setter
-    def costF(self, value):
-        self._cost_f = value
-
-    @property
-    def straightCount(self):
-        return self._straightCount
-
-    @straightCount.setter
-    def straightCount(self, value):
-        self._straightCount = value
-
-    @property
-    def visited(self):
-        return self._visited
-
-    @visited.setter
-    def visited(self, value):
-        self._visited = value
-
-    @property
-    def parent(self):
-        return self._parent
-
-    @parent.setter
-    def parent(self, value):
-        self._parent = value
-
-    @property
-    def neighbors(self):
-        return self._neighbors
-
-    # @neighbors.setter
-    # def neighbors(self, value):
-    #     self._neighbors = value
-
-    def addNeighbors(self, key, value):
-        self._neighbors[key] = value
+    def add_neighbor(self, neighbor: Self, step_type: str) -> None:
+        self.neighbors[neighbor] = step_type
 
     def __eq__(self, other):
         if not isinstance(other, GridAstarNode):
             return NotImplemented
-        return self._pos == other._pos
+        return self.pos == other.pos
 
     def __hash__(self):
-        return hash(self._pos)
+        return hash(self.pos)
 
 
 class AstarSearch:
@@ -256,106 +223,14 @@ class AstarSearch:
         predict_length = round(self._net.half_size / reslution)
         self.set_DrcManager(self.grid_radius, bend45_1, bend45_2, predict_length)
 
-        self.nextSteps = {
-            0: [
-                (self.grid_radius, -self.grid_radius, 270, "bend_90"),
-                (1, 0, 0, "straight_0"),
-                (self.grid_radius, self.grid_radius, 90, "bend_90"),
-            ],
-            90: [
-                (self.grid_radius, self.grid_radius, 0, "bend_90"),
-                (0, 1, 90, "straight_0"),
-                (-self.grid_radius, self.grid_radius, 180, "bend_90"),
-            ],
-            180: [
-                (-self.grid_radius, self.grid_radius, 90, "bend_90"),
-                (-1, 0, 180, "straight_0"),
-                (-self.grid_radius, -self.grid_radius, 270, "bend_90"),
-            ],
-            270: [
-                (-self.grid_radius, -self.grid_radius, 180, "bend_90"),
-                (0, -1, 270, "straight_0"),
-                (self.grid_radius, -self.grid_radius, 0, "bend_90"),
-            ],
-            45: [
-                (bend45_1 + bend45_2, bend45_2, 0, "bend_45_2"),
-                (1, 1, 45, "straight_45"),
-                (bend45_2, bend45_1 + bend45_2, 90, "bend_45_2"),
-            ],
-            #  (2*extra_length + bend_90_grids, -bend_90_grids, 315),
-            #  (-bend_90_grids,2*extra_length+bend_90_grids, 135)],
-            135: [
-                (-bend45_2, bend45_2 + bend45_1, 90, "bend_45_2"),
-                (-1, 1, 135, "straight_45"),
-                (-bend45_2 - bend45_1, bend45_2, 180, "bend_45_2"),
-            ],
-            #   (bend_90_grids, 2*extra_length+bend_90_grids, 45),
-            #   (-2*extra_length-bend_90_grids, -bend_90_grids, 225)],
-            225: [
-                (-bend45_2 - bend45_1, -bend45_2, 180, "bend_45_2"),
-                (-1, -1, 225, "straight_45"),
-                (-bend45_2, -bend45_2 - bend45_1, 270, "bend_45_2"),
-            ],
-            #   (-2*extra_length-bend_90_grids, bend_90_grids, 135),
-            #   (bend_90_grids, -2*extra_length-bend_90_grids, 315)],
-            315: [
-                (bend45_2, -bend45_2 - bend45_1, 270, "bend_45_2"),
-                (1, -1, 315, "straight_45"),
-                (bend45_2 + bend45_1, -bend45_2, 0, "bend_45_2"),
-            ],
-            #   (2*extra_length+bend_90_grids, bend_90_grids, 45),
-            #   (bend_90_grids, -2*extra_length-bend_90_grids, 225)],
-        }
-
-        if self._net.enable_45 and self._config.dr.enable_45_neighbor:
-            self.nextSteps[0].append((bend45_2 + bend45_1, -bend45_2, 315, "bend_45_1"))
-            self.nextSteps[0].append((bend45_2 + bend45_1, bend45_2, 45, "bend_45_1"))
-            self.nextSteps[90].append(
-                (-bend45_2, bend45_2 + bend45_1, 135, "bend_45_1")
-            )
-            self.nextSteps[90].append((bend45_2, bend45_2 + bend45_1, 45, "bend_45_1"))
-            self.nextSteps[180].append(
-                (-bend45_2 - bend45_1, bend45_2, 135, "bend_45_1")
-            )
-            self.nextSteps[180].append(
-                (-bend45_2 - bend45_1, -bend45_2, 225, "bend_45_1")
-            )
-            self.nextSteps[270].append(
-                (-bend45_2, -bend45_2 - bend45_1, 225, "bend_45_1")
-            )
-            self.nextSteps[270].append(
-                (bend45_2, -bend45_2 - bend45_1, 315, "bend_45_1")
-            )
+        self.nextSteps = _build_transitions(
+            self.grid_radius,
+            bend45_1,
+            bend45_2,
+            enable_45=self._net.enable_45 and self._config.dr.enable_45_neighbor,
+        )
 
         self.his_index = {0: 0, 45: 1, 90: 2, 135: 3, 180: 4, 225: 5, 270: 6, 315: 7}
-
-        """ disable rightnow
-        self.offset_neighbors = {
-            0: [
-                (minimum_straight+1, 1, 0, "offset_1"),
-                (minimum_straight+1, -1, 0, "offset_1"),
-                (minimum_straight+2, 2, 0, "offset_2"),
-                (minimum_straight+2, -2, 0, "offset_2")
-            ],
-            180: [
-                (-minimum_straight-1, 1, 180, "offset_1"),
-                (-minimum_straight-1, -1, 180, "offset_1"),
-                (-minimum_straight-2, 2, 180, "offset_2"),
-                (-minimum_straight-2, -2, 180, "offset_2")
-            ],
-            90: [
-                (1, minimum_straight+1, 90, "offset_1"),
-                (-1, minimum_straight+1, 90, "offset_1"),
-                (2, minimum_straight+2, 90, "offset_2"),
-                (-2, minimum_straight+2, 90, "offset_2")
-            ],
-            270: [
-                (1, -minimum_straight-1, 270, "offset_1"),
-                (-1, -minimum_straight-1, 270, "offset_1"),
-                (2, -minimum_straight-2, 270, "offset_2"),
-                (-2, -minimum_straight-2, 270, "offset_2")
-            ]
-        }"""
 
         points = np.array(
             [
@@ -394,28 +269,6 @@ class AstarSearch:
         self.stepG["bend_90"] = (
             P.length() * self.penalty["propagation_loss"] + self.penalty["bending_loss"]
         )
-
-        """
-        offset neighbor 1
-        points = np.array([(0,0), (self.grid_45*res,1), (self.grid_45*res+1,1)])
-        P = gf.path.smooth(
-            points=points,
-            radius=radius - 1e-3,
-            bend=gf.path.arc, #gf.path.euler / gf.path.arc
-            # use_eff=True
-        )
-        self.stepG["offset_1"] = P.length()
-
-        # offset neighbor 2
-        points = np.array([(0,0), (self.grid_45*res,2), (self.grid_45*res+2,2)])
-        P = gf.path.smooth(
-            points=points,
-            radius=radius - 1e-3,
-            bend=gf.path.arc, #gf.path.euler / gf.path.arc
-            # use_eff=True
-        )
-        self.stepG["offset_2"] = P.length()
-        """
 
     def set_DrcManager(self, bend90, bend45_1, bend45_2, predict_length):
         self._drcmgr.ben_45_part1 = bend45_1
@@ -714,14 +567,14 @@ class AstarSearch:
                     continue
                 costF = 0
                 if nb_type in {"crossing_0", "crossing_45"}:
-                    costG = current_node.costG
+                    costG = current_node.cost_g
                     costG += self.penalty["crossing_loss"]
                 else:
-                    costG = current_node.costG + self.stepG[nb_type]
+                    costG = current_node.cost_g + self.stepG[nb_type]
 
-                if neighbor._bviolated:
-                    cv = current_node._violatedNet
-                    nv = neighbor._violatedNet
+                if neighbor.is_violated:
+                    cv = current_node.violated_nets
+                    nv = neighbor.violated_nets
                     union_nets = cv | nv
                     netnum = len(union_nets)
                     for net in nv:
@@ -774,12 +627,12 @@ class AstarSearch:
                             costF += his
 
                     if nb_type in {"straight_0", "straight_45"}:
-                        neighbor.straightCount = current_node.straightCount + 1
+                        neighbor.straight_count = current_node.straight_count + 1
                     elif nb_type in {"bend_45_1", "bend_45_2"}:
-                        neighbor.straightCount = 0
+                        neighbor.straight_count = 0
 
-                    neighbor.costG = costG
-                    neighbor.costF = costF
+                    neighbor.cost_g = costG
+                    neighbor.cost_f = costF
                     neighbor.parent = current_node
                     self._push_node(neighbor)
 
@@ -789,14 +642,14 @@ class AstarSearch:
         """Add a node snapshot, preserving insertion order for equal costs."""
         heappush(
             self.nodepq,
-            (node.costF, next(self._nodepq_counter), node),
+            (node.cost_f, next(self._nodepq_counter), node),
         )
 
     def _pop_node(self) -> Optional[GridAstarNode]:
         """Return the cheapest current node, discarding stale heap entries."""
         while self.nodepq:
             priority, _, node = heappop(self.nodepq)
-            if not node.visited and priority == node.costF:
+            if not node.visited and priority == node.cost_f:
                 return node
         return None
 
@@ -834,9 +687,9 @@ class AstarSearch:
                         pos=neighbor_position,
                         parent=None,
                         neighbors={},
-                        crossing_budget=currentNode._crossing_budget,
+                        crossing_budget=currentNode.crossing_budget,
                     )
-                currentNode.addNeighbors(tmp_neighbor, step[3])
+                currentNode.add_neighbor(tmp_neighbor, step[3])
 
             elif result.crossing_position is not None:
                 tmp_neighbor = vAllNodesMap.get(result.crossing_position, None)
@@ -846,12 +699,12 @@ class AstarSearch:
                             pos=result.crossing_position,
                             parent=None,
                             neighbors={},
-                            crossing_budget=currentNode._crossing_budget - 1,
+                            crossing_budget=currentNode.crossing_budget - 1,
                             crossing_net=result.conflicts,
-                            # bviolated=ans[4]
+                            # is_violated=ans[4]
                         )
                     )
-                currentNode.addNeighbors(tmp_neighbor, result.obstacle_type)
+                currentNode.add_neighbor(tmp_neighbor, result.obstacle_type)
 
             elif not self._bStrictDRC and result.obstacle_type not in {"blk", "port"}:
                 tmp_neighbor = vAllNodesMap.get(neighbor_position, None)
@@ -860,10 +713,10 @@ class AstarSearch:
                         pos=neighbor_position,
                         parent=None,
                         neighbors={},
-                        bviolated=True,
-                        violatedNet=result.conflicts,
+                        is_violated=True,
+                        violated_nets=result.conflicts,
                     )
-                currentNode.addNeighbors(tmp_neighbor, step[3])
+                currentNode.add_neighbor(tmp_neighbor, step[3])
 
     def scaledMDist(self, pos1, pos2):
         x = abs(pos1[0] - pos2[0]) * self.resolution
@@ -885,12 +738,12 @@ class AstarSearch:
         if not self._bStrictDRC:
             violatedNets = set()
             path = [node.pos[0:]]
-            if node._violatedNet:
-                violatedNets = violatedNets | node._violatedNet
+            if node.violated_nets:
+                violatedNets = violatedNets | node.violated_nets
             while node.parent is not None:
                 path.append(node.parent.pos[0:])
-                if node._violatedNet:
-                    violatedNets = violatedNets | node._violatedNet
+                if node.violated_nets:
+                    violatedNets = violatedNets | node.violated_nets
                 node = node.parent
             path = path[::-1]
             origin_path = deepcopy(path)
@@ -901,16 +754,16 @@ class AstarSearch:
             flag = False  # used to check whether the net is crossed twice
             path = [node.pos[0:]]
             self._crossing_nets.clear()
-            if node._crossing_net:
-                self._crossing_nets.add(node._crossing_net)
+            if node.crossing_net:
+                self._crossing_nets.add(node.crossing_net)
             while node.parent is not None:
                 path.append(node.parent.pos[0:])
                 node = node.parent
-                if node._crossing_net:
-                    if node._crossing_net in self._crossing_nets:
+                if node.crossing_net:
+                    if node.crossing_net in self._crossing_nets:
                         flag = True
                     else:
-                        self._crossing_nets.add(node._crossing_net)
+                        self._crossing_nets.add(node.crossing_net)
             path = path[::-1]
             origin_path = deepcopy(path)
             if flag:
@@ -1067,7 +920,7 @@ class AstarSearch:
             return "nw" if currentNode.pos[1] < neighbor.pos[1] else "sw"
 
     def bNeedUpdate(self, neighbor: GridAstarNode, costG):
-        if neighbor.costG > costG:
+        if neighbor.cost_g > costG:
             return True
         return False
 

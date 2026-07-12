@@ -401,8 +401,8 @@ class DrcManager(object):
         self, currentNode, step, crossing_enable, netName, enable_prediction
     ):  # crossing enable
         currentNode_pos = currentNode.pos
-        crossing_budget = currentNode._crossing_budget
-        straight_count = currentNode.straightCount
+        crossing_budget = currentNode.crossing_budget
+        straight_count = currentNode.straight_count
         check_ori = step[2]  # next step orientation
         checkstep = self.checkSteps[check_ori]
         checkX = currentNode_pos[0]
