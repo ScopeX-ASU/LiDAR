@@ -1,6 +1,6 @@
 run:
   random_state: 42
-  output_layout_gds_path: "/home/hzhou144/projects/PICRoute/src/picroute/result/layout.gds"
+  output_layout_gds_path: "result/layout.gds"
 
 dr:
   router: GridRoute

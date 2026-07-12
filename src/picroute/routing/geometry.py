@@ -14,7 +14,7 @@ class RouteGeometry:
     """Materialize LiDAR paths using one configured optical cross-section."""
 
     def __init__(self, config) -> None:
-        self.cross_section_spec = config.dr.get("cross_section", "strip")
+        self.cross_section_spec = config.dr.cross_section
         self.cross_section = gf.get_cross_section(self.cross_section_spec)
         self.radius = float(config.dr.bend_radius)
 

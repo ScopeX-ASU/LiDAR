@@ -111,7 +111,7 @@ class DrGridRoute(object):
 
     def solveDR(self):
         # routing with ripup and reroute
-        if self.runNRR(self._config.dr.maxIteration):
+        if self.runNRR(self._config.dr.max_iteration):
             logger.info(f"{self.__class__.__name__} succeed")
             return True
         else:
@@ -469,7 +469,7 @@ class DrGridRoute(object):
 
     def updateHistoryMap(self, path, net):
         orientations = self.orientations
-        historyCost = self._config.dr.historyCost
+        historyCost = self._config.dr.history_cost
         historyMap = self.historyMap
         ports1 = set(net.NetPort1.port_grids)
         ports2 = set(net.NetPort2.port_grids)

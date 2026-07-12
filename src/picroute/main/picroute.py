@@ -12,7 +12,7 @@ FilePath: /PICRoute/src/picroute/main/picroute.py
 @brief the PICRoute flow
 """
 
-from picroute.config.config import configs
+from picroute.config.config import RouterConfig
 from picroute.config.parser import Parser
 from picroute.database.schematic import CustomSchematic
 from picroute.drc.drcmanager import DrcManager
@@ -101,10 +101,8 @@ def profile(router):
 def main() -> None:
     argp = Parser()
     args, opts = argp.parser.parse_known_args()
-    configs.load(args.config, recursive=False)
-    configs.update(opts)
-
-    router = PICRoute(args.benchmark, configs)
+    config = RouterConfig.load(args.config, overrides=opts)
+    router = PICRoute(args.benchmark, config)
     router.run()
 
     # profile(router)

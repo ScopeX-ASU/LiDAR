@@ -1,144 +1,101 @@
-"""
-Description: Modified based on torchpack 0.3.0
-Author: Jiaqi Gu (jqgu@utexas.edu)
-Date: 2021-06-06 01:46:57
-LastEditors: Jiaqi Gu (jqgu@utexas.edu)
-LastEditTime: 2021-06-06 01:46:57
-"""
+"""Validated router configuration loading and command-line overrides."""
 
-import hashlib
-import json
-import os
+from __future__ import annotations
+
 from ast import literal_eval
-from typing import Any, Dict, List, Tuple, Union
+from pathlib import Path
+from typing import Any, Literal, Self
 
 import yaml
-from multimethod import multimethod
+from pydantic import BaseModel, ConfigDict, Field
 
-# sys.path.append(os.getcwd())
-
-__all__ = [
-    "Config",
-    "configs",
-]
+__all__ = ["DetailedRoutingConfig", "RouterConfig", "RunConfig"]
 
 
-class Config(dict):
-    def __getattr__(self, key: str) -> Any:
-        if key not in self:
-            d = self
-            ## try hierarchical access
-            keys = key.split(".")
-            for k in keys:
-                if k not in d:
-                    raise AttributeError(key)
-                d = d[k]
-            return d
-        else:
-            return self[key]
+class _ConfigModel(BaseModel):
+    model_config = ConfigDict(
+        extra="forbid",
+        populate_by_name=True,
+        validate_assignment=True,
+    )
 
-    def __setattr__(self, key: str, value: Any) -> None:
-        self[key] = value
 
-    def __delattr__(self, key: str) -> None:
-        del self[key]
+class RunConfig(_ConfigModel):
+    random_state: int = 42
+    output_layout_gds_path: Path = Path("result/layout.gds")
 
-    def load(self, fpath: str, *, recursive: bool = False) -> None:
-        if not os.path.exists(fpath):
-            raise FileNotFoundError(fpath)
-        fpaths = [fpath]
-        if recursive:
-            while fpath:
-                fpath = os.path.dirname(fpath)
-                for fname in ["default.yaml", "default.yml"]:
-                    fpaths.append(os.path.join(fpath, fname))
-        for fpath in reversed(fpaths):
-            if os.path.exists(fpath):
-                with open(fpath, "r") as f:
-                    cfg_dict = yaml.safe_load(f)
-                self.update(cfg_dict)
 
-    def reload(self, fpath: str, *, recursive: bool = False) -> None:
-        self.clear()
-        self.load(fpath, recursive=recursive)
+class DetailedRoutingConfig(_ConfigModel):
+    router: Literal["GridRoute"] = "GridRoute"
+    max_iteration: int = Field(10, alias="maxIteration", ge=1)
+    net_order: Literal["topo", "naive"] = "topo"
+    group: bool = True
+    enable_45_neighbor: bool = True
+    history_cost: int = Field(1000, alias="historyCost", ge=0)
+    ripup_times: int = Field(10, ge=0)
+    grid_resolution: int = Field(2, gt=0)
+    bend_radius: int = Field(5, gt=0)
+    cross_section: str = "strip"
+    net_bound_scale_factor: float = Field(1.5, gt=0)
+    net_default_bound: float = Field(100, gt=0)
+    loss_propagation: float = Field(1.5, ge=0)
+    loss_bending: float = Field(50, ge=0)
+    loss_crossing: float = Field(0, ge=0)
+    loss_congestion: float = Field(500, ge=0)
 
-    @multimethod
-    def update(self, other: Dict) -> None:
-        for key, value in other.items():
-            if isinstance(value, dict):
-                if key not in self or not isinstance(self[key], Config):
-                    self[key] = Config()
-                self[key].update(value)
-            else:
-                self[key] = value
 
-    @multimethod
-    def update(self, opts: Union[List, Tuple]) -> None:
-        index = 0
-        while index < len(opts):
-            opt = opts[index]
-            if opt.startswith("--"):
-                opt = opt[2:]
-            if "=" in opt:
-                key, value = opt.split("=", 1)
-                index += 1
-            else:
-                key, value = opt, opts[index + 1]
-                index += 2
-            current = self
-            subkeys = key.split(".")
-            try:
-                value = literal_eval(value)
-            except (SyntaxError, ValueError):
-                pass
-            for subkey in subkeys[:-1]:
-                current = current.setdefault(subkey, Config())
-            current[subkeys[-1]] = value
+class RouterConfig(_ConfigModel):
+    run: RunConfig = Field(default_factory=RunConfig)
+    dr: DetailedRoutingConfig = Field(default_factory=DetailedRoutingConfig)
+    show_temp: bool = False
+    eval: Literal["comp", "noc"] = "comp"
+    il_cross: float = Field(0.5, ge=0)
 
-    def dict(self) -> Dict[str, Any]:
-        configs = dict()
-        for key, value in self.items():
-            if isinstance(value, Config):
-                value = value.dict()
-            configs[key] = value
-        return configs
-
-    def flat_dict(self) -> Dict[str, Any]:
-        def _flatten_dict(dd, separator: str = "_", prefix: str = ""):
-            return (
-                {
-                    prefix + separator + k if prefix else k: v
-                    for kk, vv in dd.items()
-                    for k, v in _flatten_dict(vv, separator, kk).items()
-                }
-                if isinstance(dd, dict)
-                else {prefix: dd}
-            )
-
-        return _flatten_dict(self.dict(), separator=".")
-
-    def hash(self) -> str:
-        buffer = json.dumps(self.dict(), sort_keys=True)
-        return hashlib.sha256(buffer.encode()).hexdigest()
-
-    def dump_to_yml(self, path: str) -> None:
-        with open(path, "w") as f:
-            yaml.safe_dump(self.dict(), f)
+    @classmethod
+    def load(cls, path: str | Path, overrides: list[str] | None = None) -> Self:
+        """Load one YAML file and apply validated dotted command-line overrides."""
+        config_path = Path(path)
+        if not config_path.is_file():
+            raise FileNotFoundError(config_path)
+        data = yaml.safe_load(config_path.read_text(encoding="utf-8")) or {}
+        if not isinstance(data, dict):
+            raise TypeError(f"Configuration root must be a mapping, got {type(data).__name__}")
+        _apply_overrides(data, overrides or [])
+        return cls.model_validate(data)
 
     def __str__(self) -> str:
-        texts = []
-        for key, value in self.items():
-            if isinstance(value, Config):
-                seperator = "\n"
-            else:
-                seperator = " "
-
-            text = str(key) + ":" + seperator + str(value)
-            lines = text.split("\n")
-            for k, line in enumerate(lines[1:]):
-                lines[k + 1] = (" " * 2) + line
-            texts.extend(lines)
-        return "\n".join(texts)
+        return yaml.safe_dump(
+            self.model_dump(mode="json", by_alias=True),
+            sort_keys=False,
+        ).rstrip()
 
 
-configs = Config()
+def _apply_overrides(config: dict[str, Any], options: list[str]) -> None:
+    index = 0
+    while index < len(options):
+        option = options[index]
+        if not option.startswith("--"):
+            raise ValueError(f"Unexpected configuration argument {option!r}")
+        option = option[2:]
+        if "=" in option:
+            key, raw_value = option.split("=", 1)
+            index += 1
+        else:
+            if index + 1 >= len(options):
+                raise ValueError(f"Missing value for configuration override --{option}")
+            key, raw_value = option, options[index + 1]
+            index += 2
+
+        try:
+            value = literal_eval(raw_value)
+        except (SyntaxError, ValueError):
+            value = raw_value
+
+        current = config
+        parts = key.split(".")
+        for part in parts[:-1]:
+            child = current.setdefault(part, {})
+            if not isinstance(child, dict):
+                raise ValueError(f"Cannot assign nested option --{key}")
+            current = child
+        current[parts[-1]] = value

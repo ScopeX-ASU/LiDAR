@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-from picroute.config.config import Config
+from picroute.config.config import RouterConfig
 from picroute.main.picroute import PICRoute
 
 
@@ -26,8 +26,9 @@ def test_toy_route_end_to_end(tmp_path: Path, shift: tuple[int, int]) -> None:
 
     benchmark = tmp_path / "toy.gp.yml"
     benchmark.write_text(yaml.safe_dump(data, sort_keys=False))
-    config = Config()
-    config.load(Path(__file__).parents[1] / "picroute" / "config" / "comp_LiDAR.yml")
+    config = RouterConfig.load(
+        Path(__file__).parents[1] / "picroute" / "config" / "comp_LiDAR.yml"
+    )
     output = tmp_path / "toy.gds"
     config.run.output_layout_gds_path = str(output)
 

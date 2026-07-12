@@ -1,14 +1,13 @@
 import gdsfactory as gf
 import pytest
 
-from picroute.config.config import Config
+from picroute.config.config import RouterConfig
 from picroute.drc.bitmap import Bitmap
 from picroute.routing.geometry import RouteGeometry
 
 
 def test_occupied_grid_cells_use_filled_klayout_region() -> None:
-    config = Config()
-    config.dr = Config()
+    config = RouterConfig()
     config.dr.cross_section = "strip"
     config.dr.bend_radius = 5
     geometry = RouteGeometry(config)
@@ -33,8 +32,7 @@ def test_occupied_grid_cells_use_filled_klayout_region() -> None:
     ],
 )
 def test_all_angle_placement_matches_smoothed_route_region(points) -> None:
-    config = Config()
-    config.dr = Config()
+    config = RouterConfig()
     config.dr.cross_section = "strip"
     config.dr.bend_radius = 5
     geometry = RouteGeometry(config)
@@ -50,8 +48,7 @@ def test_all_angle_placement_matches_smoothed_route_region(points) -> None:
 
 
 def test_all_angle_access_uses_native_route_result() -> None:
-    config = Config()
-    config.dr = Config()
+    config = RouterConfig()
     config.dr.cross_section = "strip"
     config.dr.bend_radius = 5
     geometry = RouteGeometry(config)
