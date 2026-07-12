@@ -124,7 +124,7 @@ class DrcManager(object):
                     self._cirdb._group_Nets[name] = inst_group
 
                     step = orientations[Port.orientation]
-                    loc = (np.array(ports[0].center) / self.resolution).astype(np.int32)
+                    loc = self._bitmap.to_grid(ports[0].center)
                     while self._bitmap.bitMap[loc[0]][loc[1]].type == "blk":
                         loc += step
                     for _ in range(self.port_length):
@@ -153,10 +153,13 @@ class DrcManager(object):
                     nets = {}
                     name = ins_name + "_" + str(ori)
                     step = orientations[ori]
-                    mean_loc = (
-                        (np.array(order_ports[0][1]) + np.array(order_ports[-1][1]))
-                        / (2 * self.resolution)
-                    ).astype(np.int32)
+                    mean_loc = self._bitmap.to_grid(
+                        (
+                            np.array(order_ports[0][1])
+                            + np.array(order_ports[-1][1])
+                        )
+                        / 2
+                    )
                     while self._bitmap.bitMap[mean_loc[0]][mean_loc[1]].type == "blk":
                         mean_loc += step
                     if CR < 100000:
@@ -221,9 +224,7 @@ class DrcManager(object):
                                 Port = self._cirdb._dbPorts.get(port[0], None)
                                 if Port.netName:
                                     nets[Port.netName] = None
-                                    loc = (np.array(port[1]) / self.resolution).astype(
-                                        np.int32
-                                    )
+                                    loc = self._bitmap.to_grid(port[1])
                                     loc[origin_axis] = mean_loc[origin_axis]
                                     if ports_num <= 2:
                                         port_len = self.radius * 4  ### To be continued

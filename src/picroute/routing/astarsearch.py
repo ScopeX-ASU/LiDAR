@@ -179,7 +179,10 @@ class AstarSearch:
 
         resolution = self._config.dr.grid_resolution
         if net_config:
-            self.routing_bound = np.array(net_config["region"]) / resolution
+            self.routing_bound = [
+                self._drcmgr.bitMap.to_grid(net_config["region"][0]),
+                self._drcmgr.bitMap.to_grid(net_config["region"][1]),
+            ]
         else:
             scale_factor = (
                 config.dr.net_bound_scale_factor + (self._net.failed_count // 2) * 0.5
@@ -203,20 +206,17 @@ class AstarSearch:
                 )
                 / 2
             )
+            lower = self._drcmgr.bitMap.to_grid(
+                [x_mean - boundx, y_mean - boundy]
+            )
+            upper = self._drcmgr.bitMap.to_grid(
+                [x_mean + boundx, y_mean + boundy]
+            )
             self.routing_bound = [
+                [max(1, int(lower[0])), max(1, int(lower[1]))],
                 [
-                    max(1, math.ceil((x_mean - boundx) / resolution)),
-                    max(1, math.ceil((y_mean - boundy) / resolution)),
-                ],
-                [
-                    min(
-                        self._drcmgr.bitMap.width - 1,
-                        int((x_mean + boundx) / resolution),
-                    ),
-                    min(
-                        self._drcmgr.bitMap.height - 1,
-                        int((y_mean + boundy) / resolution),
-                    ),
+                    min(self._drcmgr.bitMap.width - 1, int(upper[0])),
+                    min(self._drcmgr.bitMap.height - 1, int(upper[1])),
                 ],
             ]
 
@@ -905,8 +905,7 @@ class AstarSearch:
             path = path[::-1]
             origin_path = deepcopy(path)
             path = np.array(self._process_bend(path))
-            path[:, 0:2] *= self._drcmgr.resolution
-            path[:, 0:2] += self._drcmgr.resolution / 2
+            path[:, 0:2] = self._drcmgr.bitMap.to_world(path[:, 0:2])
             return path[:, 0:2], origin_path, violatedNets
         else:
             flag = False  # used to check whether the net is crossed twice
@@ -927,8 +926,7 @@ class AstarSearch:
             if flag:
                 return None, origin_path, None
             path = np.array(self._process_bend(path))
-            path[:, 0:2] *= self._drcmgr.resolution
-            path[:, 0:2] += self._drcmgr.resolution / 2
+            path[:, 0:2] = self._drcmgr.bitMap.to_world(path[:, 0:2])
             return path[:, 0:2], origin_path, None
 
     def _process_bend(self, path):
@@ -1088,7 +1086,10 @@ class AstarSearch:
         points = component.get_polygons_points()[1][0]
         # assert component.polygons is not None
         # points = component.polygons[0].points
-        int_points = (points[0:] / resolution).astype(np.int32).tolist()
+        grid_points = (
+            points - self._drcmgr.bitMap.origin
+        ) / self._drcmgr.resolution
+        int_points = grid_points.astype(np.int32).tolist()
         int_points = tuple(map(tuple, int_points))
         dpoint = points[0:-1, :] - points[1:, :]
         slope = dpoint[:, 1] / dpoint[:, 0]
@@ -1099,8 +1100,8 @@ class AstarSearch:
                 num_points = round(max(abs_num[0], abs_num[1]) / 0.1)
                 x = (
                     np.linspace(
-                        points[i, 0] / resolution,
-                        points[i + 1, 0] / resolution,
+                        grid_points[i, 0],
+                        grid_points[i + 1, 0],
                         num_points,
                     )
                     .astype(np.int32)
@@ -1108,8 +1109,8 @@ class AstarSearch:
                 )
                 y = (
                     np.linspace(
-                        points[i, 1] / resolution,
-                        points[i + 1, 1] / resolution,
+                        grid_points[i, 1],
+                        grid_points[i + 1, 1],
                         num_points,
                     )
                     .astype(np.int32)
