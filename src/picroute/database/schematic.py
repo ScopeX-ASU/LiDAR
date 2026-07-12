@@ -34,6 +34,7 @@ __all__ = [
     "Constraints",
     "Settings",
     "CustomSchematicConfiguration",
+    "CustomSchematic",
 ]
 
 
@@ -365,8 +366,11 @@ class CustomSchematicConfiguration(SchematicConfiguration):
     def placements(self):
         return self.schematic_placements
 
-    def add_macro(self, component: Union[str, gf.Component]) -> None:
+    def add_macro(
+        self, component: Union[str, gf.Component], iloss: float = 0.1
+    ) -> tuple[str, Macro]:
         new_macro = Macro(
+            iloss=iloss,
             type="CORE",
             origin=[0, 0],
             size=[float(component.dxsize), float(component.dysize)],
@@ -388,10 +392,11 @@ class CustomSchematicConfiguration(SchematicConfiguration):
         self,
         name: str,
         component: Union[str, gf.Component],
+        iloss: float = 0.1,
         placement: Optional[Placement] = None,
         settings: Optional[Dict[str, Any]] = None,
     ) -> None:
-        macro_name, _ = self.add_macro(component)
+        macro_name, _ = self.add_macro(component, iloss=iloss)
 
         if isinstance(component, gf.Component):
             # component_name = component.settings.function_name
@@ -433,7 +438,7 @@ class CustomSchematicConfiguration(SchematicConfiguration):
             node.settings["placement"] = placement
             self.placements[name] = self.convert_pl_lefdef_to_gf(
                 node.settings["macro_type"], placement
-            )
+            )[0]
 
     def convert_pl_lefdef_to_gf(self, macro_type: str, placement_sol: dict):
         placement = Placement()
@@ -587,56 +592,15 @@ class CustomSchematic(object):
         self._schematic.settings.update(**kwargs)
 
     def add_instance(
-        self, instance_name: str, component: Union[str, gf.Component], placement=None
-    ) -> None:
-        self._schematic.add_instance(name=instance_name, component=component)
-
-    def _adjust_pin_offset_orient_with_orient(
         self,
-        node_orient,
-        node_size_x,
-        node_size_y,
-        pin_offset_x,
-        pin_offset_y,
-        pin_orient,
-    ):
-        # recompute pin_offset with node orientation
-        ori = pin_orient
-        if node_orient == "N":  # R0:
-            new_pin_orient = ori
-            new_pin_offset_x = pin_offset_x
-            new_pin_offset_y = pin_offset_y
-        elif node_orient == "S":  # R180
-            new_pin_orient = (ori + 180) % 360
-            new_pin_offset_x = node_size_x - pin_offset_x
-            new_pin_offset_y = node_size_y - pin_offset_y
-        elif node_orient == "W":  # R90
-            new_pin_orient = (ori + 90) % 360
-            new_pin_offset_x = node_size_y - pin_offset_y
-            new_pin_offset_y = pin_offset_x
-        elif node_orient == "E":  # R270
-            new_pin_orient = (ori - 90) % 360
-            new_pin_offset_x = pin_offset_y
-            new_pin_offset_y = node_size_x - pin_offset_x
-        elif node_orient == "FN":  # MY mirror Y, cell center
-            new_pin_orient = [180, 90, 0, 270][int(ori // 90)]
-            new_pin_offset_x = node_size_x - pin_offset_x
-            new_pin_offset_y = pin_offset_y
-        elif node_orient == "FS":  # MX mirror X, cell center
-            new_pin_orient = [0, 270, 180, 90][int(ori // 90)]
-            new_pin_offset_x = pin_offset_x
-            new_pin_offset_y = node_size_y - pin_offset_y
-        elif node_orient == "FW":  # MX90 mirror X -> R90, cell center
-            new_pin_orient = [90, 0, 270, 180][int(ori // 90)]
-            new_pin_offset_x = pin_offset_x
-            new_pin_offset_y = pin_offset_y
-        elif node_orient == "FE":  # MY90 mirror Y -> R90, cell center
-            new_pin_orient = [270, 180, 90, 0][int(ori // 90)]
-            new_pin_offset_x = node_size_y - pin_offset_y
-            new_pin_offset_y = node_size_x - pin_offset_x
-        else:
-            raise ValueError(f"Get {node_orient}")
-        return new_pin_offset_x, new_pin_offset_y, new_pin_orient
+        instance_name: str,
+        component: Union[str, gf.Component],
+        iloss: float = 0.1,
+        placement=None,
+    ) -> None:
+        self._schematic.add_instance(
+            name=instance_name, component=component, iloss=iloss, placement=placement
+        )
 
     def load_gp(self):
         # load netlist
@@ -650,9 +614,10 @@ class CustomSchematic(object):
         self._schematic = schematic
 
         split_instance = set()
-        # process instances
-        blk_index = 0
+        # Process logical instances first. Physical geometry is read from the
+        # transformed GDSFactory instances below.
         instances = {}
+        instance_macros = {}
         for name, inst in netlist["instances"].items():
             instances[name] = Instance(
                 component=inst["component"], settings=inst["settings"]
@@ -660,85 +625,15 @@ class CustomSchematic(object):
 
             macro_type = inst["settings"]["macro_type"]
             inst_placement = inst["settings"]["placement"]
-            pl, node_size_x, node_size_y = self._schematic.convert_pl_lefdef_to_gf(
+            pl, _, _ = self._schematic.convert_pl_lefdef_to_gf(
                 macro_type, inst_placement
             )
             self._schematic.placements[name] = pl
+            instance_macros[name] = self._schematic.library[macro_type]
 
             if instances[name].settings.get("split", None):
                 split_instance.add(name)
                 del instances[name].settings["split"]
-
-            macro = self._schematic.library[macro_type]
-            size_x, size_y = macro.size
-            lx, ly = inst_placement[1]
-            hx, hy = lx + node_size_x, ly + node_size_y
-            bbox = [lx, ly, hx, hy]
-
-            port_0 = []
-            port_90 = []
-            port_180 = []
-            port_270 = []
-
-            portID = blk_index
-            pins = macro.pins
-            for pin_name, pin_setting in pins.items():
-                new_pin_offset_x, new_pin_offset_y, new_pin_orient = (
-                    self._adjust_pin_offset_orient_with_orient(
-                        node_orient=inst_placement[2],
-                        node_size_x=size_x,
-                        node_size_y=size_y,
-                        pin_offset_x=pin_setting["pin_offset_x"],
-                        pin_offset_y=pin_setting["pin_offset_y"],
-                        pin_orient=pin_setting["pin_orient"],
-                    )
-                )
-                x = lx + new_pin_offset_x
-                y = ly + new_pin_offset_y
-
-                if name in split_instance:
-                    portID += int(pin_name[1:]) - 1
-
-                port_name = name + "," + pin_name
-                Port = dBPort(
-                    port_name=port_name,
-                    center=np.array([x, y]),
-                    width=pin_setting["pin_width"],
-                    orientation=new_pin_orient,
-                    instanceName=name,
-                    idBlk=portID,
-                )
-
-                self._dbPorts[port_name] = Port
-                match new_pin_orient:
-                    case 0:
-                        port_0.append(Port)
-                    case 90:
-                        port_90.append(Port)
-                    case 180:
-                        port_180.append(Port)
-                    case 270:
-                        port_270.append(Port)
-
-            self.device_loss[name] = macro.iloss
-            self._inst_blks[name] = Blockage(
-                idBlk=blk_index,
-                instanceName=name,
-                bbox=bbox,
-                port_0=port_0,
-                port_90=port_90,
-                port_180=port_180,
-                port_270=port_270,
-            )
-
-            if name in split_instance:
-                port_nums = 0
-                for pin_name in macro.pins.keys():
-                    if "o" in pin_name:
-                        port_nums += 1
-                blk_index += port_nums
-            else:
-                blk_index += 1
 
             del instances[name].settings["placement"]
             del instances[name].settings["macro_type"]
@@ -757,13 +652,55 @@ class CustomSchematic(object):
             ports=schematic.ports,
         )
 
-        layout_filename = str(self.path)[:-4] + ".layout.yml"
-        netlist_conf.to_yaml(layout_filename)
-        c = gf.read.from_yaml(layout_filename)
+        c = gf.read.from_yaml(netlist_conf.model_dump())
         self._gdsfactoryC = gf.Component("layout")
         self._gdsfactoryC.add_ref(c)
         self._gdsfactoryC.show()
         self.tempLayout = None
+
+        # Use GDSFactory/KFactory as the source of truth for transformed
+        # bounding boxes and ports instead of duplicating transform algebra.
+        blk_index = 0
+        for reference in c.insts:
+            name = reference.name
+            bbox = reference.dbbox()
+            orientation_ports = {0: [], 90: [], 180: [], 270: []}
+            optical_ports = list(reference.ports.filter(port_type="optical"))
+
+            for port in optical_ports:
+                orientation = int(round(port.orientation)) % 360
+                if orientation not in orientation_ports:
+                    raise ValueError(
+                        f"LiDAR grid access requires cardinal ports; "
+                        f"got {orientation} degrees for {name},{port.name}"
+                    )
+                port_id = blk_index
+                if name in split_instance:
+                    port_id += int(port.name[1:]) - 1
+                port_name = f"{name},{port.name}"
+                db_port = dBPort(
+                    port_name=port_name,
+                    center=np.asarray(port.dcenter, dtype=float),
+                    width=float(port.dwidth),
+                    orientation=float(orientation),
+                    instanceName=name,
+                    idBlk=port_id,
+                    gf_port=port,
+                )
+                self._dbPorts[port_name] = db_port
+                orientation_ports[orientation].append(db_port)
+
+            self.device_loss[name] = instance_macros[name].iloss
+            self._inst_blks[name] = Blockage(
+                idBlk=blk_index,
+                instanceName=name,
+                bbox=[bbox.left, bbox.bottom, bbox.right, bbox.top],
+                port_0=orientation_ports[0],
+                port_90=orientation_ports[90],
+                port_180=orientation_ports[180],
+                port_270=orientation_ports[270],
+            )
+            blk_index += len(optical_ports) if name in split_instance else 1
 
         # process nets
         cur_netid = 0
@@ -774,13 +711,6 @@ class CustomSchematic(object):
             EulerDist = np.linalg.norm(port1.center - port2.center, ord=2)
             port1.netName = unit_name
             port2.netName = unit_name
-
-            """ Get GDSFactory ports for post-processing
-            """
-            inst1_name, port1_id = route_unit[0].split(",")
-            inst2_name, port2_id = route_unit[1].split(",")
-            port1.gf_port = c.insts[inst1_name].ports[port1_id]
-            port2.gf_port = c.insts[inst2_name].ports[port2_id]
 
             dbNets[unit_name] = Nets(
                 netName=unit_name,
