@@ -66,6 +66,7 @@ class RouteGeometry:
     def place_all_angle(self, points) -> gf.Component:
         """Place an instance-based kfactory route along an exact LiDAR backbone."""
         component = gf.Component()
+        component.routes = {}
         route = route_all_angle(
             component,
             width=self.width,
@@ -95,6 +96,7 @@ class RouteGeometry:
     def connect_ports_all_angle(self, port1, port2):
         """Connect two arbitrary-angle ports using the configured optical geometry."""
         component = gf.Component()
+        component.routes = {}
         route = gf.routing.route_bundle_all_angle(
             component=component,
             ports1=[port1],
@@ -135,6 +137,7 @@ class RouteGeometry:
         route = self.place_all_angle(path_record[0])
 
         component = gf.Component()
+        component.routes = {}
         component << access1
         component << access2
         component.add_ref(route)
