@@ -6,7 +6,7 @@ from shapely.geometry import LineString, Point
 from picroute.database.schematic import CustomSchematic, Nets
 from picroute.drc.drcmanager import DrcManager
 from picroute.utils.general import logger
-from picroute.utils.smooth import alignment, smooth
+from picroute.utils.smooth import alignment
 
 from ..queue.pqueue import AdvancedPriorityQueue
 
@@ -420,7 +420,7 @@ class DrGridRoute(object):
             current_net.crossing_num += crossing_number
             current_net.wirelength = 0
             for i, path in enumerate(current_net.routed_path):
-                P, _, _ = smooth(
+                P = gf.path.smooth(
                     points=path[0],
                     radius=self._config.dr.bend_radius - 1e-9,
                     bend=gf.path.euler,
@@ -652,7 +652,7 @@ class DrGridRoute(object):
             current_net.crossing_num = crossing_number
             current_net.wirelength = 0
             for i, path in enumerate(current_net.routed_path):
-                P, _, _ = smooth(
+                P = gf.path.smooth(
                     points=path[0],
                     radius=self._config.dr.bend_radius - 1e-9,
                     bend=gf.path.euler,

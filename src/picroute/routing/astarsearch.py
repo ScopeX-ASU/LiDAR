@@ -10,7 +10,7 @@ import shapely.geometry as sg
 
 from picroute.database.schematic import CustomSchematic, Nets
 from picroute.drc.drcmanager import DrcManager
-from picroute.utils.smooth import smooth
+from picroute.utils.smooth import prepare_waypoints
 
 from ..queue.heapdict import heapdict
 from .drgridroute import DrGridRoute
@@ -375,7 +375,7 @@ class AstarSearch:
                 ((bend45_1 + bend45_2) * reslution, bend45_2 * reslution),
             ]
         )
-        P, _, _ = smooth(
+        P = gf.path.smooth(
             points=points,
             radius=radius - 1e-3,
             bend=gf.path.arc,  # gf.path.euler / gf.path.arc
@@ -396,7 +396,7 @@ class AstarSearch:
                 (self.grid_radius * reslution, self.grid_radius * reslution),
             ]
         )
-        P, _, _ = smooth(
+        P = gf.path.smooth(
             points=points,
             radius=radius - 1e-3,
             bend=gf.path.arc,  # gf.path.euler / gf.path.arc
@@ -409,7 +409,7 @@ class AstarSearch:
         """
         offset neighbor 1
         points = np.array([(0,0), (self.grid_45*res,1), (self.grid_45*res+1,1)])
-        P, _, _ = smooth(
+        P = gf.path.smooth(
             points=points,
             radius=radius - 1e-3,
             bend=gf.path.arc, #gf.path.euler / gf.path.arc
@@ -419,7 +419,7 @@ class AstarSearch:
 
         # offset neighbor 2
         points = np.array([(0,0), (self.grid_45*res,2), (self.grid_45*res+2,2)])
-        P, _, _ = smooth(
+        P = gf.path.smooth(
             points=points,
             radius=radius - 1e-3,
             bend=gf.path.arc, #gf.path.euler / gf.path.arc
@@ -599,13 +599,13 @@ class AstarSearch:
         bend = bend_euler
         for _ in range(self.radius):
             try:
-                P, segments, accumulated_bend = smooth(
-                    points=path[0:Plength],
+                segments, accumulated_bend = prepare_waypoints(path[0:Plength])
+                P = gf.path.smooth(
+                    points=segments,
                     radius=radius - 1e-3,
                     bend=gf.path.euler,
                     # bend=gf.path.arc,
                     use_eff=True,
-                    alignment=False,
                 )
             except:
                 Plength -= 1
