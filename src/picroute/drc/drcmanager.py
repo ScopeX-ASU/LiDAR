@@ -1,10 +1,31 @@
 import math
+from collections.abc import Collection
+from dataclasses import dataclass
+from typing import Any
 
 import numpy as np
-from numba import jit
 
 from ..database.schematic import CustomSchematic
 from .bitmap import Bitmap
+
+_PERPENDICULAR_STEPS = {
+    0: (0, 1),
+    45: (1, -1),
+    90: (1, 0),
+    135: (1, 1),
+    180: (0, 1),
+    225: (1, -1),
+    270: (1, 0),
+    315: (1, 1),
+}
+
+
+@dataclass(frozen=True, slots=True)
+class DrcResult:
+    violated: bool
+    crossing_position: tuple[int, int, int] | None = None
+    obstacle_type: Any = None
+    conflicts: set[str] | str | None = None
 
 
 class DrcManager(object):
@@ -138,11 +159,7 @@ class DrcManager(object):
                     name = ins_name + "_" + str(ori)
                     step = orientations[ori]
                     mean_loc = self._bitmap.to_grid(
-                        (
-                            np.array(order_ports[0][1])
-                            + np.array(order_ports[-1][1])
-                        )
-                        / 2
+                        (np.array(order_ports[0][1]) + np.array(order_ports[-1][1])) / 2
                     )
                     while self._bitmap.bitMap[mean_loc[0]][mean_loc[1]].type == "blk":
                         mean_loc += step
@@ -343,6 +360,43 @@ class DrcManager(object):
     DRC check based on the crossing size
     """
 
+    def _scan_route_segments(self, start, segments, net_name):
+        """Scan consecutive route segments and collect conflicting route owners."""
+        x, y = start
+        conflicts = set()
+        for (dx, dy), length, orientation in segments:
+            for _ in range(length):
+                x += dx
+                y += dy
+                violated, node_type, owner = self.checkSingleNode(
+                    (x, y, orientation), net_name
+                )
+                if not violated or (node_type == "port" and owner == net_name):
+                    continue
+                if node_type in {"port", "blk"}:
+                    return (
+                        (x, y),
+                        conflicts,
+                        DrcResult(True, obstacle_type=node_type, conflicts=owner),
+                    )
+                conflicts.add(owner)
+        return (x, y), conflicts, None
+
+    def _prediction_is_blocked(self, start, step, orientation, net_name) -> bool:
+        x, y = start
+        try:
+            for _ in range(self.predict_length):
+                x += step[0]
+                y += step[1]
+                violated, node_type, owner = self.checkSingleNode(
+                    (x, y, orientation), net_name
+                )
+                if violated and not (node_type == "port" and owner == net_name):
+                    return True
+        except IndexError:
+            return True
+        return False
+
     def bViolateDRC(
         self, currentNode, step, crossing_enable, netName, enable_prediction
     ):  # crossing enable
@@ -376,16 +430,20 @@ class DrcManager(object):
                     violated_net = {nNet}
                     # violated_net.add(nNet)
                     if nType == "port" and nNet == netName:
-                        return (False, None)
+                        return DrcResult(False)
                     elif nType in {"blk", "compound", "port"}:
-                        return (True, None, nType, violated_net)
+                        return DrcResult(
+                            True, obstacle_type=nType, conflicts=violated_net
+                        )
                     elif abs(check_ori - nType) == 90:
                         if (
                             not crossing_enable
                             or crossing_budget <= 0
                             or dbNets[nNet].current_budget <= 0
                         ):
-                            return (True, None, nType, violated_net)
+                            return DrcResult(
+                                True, obstacle_type=nType, conflicts=violated_net
+                            )
                         # 90+180 / 270+180 / 0+90 / 180+90
                         host = dbNets[netName]
                         slave = dbNets[nNet]
@@ -405,7 +463,11 @@ class DrcManager(object):
                                         ]
                                         != nType
                                     ):
-                                        return (True, None, nType, violated_net)
+                                        return DrcResult(
+                                            True,
+                                            obstacle_type=nType,
+                                            conflicts=violated_net,
+                                        )
                             else:
                                 for i in range(1, checking_size + 1):
                                     if (
@@ -416,7 +478,11 @@ class DrcManager(object):
                                         ]
                                         != nType
                                     ):
-                                        return (True, None, nType, violated_net)
+                                        return DrcResult(
+                                            True,
+                                            obstacle_type=nType,
+                                            conflicts=violated_net,
+                                        )
 
                             crossing_neighbor = (checkX, checkY, check_ori)
                             for _ in range(checking_size):
@@ -430,12 +496,20 @@ class DrcManager(object):
                                     if cr_nType == "port" and cr_nNet == netName:
                                         continue
                                     else:
-                                        return (True, None, nType, violated_net)
+                                        return DrcResult(
+                                            True,
+                                            obstacle_type=nType,
+                                            conflicts=violated_net,
+                                        )
 
-                            return (True, crossing_neighbor, "crossing_0", nNet)
+                            return DrcResult(
+                                True, crossing_neighbor, "crossing_0", nNet
+                            )
                         else:
-                            return (True, None, nType, violated_net)
-                    return (True, None, nType, violated_net)
+                            return DrcResult(
+                                True, obstacle_type=nType, conflicts=violated_net
+                            )
+                    return DrcResult(True, obstacle_type=nType, conflicts=violated_net)
 
             case "straight_45":
                 checkX += checkstep[0]
@@ -448,9 +522,11 @@ class DrcManager(object):
                     violated_net = set()
                     violated_net.add(nNet)
                     if nType == "port" and nNet == netName:
-                        return (False, None)
+                        return DrcResult(False)
                     if nType in {"blk", "compound", "port"}:
-                        return (True, None, nType, violated_net)
+                        return DrcResult(
+                            True, obstacle_type=nType, conflicts=violated_net
+                        )
                     if (
                         check_ori + nType
                     ) % 180 == 0:  # 45+135 / 225+135 / 135+45 / 315+45
@@ -459,7 +535,9 @@ class DrcManager(object):
                             or crossing_budget <= 0
                             or dbNets[nNet].current_budget <= 0
                         ):
-                            return (True, None, nType, violated_net)
+                            return DrcResult(
+                                True, obstacle_type=nType, conflicts=violated_net
+                            )
                         host = dbNets[netName]
                         slave = dbNets[nNet]
                         crossing_neighbor = None
@@ -481,7 +559,11 @@ class DrcManager(object):
                                             )[1]
                                             != nType
                                         ):
-                                            return (True, None, nType, violated_net)
+                                            return DrcResult(
+                                                True,
+                                                obstacle_type=nType,
+                                                conflicts=violated_net,
+                                            )
                                 case 135 | 315:
                                     for i in range(1, checking_size + 1):
                                         if (
@@ -494,7 +576,11 @@ class DrcManager(object):
                                             )[1]
                                             != nType
                                         ):
-                                            return (True, None, nType, violated_net)
+                                            return DrcResult(
+                                                True,
+                                                obstacle_type=nType,
+                                                conflicts=violated_net,
+                                            )
                             crossing_neighbor = (checkX, checkY, check_ori)
                             for _ in range(max(0, checking_size)):
                                 checkX += step[0]
@@ -507,182 +593,78 @@ class DrcManager(object):
                                     if cr_nType == "port" and cr_nNet == netName:
                                         continue
                                     else:
-                                        return (True, None, nType, violated_net)
-                            return (True, crossing_neighbor, "crossing_45", nNet)
-                        else:
-                            return (True, None, nType, violated_net)
-                    return (True, None, nType, violated_net)
-            case "bend_45_2":
-                violated_net = set()
-                ori1 = currentNode_pos[2]
-                ori2 = check_ori
-                checkstep1 = self.checkSteps[ori1]
-                checkstep2 = checkstep
-                # check_len = self.straight_45_part2
-                for _ in range(self.ben_45_part2):
-                    checkX += checkstep1[0]
-                    checkY += checkstep1[1]
-                    bviolated, nType, nNet = checkBitmap(
-                        (checkX, checkY, ori1), netName
-                    )
-                    if bviolated:
-                        if nType == "port" and nNet == netName:
-                            continue
-                        elif nType in {"port", "blk"}:
-                            return (True, None, nType, nNet)
-                        else:
-                            violated_net.add(nNet)
-                for _ in range(self.ben_45_part1):
-                    checkX += checkstep2[0]
-                    checkY += checkstep2[1]
-                    bviolated, nType, nNet = checkBitmap(
-                        (checkX, checkY, ori2), netName
-                    )
-                    if bviolated:
-                        if nType == "port" and nNet == netName:
-                            continue
-                        elif nType in {"port", "blk"}:
-                            return (True, None, nType, nNet)
-                        else:
-                            violated_net.add(nNet)
-
-                # Prediction
-
-                if not violated_net and enable_prediction and crossing_enable:
-                    try:
-                        tempX, tempY = checkX, checkY
-                        for _ in range(self.predict_length):
-                            tempX += checkstep2[0]
-                            tempY += checkstep2[1]
-                            bviolated, nType, nNet = checkBitmap(
-                                (tempX, tempY, check_ori), netName
+                                        return DrcResult(
+                                            True,
+                                            obstacle_type=nType,
+                                            conflicts=violated_net,
+                                        )
+                            return DrcResult(
+                                True, crossing_neighbor, "crossing_45", nNet
                             )
-                            if bviolated:
-                                if nType == "port" and nNet == netName:
-                                    continue
-                                else:
-                                    return (True, None, None, None)
-                    except IndexError:
-                        return (True, None, None, None)
-                elif violated_net:
-                    return (True, None, None, violated_net)
-            case "bend_45_1":
-                violated_net = set()
-                ori1 = currentNode_pos[2]
-                ori2 = check_ori
-                checkstep1 = self.checkSteps[ori1]
-                checkstep2 = checkstep
-                for _ in range(self.ben_45_part1):
-                    checkX += checkstep1[0]
-                    checkY += checkstep1[1]
-                    bviolated, nType, nNet = checkBitmap(
-                        (checkX, checkY, ori1), netName
-                    )
-                    if bviolated:
-                        if nType == "port" and nNet == netName:
-                            continue
-                        elif nType in {"port", "blk"}:
-                            return (True, None, nType, nNet)
                         else:
-                            violated_net.add(nNet)
-                for _ in range(self.ben_45_part2):
-                    checkX += checkstep2[0]
-                    checkY += checkstep2[1]
-                    bviolated, nType, nNet = checkBitmap(
-                        (checkX, checkY, ori2), netName
-                    )
-                    if bviolated:
-                        if nType == "port" and nNet == netName:
-                            continue
-                        elif nType in {"port", "blk"}:
-                            return (True, None, nType, nNet)
-                        else:
-                            violated_net.add(nNet)
-
-                # Prediction
-
-                if not violated_net and enable_prediction and crossing_enable:
-                    try:
-                        tempX, tempY = checkX, checkY
-                        for _ in range(self.predict_length):
-                            tempX += checkstep2[0]
-                            tempY += checkstep2[1]
-                            bviolated, nType, nNet = checkBitmap(
-                                (tempX, tempY, check_ori), netName
+                            return DrcResult(
+                                True, obstacle_type=nType, conflicts=violated_net
                             )
-                            if bviolated:
-                                if nType == "port" and nNet == netName:
-                                    continue
-                                else:
-                                    return (True, None, None, None)
-                    except IndexError:
-                        return (True, None, None, None)
-                elif violated_net:
-                    return (True, None, None, violated_net)
+                    return DrcResult(True, obstacle_type=nType, conflicts=violated_net)
+            case "bend_45_1" | "bend_45_2":
+                start_orientation = currentNode_pos[2]
+                first_length, second_length = (
+                    (self.ben_45_part1, self.ben_45_part2)
+                    if nb_type == "bend_45_1"
+                    else (self.ben_45_part2, self.ben_45_part1)
+                )
+                end, conflicts, blocked = self._scan_route_segments(
+                    (checkX, checkY),
+                    (
+                        (
+                            self.checkSteps[start_orientation],
+                            first_length,
+                            start_orientation,
+                        ),
+                        (checkstep, second_length, check_ori),
+                    ),
+                    netName,
+                )
+                if blocked:
+                    return blocked
+                if conflicts:
+                    return DrcResult(True, conflicts=conflicts)
+                if (
+                    enable_prediction
+                    and crossing_enable
+                    and self._prediction_is_blocked(end, checkstep, check_ori, netName)
+                ):
+                    return DrcResult(True)
             case "bend_90":
-                violated_net = set()
-                ori1 = currentNode_pos[2]
-                ori2 = check_ori
-                checkstep1 = self.checkSteps[ori1]
-                checkstep2 = checkstep
-                for _ in range(self.ben_45_part1):
-                    checkX += checkstep1[0]
-                    checkY += checkstep1[1]
-                    bviolated, nType, nNet = checkBitmap(
-                        (checkX, checkY, ori1), netName
-                    )
-                    if bviolated:
-                        if nType == "port" and nNet == netName:
-                            continue
-                        elif nType in {"port", "blk"}:
-                            return (True, None, nType, nNet)
-                        else:
-                            violated_net.add(nNet)
-                ori3 = (ori1 + ori2) / 2
-                for _ in range(self.radius - self.ben_45_part1):
-                    checkX += checkstep1[0] + checkstep2[0]
-                    checkY += checkstep1[1] + checkstep2[1]
-                    bviolated, nType, nNet = checkBitmap(
-                        (checkX, checkY, ori3), netName
-                    )
-                    if bviolated:
-                        if nType == "port" and nNet == netName:
-                            continue
-                        elif nType in {"port", "blk"}:
-                            return (True, None, nType, nNet)
-                        else:
-                            violated_net.add(nNet)
-                for _ in range(self.ben_45_part1):
-                    checkX += checkstep2[0]
-                    checkY += checkstep2[1]
-                    bviolated, nType, nNet = checkBitmap(
-                        (checkX, checkY, ori2), netName
-                    )
-                    if bviolated:
-                        if nType == "port" and nNet == netName:
-                            continue
-                        elif nType in {"port", "blk"}:
-                            return (True, None, nType, nNet)
-                        else:
-                            violated_net.add(nNet)
-                # prediction
-                if not violated_net and enable_prediction and crossing_enable:
-                    try:
-                        for _ in range(self.predict_length):
-                            checkX += checkstep2[0]
-                            checkY += checkstep2[1]
-                            bviolated, nType, nNet = checkBitmap(
-                                (checkX, checkY, ori2), netName
-                            )
-                            if bviolated:
-                                if nType == "port" and nNet == netName:
-                                    continue
-                                else:
-                                    return (True, None, None, None)
-                    except IndexError:
-                        return (True, None, None, None)
-                elif violated_net:
-                    return (True, None, None, violated_net)
+                start_orientation = currentNode_pos[2]
+                start_step = self.checkSteps[start_orientation]
+                diagonal_step = (
+                    start_step[0] + checkstep[0],
+                    start_step[1] + checkstep[1],
+                )
+                end, conflicts, blocked = self._scan_route_segments(
+                    (checkX, checkY),
+                    (
+                        (start_step, self.ben_45_part1, start_orientation),
+                        (
+                            diagonal_step,
+                            self.radius - self.ben_45_part1,
+                            (start_orientation + check_ori) / 2,
+                        ),
+                        (checkstep, self.ben_45_part1, check_ori),
+                    ),
+                    netName,
+                )
+                if blocked:
+                    return blocked
+                if conflicts:
+                    return DrcResult(True, conflicts=conflicts)
+                if (
+                    enable_prediction
+                    and crossing_enable
+                    and self._prediction_is_blocked(end, checkstep, check_ori, netName)
+                ):
+                    return DrcResult(True)
             case "offset_1":
                 straight = int(self.ben_45_part1 / 2)
                 for _ in range(straight):
@@ -695,7 +677,7 @@ class DrcManager(object):
                         if nType == "port" and nNet == netName:
                             pass
                         else:
-                            return (True, None, nType, nNet)
+                            return DrcResult(True, obstacle_type=nType, conflicts=nNet)
                 if check_ori == 0 or check_ori == 180:
                     checkY += step[1]
                 else:
@@ -710,7 +692,7 @@ class DrcManager(object):
                         if nType == "port" and nNet == netName:
                             pass
                         else:
-                            return (True, None, nType, nNet)
+                            return DrcResult(True, obstacle_type=nType, conflicts=nNet)
             case "offset_2":
                 straight = int(self.ben_45_part1 / 2)
                 for _ in range(straight):
@@ -723,7 +705,7 @@ class DrcManager(object):
                         if nType == "port" and nNet == netName:
                             pass
                         else:
-                            return (True, None, nType, nNet)
+                            return DrcResult(True, obstacle_type=nType, conflicts=nNet)
                 if check_ori == 0 or check_ori == 180:
                     checkY += step[1]
                 else:
@@ -738,116 +720,35 @@ class DrcManager(object):
                         if nType == "port" and nNet == netName:
                             pass
                         else:
-                            return (True, None, nType, nNet)
-        return (False, None)
+                            return DrcResult(True, obstacle_type=nType, conflicts=nNet)
+        return DrcResult(False)
 
-    def checkSpacing(self, neighbor, check_region, groups={}):
+    def checkSpacing(
+        self,
+        neighbor,
+        check_region: int,
+        groups: Collection[str] = (),
+    ) -> int:
         x, y, ori = neighbor.pos
-        self._bitmap
-        bitMap = self._bitmap.bitMap
         count = 0
-        height, width = self.height, self.width
+        perpendicular = _PERPENDICULAR_STEPS.get(ori)
+        if perpendicular is None:
+            raise ValueError(f"Unsupported routing orientation {ori!r}")
 
-        match ori:
-            case 0 | 180:
-                for i in range(1, check_region + 1):
-                    checkx, checky = clip2(x, y + i, height, width)
-                    ans = bitMap[checkx, checky]
-                    nets = ans.netID
-                    if ans.type in {"blk", "port"}:
-                        count += 1
-                    elif nets:
-                        if nets[0] in groups:
-                            pass
-                        else:
-                            count += 1
-                    checkx, checky = clip2(x, y - i, height, width)
-                    ans = bitMap[checkx, checky]
-                    nets = ans.netID
-                    if ans.type in {"blk", "port"}:
-                        count += 1
-                    elif nets:
-                        if nets[0] in groups:
-                            pass
-                        else:
-                            count += 1
-                return count
-
-            case 90 | 270:
-                for i in range(1, check_region + 1):
-                    checkx, checky = clip2(x + i, y, height, width)
-                    ans = bitMap[checkx, checky]
-                    type = ans.type
-                    if type != "empty":
-                        if type in {"port", "blk"}:
-                            count += 1
-                        else:
-                            netID = ans.netID[0]
-                            if netID in groups:
-                                pass
-                            else:
-                                count += 1
-                    checkx, checky = clip2(x - i, y, height, width)
-                    ans = bitMap[checkx, checky]
-                    type = ans.type
-                    if type != "empty":
-                        if type in {"port", "blk"}:
-                            count += 1
-                        else:
-                            netID = ans.netID[0]
-                            if netID in groups:
-                                pass
-                            else:
-                                count += 1
-                return count
-
-            case 45 | 225:
-                for i in range(1, check_region + 1):
-                    checkx, checky = clip2(x + i, y - i, height, width)
-                    ans = bitMap[checkx, checky]
-                    nets = ans.netID
-                    if ans.type in {"blk", "port"}:
-                        count += 1
-                    elif nets:
-                        if nets[0] in groups:
-                            pass
-                        else:
-                            count += 1
-                    checkx, checky = clip2(x - i, y + i, height, width)
-                    ans = bitMap[checkx, checky]
-                    nets = ans.netID
-                    if ans.type in {"blk", "port"}:
-                        count += 1
-                    elif nets:
-                        if nets[0] in groups:
-                            pass
-                        else:
-                            count += 1
-                return count
-
-            case 135 | 315:
-                for i in range(1, check_region + 1):
-                    checkx, checky = clip2(x + i, y + i, height, width)
-                    ans = bitMap[checkx, checky]
-                    nets = ans.netID
-                    if ans.type in {"blk", "port"}:
-                        count += 1
-                    elif nets:
-                        if nets[0] in groups:
-                            pass
-                        else:
-                            count += 1
-                    checkx, checky = clip2(x - i, y - i, height, width)
-                    ans = bitMap[checkx, checky]
-                    nets = ans.netID
-                    if ans.type in {"blk", "port"}:
-                        count += 1
-                    elif nets:
-                        if nets[0] in groups:
-                            pass
-                        else:
-                            count += 1
-                return count
+        dx, dy = perpendicular
+        for distance in range(1, check_region + 1):
+            for sign in (-1, 1):
+                check_x = x + sign * distance * dx
+                check_y = y + sign * distance * dy
+                if not self._bitmap.in_bounds(check_x, check_y):
+                    count += 1
+                    continue
+                node = self._bitmap.node(check_x, check_y)
+                if node.type in {"blk", "port"}:
+                    count += 1
+                elif node.netID and node.netID[0] not in groups:
+                    count += 1
+        return count
 
     def checkBitmap(self, index, check_net=None):
         """check the neighbors of the current index
@@ -869,150 +770,30 @@ class DrcManager(object):
         return [False]
 
     def checkBitmap_ori(self, index, check_net=None):
-        _bitmap = self._bitmap
-        bitMap = _bitmap.bitMap
-        ori = index[2]
-        ans = None
+        x, y, ori = index
+        perpendicular = _PERPENDICULAR_STEPS.get(ori)
+        if perpendicular is None:
+            raise ValueError(f"Unsupported routing orientation {ori!r}")
+
         types = set()
         netID = None
-        match ori:
-            case 0:
-                x, y = index[0], index[1] - 1
-                for i in range(0, 3):
-                    ans = bitMap[x, y + i]
-                    type = ans.type
-                    if type != "empty":
-                        if type in {"port", "blk"}:
-                            return (True, ans.type, ans.blkID)
-                        else:
-                            types.add(ans.type)
-                            netID = ans.netID[0]
+        dx, dy = perpendicular
+        for offset in (-1, 0, 1):
+            check_x, check_y = x + offset * dx, y + offset * dy
+            if not self._bitmap.in_bounds(check_x, check_y):
+                return (True, "blk", None)
+            node = self._bitmap.node(check_x, check_y)
+            node_type = node.type
+            if node_type in {"port", "blk"}:
+                return (True, node_type, node.blkID)
+            if node_type != "empty":
+                types.add(node_type)
+                netID = node.netID[0]
 
-                types_len = len(types)
-                if types_len > 1:
-                    return (True, "compound", netID)
-                elif types_len == 1:
-                    for type in types:
-                        return (True, type, netID)
-            case 45:
-                x, y = index[0] - 1, index[1] + 1
-                for i in range(0, 3):
-                    ans = bitMap[x + i, y - i]
-                    type = ans.type
-                    if type != "empty":
-                        if type in {"port", "blk"}:
-                            return (True, ans.type, ans.blkID)
-                        else:
-                            types.add(ans.type)
-                            netID = ans.netID[0]
-                types_len = len(types)
-                if types_len > 1:
-                    return (True, "compound", netID)
-                elif types_len == 1:
-                    for type in types:
-                        return (True, type, netID)
-            case 90:
-                x, y = index[0] - 1, index[1]
-                for i in range(0, 3):
-                    ans = bitMap[x + i, y]
-                    type = ans.type
-                    if type != "empty":
-                        if type in {"port", "blk"}:
-                            return (True, ans.type, ans.blkID)
-                        else:
-                            types.add(ans.type)
-                            netID = ans.netID[0]
-                types_len = len(types)
-                if types_len > 1:
-                    return (True, "compound", netID)
-                elif types_len == 1:
-                    for type in types:
-                        return (True, type, netID)
-            case 135:
-                x, y = index[0] - 1, index[1] - 1
-                for i in range(0, 3):
-                    ans = bitMap[x + i, y + i]
-                    type = ans.type
-                    if type != "empty":
-                        if type in {"port", "blk"}:
-                            return (True, ans.type, ans.blkID)
-                        else:
-                            types.add(ans.type)
-                            netID = ans.netID[0]
-                types_len = len(types)
-                if types_len > 1:
-                    return (True, "compound", netID)
-                elif types_len == 1:
-                    for type in types:
-                        return (True, type, netID)
-            case 180:
-                x, y = index[0], index[1] - 1
-                for i in range(0, 3):
-                    ans = bitMap[x, y + i]
-                    type = ans.type
-                    if type != "empty":
-                        if type in {"port", "blk"}:
-                            return (True, ans.type, ans.blkID)
-                        else:
-                            types.add(ans.type)
-                            netID = ans.netID[0]
-                types_len = len(types)
-                if types_len > 1:
-                    return (True, "compound", netID)
-                elif types_len == 1:
-                    for type in types:
-                        return (True, type, netID)
-            case 225:
-                x, y = index[0] - 1, index[1] + 1
-                for i in range(0, 3):
-                    ans = bitMap[x + i, y - i]
-                    type = ans.type
-                    if type != "empty":
-                        if type in {"port", "blk"}:
-                            return (True, ans.type, ans.blkID)
-                        else:
-                            types.add(ans.type)
-                            netID = ans.netID[0]
-                types_len = len(types)
-                if types_len > 1:
-                    return (True, "compound", netID)
-                elif types_len == 1:
-                    for type in types:
-                        return (True, type, netID)
-            case 270:
-                x, y = index[0] - 1, index[1]
-                for i in range(0, 3):
-                    ans = bitMap[x + i, y]
-                    type = ans.type
-                    if type != "empty":
-                        if type in {"port", "blk"}:
-                            return (True, ans.type, ans.blkID)
-                        else:
-                            types.add(ans.type)
-                            netID = ans.netID[0]
-                types_len = len(types)
-                if types_len > 1:
-                    return (True, "compound", netID)
-                elif types_len == 1:
-                    for type in types:
-                        return (True, type, netID)
-            case 315:
-                x, y = index[0] - 1, index[1] - 1
-                for i in range(0, 3):
-                    ans = bitMap[x + i, y + i]
-                    type = ans.type
-                    if type != "empty":
-                        if type in {"port", "blk"}:
-                            return [True, ans.type, ans.blkID]
-                        else:
-                            types.add(ans.type)
-                            netID = ans.netID[0]
-                types_len = len(types)
-                if types_len > 1:
-                    return (True, "compound", netID)
-                elif types_len == 1:
-                    for type in types:
-                        return (True, type, netID)
+        if len(types) > 1:
+            return (True, "compound", netID)
+        if types:
+            return (True, next(iter(types)), netID)
         return (False, "empty", None)
 
     def checkSingleNode(self, index, check_net=None):  # Acspoints
@@ -1034,17 +815,10 @@ class DrcManager(object):
             straight_length = straight_count * self.resolution * np.sqrt(2)
         return host_net.crossing_check(slave_net, straight_length)
 
-@jit(nopython=True)
+
 def clip(x, y, height, width):
     xrangmin = min(max(x - 1, 0), width - 1)
     xrangmax = max(min(x + 2, width), 0)  # [ ... )
     yrangmin = min(max(y - 1, 0), height - 1)
     yrangmax = max(min(y + 2, height), 0)
     return xrangmin, xrangmax, yrangmin, yrangmax
-
-
-@jit(nopython=True)
-def clip2(x, y, height, width):
-    checkx = min(max(x, 0), width - 1)
-    checky = min(max(y, 0), height - 1)
-    return checkx, checky

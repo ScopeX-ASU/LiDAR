@@ -206,12 +206,8 @@ class AstarSearch:
                 )
                 / 2
             )
-            lower = self._drcmgr.bitMap.to_grid(
-                [x_mean - boundx, y_mean - boundy]
-            )
-            upper = self._drcmgr.bitMap.to_grid(
-                [x_mean + boundx, y_mean + boundy]
-            )
+            lower = self._drcmgr.bitMap.to_grid([x_mean - boundx, y_mean - boundy])
+            upper = self._drcmgr.bitMap.to_grid([x_mean + boundx, y_mean + boundy])
             self.routing_bound = [
                 [max(1, int(lower[0])), max(1, int(lower[1]))],
                 [
@@ -230,9 +226,11 @@ class AstarSearch:
             self.costH = self.scaledMDist
         elif config.dr.enable_45_neighbor:
             # self.costH = self.customH
-            self.costH = lambda x, y, bending_loss=self.penalty[
-                "bending_loss"
-            ], res=self.resolution: customH(x, y, bending_loss, resolution=res)
+            self.costH = (
+                lambda x, y, bending_loss=self.penalty["bending_loss"], res=self.resolution: (
+                    customH(x, y, bending_loss, resolution=res)
+                )
+            )
         else:
             self.costH = self.scaledMDist
 
@@ -821,17 +819,15 @@ class AstarSearch:
                 or neighbor_position[1] >= routing_bound[1][1]
             ):
                 continue
-            ans = self._drcmgr.bViolateDRC(
+            result = self._drcmgr.bViolateDRC(
                 currentNode,
                 step,
                 self._bStrictDRC,
                 self._net.netName,
                 enable_prediction,
             )
-            ans_1 = ans[1]
-
             vAllNodesMap = self.vAllNodesMap
-            if not ans[0]:
+            if not result.violated:
                 tmp_neighbor = vAllNodesMap.get(neighbor_position, None)
                 if tmp_neighbor is None:
                     tmp_neighbor = vAllNodesMap[neighbor_position] = GridAstarNode(
@@ -842,20 +838,22 @@ class AstarSearch:
                     )
                 currentNode.addNeighbors(tmp_neighbor, step[3])
 
-            elif ans_1 is not None:  # crossing neighbor
-                tmp_neighbor = vAllNodesMap.get(ans_1, None)
+            elif result.crossing_position is not None:
+                tmp_neighbor = vAllNodesMap.get(result.crossing_position, None)
                 if tmp_neighbor is None:
-                    tmp_neighbor = vAllNodesMap[ans_1] = GridAstarNode(
-                        pos=ans_1,
-                        parent=None,
-                        neighbors={},
-                        crossing_budget=currentNode._crossing_budget - 1,
-                        crossing_net=ans[3],
-                        # bviolated=ans[4]
+                    tmp_neighbor = vAllNodesMap[result.crossing_position] = (
+                        GridAstarNode(
+                            pos=result.crossing_position,
+                            parent=None,
+                            neighbors={},
+                            crossing_budget=currentNode._crossing_budget - 1,
+                            crossing_net=result.conflicts,
+                            # bviolated=ans[4]
+                        )
                     )
-                currentNode.addNeighbors(tmp_neighbor, ans[2])
+                currentNode.addNeighbors(tmp_neighbor, result.obstacle_type)
 
-            elif not self._bStrictDRC and ans[2] not in {"blk", "port"}:
+            elif not self._bStrictDRC and result.obstacle_type not in {"blk", "port"}:
                 tmp_neighbor = vAllNodesMap.get(neighbor_position, None)
                 if tmp_neighbor is None:
                     tmp_neighbor = vAllNodesMap[neighbor_position] = GridAstarNode(
@@ -863,7 +861,7 @@ class AstarSearch:
                         parent=None,
                         neighbors={},
                         bviolated=True,
-                        violatedNet=ans[3],
+                        violatedNet=result.conflicts,
                     )
                 currentNode.addNeighbors(tmp_neighbor, step[3])
 
@@ -1079,9 +1077,7 @@ class AstarSearch:
         points = component.get_polygons_points(
             by="tuple", layers=[self._route_geometry.layer]
         )[layer][0]
-        grid_points = (
-            points - self._drcmgr.bitMap.origin
-        ) / self._drcmgr.resolution
+        grid_points = (points - self._drcmgr.bitMap.origin) / self._drcmgr.resolution
         int_points = grid_points.astype(np.int32).tolist()
         int_points = tuple(map(tuple, int_points))
         dpoint = points[0:-1, :] - points[1:, :]
