@@ -1,5 +1,6 @@
 from types import SimpleNamespace
 
+import gdsfactory as gf
 import numpy as np
 
 from picroute.drc.bitmap import Bitmap
@@ -30,7 +31,7 @@ def test_bitmap_coordinates_are_relative_to_die_origin() -> None:
     np.testing.assert_allclose(bitmap.to_world([0, 0]), [-9, -19])
 
     blockage = SimpleNamespace(
-        bbox=[-12, -22, -8, -18], instanceName="partly-outside"
+        bbox=gf.kdb.DBox(-12, -22, -8, -18), instanceName="partly-outside"
     )
     bitmap.initMap([blockage])
     assert bitmap.bitMap[0, 0].type == "blk"
