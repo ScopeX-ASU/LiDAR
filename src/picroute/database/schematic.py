@@ -14,11 +14,12 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
 import gdsfactory as gf
-import networkx as nx
 import numpy as np
 import yaml
 from gdsfactory.schematic import Placement
 from pydantic import AnyUrl, BaseModel, ConfigDict, Field
+
+from picroute.database.netlist_graph import NetlistGraph
 
 __all__ = [
     "Macro",
@@ -762,44 +763,20 @@ class CustomSchematic(object):
         #     "ring_single_pn": 1,
         # }
 
-        self._netlist_graph = nx.DiGraph()
+        self._netlist_graph = NetlistGraph()
         G = self._netlist_graph
-        self.topology_orders = []
 
-        for net in self._dbNets.values():
-            G.add_edge(
+        G.add_edges(
+            (
                 net.NetPort1.idBlk,
                 net.NetPort2.idBlk,
-                weight=net.distance["Euler"],
-                label=net.netName,
+                net.distance["Euler"],
+                net.netName,
             )
+            for net in self._dbNets.values()
+        )
 
-        def find_source_nodes(graph):
-            return [node for node in graph.nodes() if graph.in_degree(node) == 0]
-
-        def find_end_nodes(graph):
-            return [node for node in graph.nodes() if graph.out_degree(node) == 0]
-
-        def find_graph_neighbors(graph, source):
-            visited = set()
-            current_level = set(source)
-            while current_level:
-                nets = []
-                # print(f"{sorted(current_level)}")
-                next_level = set()
-                for node in current_level:
-                    for neighbor in graph.successors(node):
-                        next_level.add(neighbor)
-                        net = graph[node][neighbor]["label"]
-                        if net not in visited:
-                            nets.append(net)
-                            visited.add(net)
-                if len(nets) != 0:
-                    self.topology_orders.append(nets)
-                current_level = next_level
-
-        sources = find_source_nodes(G)
-        find_graph_neighbors(G, sources)
+        self.topology_orders = G.topology_orders()
 
     def load_netlist(self, path=None) -> None:
         path = path or self.path
@@ -865,33 +842,31 @@ class CustomSchematic(object):
         with_labels: bool = True,
         font_weight: str = "normal",
     ):
-        """Plots a netlist graph with networkx.
+        """Plot the netlist graph with rustworkx.
 
         Args:
             with_labels: add label to each node.
             font_weight: normal, bold.
         """
         import matplotlib.pyplot as plt
-        import networkx as nx
+        import rustworkx as rx
+        from rustworkx.visualization import mpl_draw
 
         plt.figure()
         nets = self._schematic.nets
         placements = self._schematic.placements
-        G = nx.Graph()
-        G.add_edges_from(
-            [(net[0].split(",")[0], net[1].split(",")[0]) for net in nets.values()]
-        )
-        pos = {k: (v.x, v.y) for k, v in placements.items()}
-        labels = {k: k for k in placements.keys()}
+        G = rx.PyGraph(multigraph=False)
+        node_indices = {name: G.add_node(name) for name in placements}
+        for net in nets.values():
+            source, target = (endpoint.split(",")[0] for endpoint in net)
+            G.add_edge(node_indices[source], node_indices[target], None)
+        pos = {
+            node_indices[name]: (placement.x, placement.y)
+            for name, placement in placements.items()
+        }
+        labels = {index: name for name, index in node_indices.items()}
 
-        for node, placement in placements.items():
-            if not G.has_node(
-                node
-            ):  # Check if the node is already in the graph (from connections), to avoid duplication.
-                G.add_node(node)
-                pos[node] = (placement.x, placement.y)
-
-        nx.draw(
+        mpl_draw(
             G,
             with_labels=with_labels,
             font_weight=font_weight,

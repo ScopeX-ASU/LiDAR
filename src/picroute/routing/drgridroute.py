@@ -512,8 +512,6 @@ class DrGridRoute(object):
         """
 
     def evaluation(self):
-        import networkx as nx
-
         propagation_loss = self.prop * 1e-4
         bending_loss = 0.01 / 90
         crossing_loss = self.cross
@@ -546,8 +544,9 @@ class DrGridRoute(object):
                     label=current_net.netName,
                 )
 
-            criticalPath = nx.dag_longest_path(self._cirdb._netlist_graph)
-            lenCriticalPath = nx.dag_longest_path_length(self._cirdb._netlist_graph)
+            criticalPath, lenCriticalPath = (
+                self._cirdb._netlist_graph.weighted_longest_path()
+            )
             node_num = len(criticalPath)
             nets = []
             crossing = 0
@@ -555,7 +554,9 @@ class DrGridRoute(object):
             DRV_path = 0
             for i, value in enumerate(criticalPath):
                 if i < node_num - 1:
-                    edge = self._cirdb._netlist_graph[value][criticalPath[i + 1]]
+                    edge = self._cirdb._netlist_graph.edge_data(
+                        value, criticalPath[i + 1]
+                    )
                     net = edge["label"]
                     crossing += dbNets[net].crossing_num
                     WL += dbNets[net].wirelength
