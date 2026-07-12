@@ -598,7 +598,7 @@ class AstarSearch:
                     # bend=gf.path.arc,
                     use_eff=True,
                 )
-            except:
+            except (TypeError, ValueError):
                 Plength -= 1
                 continue
 
@@ -1093,7 +1093,12 @@ class AstarSearch:
         int_points = grid_points.astype(np.int32).tolist()
         int_points = tuple(map(tuple, int_points))
         dpoint = points[0:-1, :] - points[1:, :]
-        slope = dpoint[:, 1] / dpoint[:, 0]
+        slope = np.divide(
+            dpoint[:, 1],
+            dpoint[:, 0],
+            out=np.copysign(np.full(len(dpoint), np.inf), dpoint[:, 1]),
+            where=dpoint[:, 0] != 0,
+        )
         grid_dict = {}
         for i, num in enumerate(dpoint):
             abs_num = abs(num)
@@ -1141,10 +1146,10 @@ class AstarSearch:
             grid_dict.setdefault(grid, [np.nan])
 
         for grid, slope in grid_dict.items():
-            mean_slope = np.mean(slope)
+            with np.errstate(invalid="ignore"):
+                mean_slope = np.mean(slope)
             abs_slope = np.abs(slope)
             abs_mean_slope = np.mean(abs_slope)
-            max_slope = np.max(abs_slope)
             min_slope = np.min(abs_slope)
             grid_dict[grid] = mean_slope
             # contain inf

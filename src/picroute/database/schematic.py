@@ -312,7 +312,9 @@ class Settings(BaseModel):
 
 
 class SchematicConfiguration(BaseModel):
-    schema: AnyUrl | None = Field(None, alias="$schema")
+    model_config = ConfigDict(populate_by_name=True)
+
+    schema_: AnyUrl | None = Field(None, alias="$schema")
     instances: dict[str, Instance] | None = {}
     schematic_placements: dict[str, Placement] | None = {}
     nets: list[list[str]] | None = None
@@ -351,7 +353,6 @@ class SchematicConfiguration(BaseModel):
 
 
 class CustomSchematicConfiguration(SchematicConfiguration):
-    schema: Optional[AnyUrl] = Field(None, alias="$schema")
     settings: Optional[Settings] = None
     instances: Optional[Dict[str, Instance]] = None
     library: Optional[Dict[str, Macro]] = {}
@@ -655,7 +656,6 @@ class CustomSchematic(object):
         c = gf.read.from_yaml(netlist_conf.model_dump())
         self._gdsfactoryC = gf.Component("layout")
         self._gdsfactoryC.add_ref(c)
-        self._gdsfactoryC.show()
         self.tempLayout = None
 
         # Use GDSFactory/KFactory as the source of truth for transformed

@@ -1,12 +1,10 @@
 from pathlib import Path
 from shutil import copyfile
 
-import gdsfactory as gf
-
 from picroute.database.schematic import CustomSchematic
 
 
-def test_se_load_netlist(tmp_path: Path, monkeypatch) -> None:
+def test_se_load_netlist(tmp_path: Path) -> None:
     benchmark = (
         Path(__file__).parents[1]
         / "picroute"
@@ -16,8 +14,6 @@ def test_se_load_netlist(tmp_path: Path, monkeypatch) -> None:
     )
     benchmark_copy = tmp_path / benchmark.name
     copyfile(benchmark, benchmark_copy)
-    monkeypatch.setattr(gf.Component, "show", lambda self, *args, **kwargs: None)
-
     schematic = CustomSchematic(benchmark_copy)
     schematic.load_gp()
 

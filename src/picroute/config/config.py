@@ -89,7 +89,7 @@ class Config(dict):
             subkeys = key.split(".")
             try:
                 value = literal_eval(value)
-            except:
+            except (SyntaxError, ValueError):
                 pass
             for subkey in subkeys[:-1]:
                 current = current.setdefault(subkey, Config())

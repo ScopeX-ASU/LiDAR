@@ -12,11 +12,6 @@ FilePath: /PICRoute/src/picroute/main/picroute.py
 @brief the PICRoute flow
 """
 
-import warnings
-
-warnings.filterwarnings("ignore")
-
-
 from picroute.config.config import configs
 from picroute.config.parser import Parser
 from picroute.database.schematic import CustomSchematic

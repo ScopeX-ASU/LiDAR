@@ -578,7 +578,7 @@ class DrcManager(object):
                                     continue
                                 else:
                                     return (True, None, None, None)
-                    except:
+                    except IndexError:
                         return (True, None, None, None)
                 elif violated_net:
                     return (True, None, None, violated_net)
@@ -631,7 +631,7 @@ class DrcManager(object):
                                     continue
                                 else:
                                     return (True, None, None, None)
-                    except:
+                    except IndexError:
                         return (True, None, None, None)
                 elif violated_net:
                     return (True, None, None, violated_net)
@@ -695,7 +695,7 @@ class DrcManager(object):
                                     continue
                                 else:
                                     return (True, None, None, None)
-                    except:
+                    except IndexError:
                         return (True, None, None, None)
                 elif violated_net:
                     return (True, None, None, violated_net)
@@ -974,7 +974,7 @@ class DrcManager(object):
                                     continue
                                 else:
                                     return (True, None, None, None)
-                    except:
+                    except IndexError:
                         return (True, None, None, None)
                 elif violated_net:
                     return (True, None, None, violated_net)
@@ -1027,7 +1027,7 @@ class DrcManager(object):
                                     continue
                                 else:
                                     return (True, None, None, None)
-                    except:
+                    except IndexError:
                         return (True, None, None, None)
                 elif violated_net:
                     return (True, None, None, violated_net)
@@ -1091,7 +1091,7 @@ class DrcManager(object):
                                     continue
                                 else:
                                     return (True, None, None, None)
-                    except:
+                    except IndexError:
                         return (True, None, None, None)
                 elif violated_net:
                     return (True, None, None, violated_net)
