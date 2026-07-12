@@ -17,7 +17,7 @@ from picroute.config.parser import Parser
 from picroute.database.schematic import CustomSchematic
 from picroute.drc.drcmanager import DrcManager
 from picroute.routing.drmanager import DrManager
-from picroute.utils.general import TimerCtx, logger, set_torch_deterministic
+from picroute.utils.general import TimerCtx, logger, seed_random
 from picroute.version import __version__
 
 
@@ -26,7 +26,7 @@ class PICRoute(object):
         self.path = path
         self.config = config
         self.print_welcome()
-        set_torch_deterministic(config.run.random_state)
+        seed_random(config.run.random_state)
         self.initialize()
 
     def initialize(self):

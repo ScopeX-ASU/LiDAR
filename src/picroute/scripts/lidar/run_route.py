@@ -11,7 +11,7 @@ import sys
 from multiprocessing import Pool
 from pathlib import Path
 
-from picroute.utils.general import ensure_dir, logger
+from picroute.utils.general import ensure_directory, logger
 
 method = "LiDAR"
 exp_name = "main_results"
@@ -52,8 +52,8 @@ def task_launcher(args):
 
 
 def main() -> None:
-    ensure_dir(root)
-    ensure_dir(result_root)
+    ensure_directory(root)
+    ensure_directory(result_root)
 
     tasks = [
         # [f"{benchmark_root}/clements_8x8/clements_8x8.yml", comp_config, 2],

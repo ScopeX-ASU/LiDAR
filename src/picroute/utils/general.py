@@ -1,88 +1,61 @@
+"""Small runtime utilities shared by the router entry points."""
+
 import logging
 import logging.handlers
 import random
 import time
 from pathlib import Path
 
+_LOG_FORMAT = "%(asctime)s - %(filename)s:%(lineno)d - %(levelname)s: %(message)s"
+
 
 class TimerCtx:
+    """Measure a block with a monotonic high-resolution clock."""
+
     def __enter__(self):
-        self.start = time.time()
+        self.start = time.perf_counter()
         return self
 
-    def __exit__(self, *args):
-        self.end = time.time()
-        self.interval = self.end - self.start
+    def __exit__(self, *_args):
+        self.interval = time.perf_counter() - self.start
 
 
-class CustomFormatter(logging.Formatter):
-    """Logging Formatter to add colors and count warning / errors"""
-
-    grey = "\x1b[38;21m"
-    yellow = "\x1b[33;21m"
-    red = "\x1b[31;21m"
-    bold_red = "\x1b[31;1m"
-    green = "\x1b[32;21m"
-    reset = "\x1b[0m"
-    # format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s (%(filename)s:%(lineno)d)"
-    format = "%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s"
-
-    FORMATS = {
-        logging.DEBUG: grey + format + reset,
-        logging.INFO: grey + format + reset,
-        logging.WARNING: yellow + format + reset,
-        logging.ERROR: red + format + reset,
-        logging.CRITICAL: bold_red + format + reset,
-    }
-
-    def format(self, record):
-        log_fmt = self.FORMATS.get(record.levelno)
-        formatter = logging.Formatter(log_fmt)
-        return formatter.format(record)
-
-
-def setup_default_logging(
-    default_level=logging.INFO, default_file_level=logging.INFO, log_path=""
-):
-    console_handler = logging.StreamHandler()
-    console_handler.setFormatter(CustomFormatter())
-    logging.root.addHandler(console_handler)
-    logging.root.setLevel(default_level)
-    if log_path:
-        file_handler = logging.handlers.RotatingFileHandler(
-            log_path, maxBytes=(1024**2 * 2), backupCount=3
-        )
-        file_formatter = logging.Formatter(
-            "%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s"
-        )
-        file_handler.setFormatter(file_formatter)
-        file_handler.setLevel(default_file_level)
-        logging.root.addHandler(file_handler)
+def configure_logging(
+    level: int = logging.INFO,
+    *,
+    log_path: str | Path | None = None,
+) -> logging.Logger:
+    logger = logging.getLogger("picroute")
+    logger.setLevel(level)
+    logger.propagate = False
+    if not logger.handlers:
+        console = logging.StreamHandler()
+        console.setFormatter(logging.Formatter(_LOG_FORMAT))
+        logger.addHandler(console)
+    if log_path is not None:
+        destination = Path(log_path)
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        if not any(
+            isinstance(handler, logging.FileHandler)
+            and Path(handler.baseFilename) == destination.resolve()
+            for handler in logger.handlers
+        ):
+            file_handler = logging.handlers.RotatingFileHandler(
+                destination, maxBytes=2 * 1024**2, backupCount=3
+            )
+            file_handler.setFormatter(logging.Formatter(_LOG_FORMAT))
+            logger.addHandler(file_handler)
+    return logger
 
 
-def get_logger(
-    name="default",
-    default_level=logging.INFO,
-    default_file_level=logging.INFO,
-    log_path="",
-):
-    setup_default_logging(
-        default_level=default_level,
-        default_file_level=default_file_level,
-        log_path=log_path,
-    )
-    return logging.getLogger(name)
+logger = configure_logging()
 
 
-logger = get_logger()
+def seed_random(random_state: int = 0) -> None:
+    random.seed(int(random_state) % 2**32)
 
 
-def set_torch_deterministic(random_state: int = 0) -> None:
-    random_state = int(random_state) % (2**32)
-    random.seed(random_state)
-
-
-def ensure_dir(dirname, exist_ok: bool = True):
-    dirname = Path(dirname)
-    if not dirname.is_dir():
-        dirname.mkdir(parents=True, exist_ok=exist_ok)
+def ensure_directory(path: str | Path) -> Path:
+    directory = Path(path)
+    directory.mkdir(parents=True, exist_ok=True)
+    return directory
