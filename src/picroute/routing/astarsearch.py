@@ -681,7 +681,9 @@ class AstarSearch:
                     start_port, self.end_port.port
                 )
             )
-            self._net.wirelength += float(access_route.length)
+            self._net.wirelength += self._route_geometry.route_length_um(
+                access_waveguide, access_route
+            )
             self._net.wg_component.append(access_waveguide)
             self._cirdb.layout.add_ref(access_waveguide)
             return True

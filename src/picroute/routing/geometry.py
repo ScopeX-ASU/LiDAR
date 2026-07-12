@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from functools import partial
+from typing import cast
+
 import gdsfactory as gf
+import numpy as np
 from kfactory.routing.aa.optical import route as route_all_angle
 
 
@@ -97,20 +100,100 @@ class RouteGeometry:
         """Connect two arbitrary-angle ports using the configured optical geometry."""
         component = gf.Component()
         component.routes = {}
-        route = gf.routing.route_bundle_all_angle(
-            component=component,
-            ports1=[port1],
-            ports2=[port2],
-            straight=partial(gf.components.straight_all_angle),
-            bend=partial(
-                gf.components.bend_euler_all_angle,
-                radius=self.radius,
-            ),
-            cross_section=self.cross_section_spec,
-        )[0]
+        try:
+            route = gf.routing.route_bundle_all_angle(
+                component=component,
+                ports1=[port1],
+                ports2=[port2],
+                straight=partial(gf.components.straight_all_angle),
+                bend=partial(
+                    gf.components.bend_euler_all_angle,
+                    radius=self.radius,
+                ),
+                cross_section=self.cross_section_spec,
+            )[0]
+        except (RuntimeError, ValueError):
+            return self._connect_ports_sbend(port1, port2)
+        for name, port in (("o1", route.start_port), ("o2", route.end_port)):
+            component.add_port(
+                name=name,
+                center=port.dcenter,
+                width=port.dwidth,
+                orientation=port.orientation,
+                layer=port.layer,
+                port_type=port.port_type,
+            )
         component.routes["access"] = route
         component.insert_vinsts()
         return component, route
+
+    def _connect_ports_sbend(self, endpoint, internal_port):
+        """Fallback for access stubs too short for the all-angle bend placer."""
+        local = gf.Component()
+        local.routes = {}
+        port1 = endpoint
+        port2 = internal_port
+        orientation = round(port1.orientation) % 360
+        rotation = None
+
+        if orientation not in {0, 90, 180, 270}:
+            x1, y1 = port1.dcenter
+            x2, y2 = port2.dcenter
+            distance = float(np.hypot(x2 - x1, y2 - y1))
+            if orientation in {45, 315}:
+                port1_orientation, port2_orientation = 0, 180
+                direction = 1
+            elif orientation in {135, 225}:
+                port1_orientation, port2_orientation = 180, 0
+                direction = -1
+            else:
+                raise ValueError(f"Unsupported access-port orientation {orientation}")
+            port1 = gf.Port(
+                name="o1",
+                orientation=port1_orientation,
+                center=(x1, y1),
+                width=self.width,
+                layer=self.layer,
+            )
+            port2 = gf.Port(
+                name="o2",
+                orientation=port2_orientation,
+                center=(x1 + direction * distance, y1),
+                width=self.width,
+                layer=self.layer,
+            )
+            angle = 45 if orientation in {45, 225} else -45
+            rotation = (angle, float(x1), float(y1))
+
+        route = gf.routing.route_bundle(
+            local,
+            [cast(gf.Port, port1)],
+            [cast(gf.Port, port2)],
+            cross_section=self.cross_section_spec,
+            radius=self.radius,
+            sbend="bend_s",
+            on_collision=None,
+            on_placer_error="error",
+        )[0]
+        local.routes["access"] = route
+
+        if rotation is None:
+            component = local
+        else:
+            component = gf.Component()
+            component.routes = {"access": route}
+            reference = component << local
+            reference.drotate(rotation[0], (rotation[1], rotation[2]))
+        component.add_port(name="o1", port=endpoint)
+        component.add_port(name="o2", port=internal_port)
+        return component, route
+
+    @staticmethod
+    def route_length_um(component: gf.Component, route) -> float:
+        """Return a native route result's physical length in microns."""
+        if isinstance(route, gf.kf.routing.generic.ManhattanRoute):
+            return float(route.length) * component.kcl.dbu
+        return float(route.length)
 
     def _access_waveguide(
         self,
@@ -122,7 +205,7 @@ class RouteGeometry:
         access_waveguide, access_route = self.connect_ports_all_angle(
             endpoint, internal_port
         )
-        return access_waveguide, float(access_route.length)
+        return access_waveguide, self.route_length_um(access_waveguide, access_route)
 
     def materialize_record(self, path_record) -> tuple[gf.Component, float]:
         """Create one routed component and return it with its physical length."""
@@ -141,6 +224,8 @@ class RouteGeometry:
         component << access1
         component << access2
         component.add_ref(route)
+        component.add_port(name="o1", port=path_record[1])
+        component.add_port(name="o2", port=path_record[2])
         component.routes["access1"] = access1.routes["access"]
         component.routes["access2"] = access2.routes["access"]
         component.routes["backbone"] = route.routes["backbone"]
