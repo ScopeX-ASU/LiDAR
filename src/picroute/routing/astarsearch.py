@@ -10,7 +10,7 @@ import gdsfactory as gf
 import numpy as np
 import shapely.geometry as sg
 
-from picroute.database.schematic import CustomSchematic, Nets
+from picroute.database.schematic import CustomSchematic, RouteState
 from picroute.drc.drcmanager import DrcManager
 from picroute.utils.smooth import prepare_waypoints
 
@@ -140,7 +140,7 @@ class AstarSearch:
         self,
         Dr: DrGridRoute,
         CirDB: CustomSchematic,
-        CurrentNet: Nets,
+        CurrentNet: RouteState,
         Drc: DrcManager,
         config: dict = None,
         net_config: dict = None,

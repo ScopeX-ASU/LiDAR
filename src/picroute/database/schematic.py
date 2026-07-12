@@ -24,7 +24,7 @@ __all__ = [
     "Macro",
     "Instance",
     "EndpointState",
-    "Nets",
+    "RouteState",
     "Constraints",
     "Settings",
     "CustomSchematicConfiguration",
@@ -165,7 +165,7 @@ class Blockage(BaseModel):
         return self.ports_by_orientation.get(orientation, [])
 
 
-class Nets(BaseModel):
+class RouteState(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     netName: str = Field(...)
@@ -735,7 +735,7 @@ class CustomSchematic(object):
             port1.netName = unit_name
             port2.netName = unit_name
 
-            dbNets[unit_name] = Nets(
+            dbNets[unit_name] = RouteState(
                 netName=unit_name,
                 netID=cur_netid,
                 # group_name=inst1_name,

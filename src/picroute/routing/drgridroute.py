@@ -6,7 +6,7 @@ import gdsfactory as gf
 import numpy as np
 from shapely.geometry import LineString, Point
 
-from picroute.database.schematic import CustomSchematic, Nets
+from picroute.database.schematic import CustomSchematic, RouteState
 from picroute.drc.drcmanager import DrcManager
 from picroute.routing.geometry import RouteGeometry
 from picroute.utils.general import logger
@@ -198,7 +198,7 @@ class DrGridRoute(object):
         self._cirdb.tempLayout.show()
 
     def routeSingleNet(
-        self, cur_net: Nets, strictDRC=True, net_config=None, groups=None
+        self, cur_net: RouteState, strictDRC=True, net_config=None, groups=None
     ):
         from .astarsearch import AstarSearch
 
