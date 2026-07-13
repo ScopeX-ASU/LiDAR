@@ -84,10 +84,12 @@ class DrGridRoute(object):
                 for net_name in nets:
                     net = dbNets[net_name]
                     net.comp_dist = level
-                    current_line = LineString([net.port1.center, net.port2.center])
+                    current_line = gf.kdb.DEdge(
+                        gf.kdb.DPoint(*net.port1.center),
+                        gf.kdb.DPoint(*net.port2.center),
+                    )
                     for line_name, line in linestrings.items():
-                        intersection = current_line.intersection(line)
-                        if not intersection.is_empty:
+                        if current_line.intersects(line):
                             dbNets[net_name].topology_crossing += 1
                             dbNets[line_name].topology_crossing += 1
                             CR += 1

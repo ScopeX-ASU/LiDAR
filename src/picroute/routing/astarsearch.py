@@ -8,14 +8,13 @@ from typing import List, Optional, Self, Tuple
 
 import gdsfactory as gf
 import numpy as np
-import shapely.geometry as sg
 
 from picroute.database.schematic import CustomSchematic, RouteState
 from picroute.drc.drcmanager import DrcManager
 from picroute.utils.smooth import prepare_waypoints
 
 from .drgridroute import DrGridRoute
-from .utils import EulerDist, customH, manhattanDH
+from .utils import EulerDist, customH, manhattanDH, vector_intersection
 
 type Transition = tuple[int, int, int, str]
 
@@ -359,20 +358,7 @@ class AstarSearch:
                     return False, "None", 0
         elif angle == 90:
             if dx >= self.radius and dy >= self.radius:
-                ori1_rad = np.deg2rad(ori1)
-                ori2_rad = np.deg2rad(ori2)
-                dx1 = 100 * np.cos(ori1_rad)
-                dy1 = 100 * np.sin(ori1_rad)
-                dx2 = 100 * np.cos(ori2_rad)
-                dy2 = 100 * np.sin(ori2_rad)
-                center1_far = np.asarray(center1) + [dx1, dy1]
-                l1 = sg.LineString([center1, center1_far])
-
-                center2_far = np.asarray(center2) + [dx2, dy2]
-                l2 = sg.LineString([center2, center2_far])
-
-                intersect = l1.intersection(l2)
-                if isinstance(intersect, sg.Point):
+                if vector_intersection(center1, ori1, center2, ori2, max_distance=100):
                     return True, "all_angle", 90
                 return False, "None", 0
             else:
@@ -382,40 +368,18 @@ class AstarSearch:
             if ori1 == 45 or ori1 == 135 or ori1 == 225 or ori1 == 315:
                 if ori2 == 0 or ori2 == 180:
                     if dy >= 0.3 * self.radius and dx >= dy + 0.4 * self.radius:
-                        ori1_rad = np.deg2rad(ori1)
-                        ori2_rad = np.deg2rad(ori2)
-                        dx1 = 100 * np.cos(ori1_rad)
-                        dy1 = 100 * np.sin(ori1_rad)
-                        dx2 = 100 * np.cos(ori2_rad)
-                        dy2 = 100 * np.sin(ori2_rad)
-                        center1_far = np.asarray(center1) + [dx1, dy1]
-                        l1 = sg.LineString([center1, center1_far])
-
-                        center2_far = np.asarray(center2) + [dx2, dy2]
-                        l2 = sg.LineString([center2, center2_far])
-
-                        intersect = l1.intersection(l2)
-                        if isinstance(intersect, sg.Point):
+                        if vector_intersection(
+                            center1, ori1, center2, ori2, max_distance=100
+                        ):
                             return True, "all_angle", 45
 
                         return False, "None", 0
 
                 elif ori2 == 90 or ori2 == 270:
                     if dx >= 0.3 * self.radius and dy >= dx + 0.4 * self.radius:
-                        ori1_rad = np.deg2rad(ori1)
-                        ori2_rad = np.deg2rad(ori2)
-                        dx1 = 100 * np.cos(ori1_rad)
-                        dy1 = 100 * np.sin(ori1_rad)
-                        dx2 = 100 * np.cos(ori2_rad)
-                        dy2 = 100 * np.sin(ori2_rad)
-                        center1_far = np.asarray(center1) + [dx1, dy1]
-                        l1 = sg.LineString([center1, center1_far])
-
-                        center2_far = np.asarray(center2) + [dx2, dy2]
-                        l2 = sg.LineString([center2, center2_far])
-
-                        intersect = l1.intersection(l2)
-                        if isinstance(intersect, sg.Point):
+                        if vector_intersection(
+                            center1, ori1, center2, ori2, max_distance=100
+                        ):
                             return True, "all_angle", 45
 
                         return False, "None", 0
