@@ -173,6 +173,28 @@ class Bitmap:
             )
         return bitmapNode(self, x, y)
 
+    def query(self, x: int, y: int) -> tuple[bool, str | int, Any]:
+        """Return one cell's DRC state without allocating a ``bitmapNode`` view."""
+        x, y = int(x), int(y)
+        if not self.in_bounds(x, y):
+            raise IndexError(
+                f"Bitmap index {(x, y)} outside {(self.width, self.height)}"
+            )
+
+        code = int(self._types[x, y])
+        if code == EMPTY:
+            return False, "empty", None
+
+        key = (x, y)
+        if code == BLOCKAGE:
+            return True, "blk", self._owners.get(key)
+        if code == PORT:
+            return True, "port", self._owners.get(key)
+
+        routes = self._routes.get(key, {})
+        owner = next(iter(routes), None)
+        return True, _CODE_TO_TYPE.get(code, code), owner
+
     def to_grid(self, point) -> np.ndarray:
         return np.floor(
             (np.asarray(point, dtype=float) - self.origin) / self._resolution

@@ -53,3 +53,39 @@ def test_spacing_ignores_group_routes_and_counts_outside_die() -> None:
 
     boundary_node = SimpleNamespace(pos=(0, 0, 0))
     assert manager.checkSpacing(boundary_node, 1) == 1
+
+
+def test_route_segment_scan_batches_cells_and_preserves_conflicts() -> None:
+    manager = _manager()
+    manager.bitMap.node(2, 1).update("waveguide", id="first", wgtype=90)
+    manager.bitMap.node(3, 1).update("waveguide", id="second", wgtype=90)
+
+    end, conflicts, blocked = manager._scan_route_segments(
+        (0, 1), [((1, 0), 4, 0)], "host"
+    )
+
+    assert end == (4, 1)
+    assert conflicts == {"first", "second"}
+    assert blocked is None
+
+
+def test_long_route_segment_scan_uses_batched_coordinates() -> None:
+    manager = _manager(30)
+    manager.bitMap.node(18, 1).update("waveguide", id="route", wgtype=90)
+
+    end, conflicts, blocked = manager._scan_route_segments(
+        (0, 1), [((1, 0), 20, 0)], "host"
+    )
+
+    assert end == (20, 1)
+    assert conflicts == {"route"}
+    assert blocked is None
+
+
+def test_prediction_allows_own_port_but_rejects_boundary() -> None:
+    manager = _manager()
+    manager.predict_length = 2
+    manager.bitMap.node(2, 1).update("port", id="host")
+
+    assert not manager._prediction_is_blocked((0, 1), (1, 0), 0, "host")
+    assert manager._prediction_is_blocked((6, 1), (1, 0), 0, "host")

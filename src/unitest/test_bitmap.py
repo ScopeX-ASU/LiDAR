@@ -25,6 +25,19 @@ def test_bitmap_uses_compact_directional_state() -> None:
     assert bitmap._types.dtype == np.int16
 
 
+def test_bitmap_query_returns_cell_state_without_a_node_view() -> None:
+    bitmap = Bitmap([[0, 0], [10, 10]], resolution=1)
+
+    assert bitmap.query(2, 3) == (False, "empty", None)
+    bitmap.node(2, 3).update("waveguide", id="route", wgtype=90)
+    assert bitmap.query(2, 3) == (True, 90, "route")
+    bitmap.node(4, 5).update("port", id="net")
+    assert bitmap.query(4, 5) == (True, "port", "net")
+
+    with pytest.raises(IndexError, match="outside"):
+        bitmap.query(-1, 0)
+
+
 def test_bitmap_coordinates_are_relative_to_die_origin() -> None:
     bitmap = Bitmap([[-10, -20], [10, 20]], resolution=2)
 

@@ -6,7 +6,7 @@ from typing import Any
 import numpy as np
 
 from ..database.schematic import CustomSchematic
-from .bitmap import Bitmap
+from .bitmap import BLOCKAGE, EMPTY, PORT, Bitmap
 
 _PERPENDICULAR_STEPS = {
     0: (0, 1),
@@ -18,6 +18,7 @@ _PERPENDICULAR_STEPS = {
     270: (1, 0),
     315: (1, 1),
 }
+_BATCH_SCAN_THRESHOLD = 16
 
 
 @dataclass(frozen=True, slots=True)
@@ -365,36 +366,103 @@ class DrcManager(object):
         x, y = start
         conflicts = set()
         for (dx, dy), length, orientation in segments:
-            for _ in range(length):
-                x += dx
-                y += dy
-                violated, node_type, owner = self.checkSingleNode(
-                    (x, y, orientation), net_name
+            if length <= 0:
+                continue
+            if length < _BATCH_SCAN_THRESHOLD:
+                for _ in range(length):
+                    x += dx
+                    y += dy
+                    if not self._bitmap.in_bounds(x, y):
+                        return (
+                            (x, y),
+                            conflicts,
+                            DrcResult(True, obstacle_type="blk"),
+                        )
+                    if int(self._bitmap._types[x, y]) == EMPTY:
+                        continue
+                    violated, node_type, owner = self._bitmap.query(x, y)
+                    if not violated or (
+                        node_type == "port" and owner == net_name
+                    ):
+                        continue
+                    if node_type in {"port", "blk"}:
+                        return (
+                            (x, y),
+                            conflicts,
+                            DrcResult(
+                                True, obstacle_type=node_type, conflicts=owner
+                            ),
+                        )
+                    conflicts.add(owner)
+                continue
+
+            distances = np.arange(1, length + 1, dtype=np.int32)
+            xs = x + distances * dx
+            ys = y + distances * dy
+            in_bounds = (
+                (xs >= 0)
+                & (xs < self._bitmap.width)
+                & (ys >= 0)
+                & (ys < self._bitmap.height)
+            )
+            if not np.all(in_bounds):
+                first = int(np.flatnonzero(~in_bounds)[0])
+                return (
+                    (int(xs[first]), int(ys[first])),
+                    conflicts,
+                    DrcResult(True, obstacle_type="blk"),
                 )
+
+            codes = self._bitmap._types[xs, ys]
+            for index in np.flatnonzero(codes != EMPTY):
+                check_x, check_y = int(xs[index]), int(ys[index])
+                violated, node_type, owner = self._bitmap.query(check_x, check_y)
                 if not violated or (node_type == "port" and owner == net_name):
                     continue
                 if node_type in {"port", "blk"}:
                     return (
-                        (x, y),
+                        (check_x, check_y),
                         conflicts,
                         DrcResult(True, obstacle_type=node_type, conflicts=owner),
                     )
                 conflicts.add(owner)
+            x, y = int(xs[-1]), int(ys[-1])
         return (x, y), conflicts, None
 
     def _prediction_is_blocked(self, start, step, orientation, net_name) -> bool:
-        x, y = start
-        try:
+        if self.predict_length < _BATCH_SCAN_THRESHOLD:
+            x, y = start
             for _ in range(self.predict_length):
                 x += step[0]
                 y += step[1]
-                violated, node_type, owner = self.checkSingleNode(
-                    (x, y, orientation), net_name
-                )
-                if violated and not (node_type == "port" and owner == net_name):
+                if not self._bitmap.in_bounds(x, y):
                     return True
-        except IndexError:
+                code = int(self._bitmap._types[x, y])
+                if code == EMPTY:
+                    continue
+                if code != PORT or self._bitmap._owners.get((x, y)) != net_name:
+                    return True
+            return False
+
+        distances = np.arange(1, self.predict_length + 1, dtype=np.int32)
+        xs = start[0] + distances * step[0]
+        ys = start[1] + distances * step[1]
+        if (
+            np.any(xs < 0)
+            or np.any(xs >= self._bitmap.width)
+            or np.any(ys < 0)
+            or np.any(ys >= self._bitmap.height)
+        ):
             return True
+
+        codes = self._bitmap._types[xs, ys]
+        for index in np.flatnonzero(codes != EMPTY):
+            node_type = int(codes[index])
+            if node_type != PORT:
+                return True
+            owner = self._bitmap._owners.get((int(xs[index]), int(ys[index])))
+            if owner != net_name:
+                return True
         return False
 
     def bViolateDRC(
@@ -730,23 +798,29 @@ class DrcManager(object):
         groups: Collection[str] = (),
     ) -> int:
         x, y, ori = neighbor.pos
-        count = 0
         perpendicular = _PERPENDICULAR_STEPS.get(ori)
         if perpendicular is None:
             raise ValueError(f"Unsupported routing orientation {ori!r}")
 
         dx, dy = perpendicular
-        for distance in range(1, check_region + 1):
-            for sign in (-1, 1):
-                check_x = x + sign * distance * dx
-                check_y = y + sign * distance * dy
-                if not self._bitmap.in_bounds(check_x, check_y):
-                    count += 1
-                    continue
-                node = self._bitmap.node(check_x, check_y)
-                if node.type in {"blk", "port"}:
-                    count += 1
-                elif node.netID and node.netID[0] not in groups:
+        distances = np.arange(1, check_region + 1, dtype=np.int32)
+        offsets = np.concatenate((-distances, distances))
+        xs = x + offsets * dx
+        ys = y + offsets * dy
+        in_bounds = (
+            (xs >= 0)
+            & (xs < self._bitmap.width)
+            & (ys >= 0)
+            & (ys < self._bitmap.height)
+        )
+        count = int(np.count_nonzero(~in_bounds))
+        for check_x, check_y in zip(xs[in_bounds], ys[in_bounds]):
+            code = int(self._bitmap._types[check_x, check_y])
+            if code in {BLOCKAGE, PORT}:
+                count += 1
+            elif code != EMPTY:
+                routes = self._bitmap._routes.get((int(check_x), int(check_y)), {})
+                if routes and next(iter(routes)) not in groups:
                     count += 1
         return count
 
@@ -782,13 +856,12 @@ class DrcManager(object):
             check_x, check_y = x + offset * dx, y + offset * dy
             if not self._bitmap.in_bounds(check_x, check_y):
                 return (True, "blk", None)
-            node = self._bitmap.node(check_x, check_y)
-            node_type = node.type
+            _, node_type, owner = self._bitmap.query(check_x, check_y)
             if node_type in {"port", "blk"}:
-                return (True, node_type, node.blkID)
+                return (True, node_type, owner)
             if node_type != "empty":
                 types.add(node_type)
-                netID = node.netID[0]
+                netID = owner
 
         if len(types) > 1:
             return (True, "compound", netID)
@@ -797,16 +870,7 @@ class DrcManager(object):
         return (False, "empty", None)
 
     def checkSingleNode(self, index, check_net=None):  # Acspoints
-        ans = self._bitmap.bitMap[index[0], index[1]]
-        match ans.type:
-            case "empty":
-                return (False, ans.type, None)
-            case "blk":
-                return (True, ans.type, ans.blkID)
-            case "port":
-                return (True, ans.type, ans.blkID)
-            case _:  # waveguide or compound
-                return (True, ans.type, ans.netID[0])
+        return self._bitmap.query(index[0], index[1])
 
     def crossing_check(self, host_net, slave_net, straight_count, manhattan=True):
         if manhattan:
