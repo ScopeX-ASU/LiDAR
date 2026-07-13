@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 from functools import partial
 from typing import cast
 
@@ -100,6 +101,9 @@ class RouteGeometry:
 
     def connect_ports_all_angle(self, port1, port2):
         """Connect two arbitrary-angle ports using the configured optical geometry."""
+        if self._can_use_standard_route(port1, port2):
+            return self._connect_ports_sbend(port1, port2)
+
         component = gf.Component()
         component.routes = {}
         try:
@@ -128,6 +132,54 @@ class RouteGeometry:
         component.routes["access"] = route
         component.insert_vinsts()
         return component, route
+
+    @staticmethod
+    def _can_use_standard_route(port1, port2, *, tolerance: float = 1e-6) -> bool:
+        """Return whether a direct standard route can avoid all-angle optimization."""
+        def cross2d(vector1, vector2) -> float:
+            return float(vector1[0] * vector2[1] - vector1[1] * vector2[0])
+
+        center1 = np.asarray(port1.dcenter, dtype=float)
+        center2 = np.asarray(port2.dcenter, dtype=float)
+        delta = center2 - center1
+        distance = float(np.linalg.norm(delta))
+        if distance <= tolerance:
+            return False
+
+        orientation1 = float(port1.orientation) % 360
+        orientation2 = float(port2.orientation) % 360
+        angle1 = math.radians(orientation1)
+        angle2 = math.radians(orientation2)
+        direction1 = np.array([math.cos(angle1), math.sin(angle1)])
+        direction2 = np.array([math.cos(angle2), math.sin(angle2)])
+
+        opposite = math.isclose(
+            (orientation1 - orientation2) % 360,
+            180,
+            abs_tol=tolerance,
+        )
+        if opposite:
+            cross = cross2d(direction1, delta)
+            return abs(cross) <= tolerance and float(np.dot(direction1, delta)) > 0
+
+        cardinal1 = math.isclose(orientation1 % 90, 0, abs_tol=tolerance)
+        cardinal2 = math.isclose(orientation2 % 90, 0, abs_tol=tolerance)
+        orthogonal = math.isclose(
+            (orientation1 - orientation2) % 180,
+            90,
+            abs_tol=tolerance,
+        )
+        if not (cardinal1 and cardinal2 and orthogonal):
+            return False
+
+        # The path leaves port1 along direction1. Tracing backward from port2
+        # follows direction2; those rays must meet to form one legal bend.
+        denominator = cross2d(direction1, direction2)
+        if abs(denominator) <= tolerance:
+            return False
+        first_length = cross2d(delta, direction2) / denominator
+        second_length = cross2d(delta, direction1) / denominator
+        return first_length >= -tolerance and second_length >= -tolerance
 
     def _connect_ports_sbend(self, endpoint, internal_port):
         """Fallback for access stubs too short for the all-angle bend placer."""
@@ -202,8 +254,10 @@ class RouteGeometry:
         route: gf.Component,
         endpoint,
         index: int,
-    ) -> tuple[gf.Component, float]:
+    ) -> tuple[gf.Component | None, float]:
         internal_port = route.ports["o1"] if index == 1 else route.ports["o2"]
+        if np.allclose(endpoint.dcenter, internal_port.dcenter, rtol=0, atol=1e-9):
+            return None, 0.0
         access_waveguide, access_route = self.connect_ports_all_angle(
             endpoint, internal_port
         )
@@ -219,12 +273,14 @@ class RouteGeometry:
 
         component = gf.Component()
         component.routes = {}
-        component << access1
-        component << access2
+        if access1 is not None:
+            component << access1
+            component.routes["access1"] = access1.routes["access"]
+        if access2 is not None:
+            component << access2
+            component.routes["access2"] = access2.routes["access"]
         component.add_ref(route)
         component.add_port(name="o1", port=path_record[1])
         component.add_port(name="o2", port=path_record[2])
-        component.routes["access1"] = access1.routes["access"]
-        component.routes["access2"] = access2.routes["access"]
         component.routes["backbone"] = route.routes["backbone"]
         return component, length1 + length2 + float(path.length())

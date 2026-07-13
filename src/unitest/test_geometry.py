@@ -69,3 +69,63 @@ def test_all_angle_access_uses_native_route_result() -> None:
     assert component.routes["access"] is route
     assert route.length > 0
     assert not component.get_region(geometry.layer).is_empty()
+
+
+@pytest.mark.parametrize(
+    ("center2", "orientation2"),
+    [((20, 0), 180), ((15, 15), 270)],
+)
+def test_simple_access_avoids_all_angle_optimizer(
+    monkeypatch, center2, orientation2
+) -> None:
+    config = RouterConfig()
+    config.dr.cross_section = "strip"
+    config.dr.bend_radius = 5
+    geometry = RouteGeometry(config)
+    layer = gf.get_layer(geometry.layer)
+    port1 = gf.Port(
+        name="o1", center=(0, 0), width=geometry.width, orientation=0, layer=layer
+    )
+    port2 = gf.Port(
+        name="o2",
+        center=center2,
+        width=geometry.width,
+        orientation=orientation2,
+        layer=layer,
+    )
+
+    def fail_all_angle(**kwargs):
+        raise AssertionError("simple access should not run all-angle optimization")
+
+    monkeypatch.setattr(gf.routing, "route_bundle_all_angle", fail_all_angle)
+    component, route = geometry.connect_ports_all_angle(port1, port2)
+
+    assert route.length > 0
+    assert not component.get_region(geometry.layer).is_empty()
+
+
+def test_coincident_access_does_not_create_redundant_geometry(monkeypatch) -> None:
+    config = RouterConfig()
+    config.dr.cross_section = "strip"
+    geometry = RouteGeometry(config)
+    layer = gf.get_layer(geometry.layer)
+    route = gf.Component()
+    route.add_port(
+        name="o1", center=(2, 3), width=geometry.width, orientation=180, layer=layer
+    )
+    endpoint = gf.Port(
+        name="endpoint",
+        center=(2, 3),
+        width=geometry.width,
+        orientation=0,
+        layer=layer,
+    )
+
+    def fail_connection(*args, **kwargs):
+        raise AssertionError("coincident ports should not create an access route")
+
+    monkeypatch.setattr(geometry, "connect_ports_all_angle", fail_connection)
+
+    access, length = geometry._access_waveguide(route, endpoint, index=1)
+    assert access is None
+    assert length == 0
