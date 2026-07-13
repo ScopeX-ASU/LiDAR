@@ -564,7 +564,7 @@ class AstarSearch:
                     )
 
                     if self._bStrictDRC:
-                        his = self._Dr.historyMap[x][y][self.his_index[ori]]
+                        his = self._Dr.historyMap[x, y, self.his_index[ori]]
                         if his:
                             costF += his
 

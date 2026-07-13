@@ -11,6 +11,7 @@ EMPTY = -1
 BLOCKAGE = -2
 PORT = -3
 COMPOUND = -4
+_BLOCKAGE_ID_DTYPES = (np.int16, np.int32, np.int64)
 
 _TYPE_TO_CODE = {
     "empty": EMPTY,
@@ -46,6 +47,8 @@ class bitmapNode:
 
     @property
     def blkID(self):
+        if int(self._grid._types[self._x, self._y]) == BLOCKAGE:
+            return self._grid.blockage_owner(self._x, self._y)
         return self._grid._owners.get(self._key)
 
     @property
@@ -77,7 +80,10 @@ class bitmapNode:
             )
         elif nodetype == "blk":
             self._grid._types[self._x, self._y] = BLOCKAGE
-            self._grid._owners[self._key] = id
+            self._grid._blockage_ids[self._x, self._y] = (
+                self._grid._blockage_id(id)
+            )
+            self._grid._owners.pop(self._key, None)
             self._grid._routes.pop(self._key, None)
         elif nodetype == "port":
             if current_type == "empty":
@@ -85,6 +91,7 @@ class bitmapNode:
                 self._grid._owners[self._key] = id
         elif current_type not in {"blk", "port"}:
             self._grid._types[self._x, self._y] = EMPTY
+            self._grid._blockage_ids[self._x, self._y] = -1
             self._grid._routes.pop(self._key, None)
 
     def delete(self, net_name) -> None:
@@ -158,6 +165,13 @@ class Bitmap:
         self.height = math.ceil((upper[1] - self.origin[1]) / self._resolution)
         self._distance = float(distance)
         self._types = np.full((self.width, self.height), EMPTY, dtype=np.int16)
+        self._blockage_ids = np.full(
+            (self.width, self.height), -1, dtype=_BLOCKAGE_ID_DTYPES[0]
+        )
+        self._blockage_names: list[Any] = []
+        self._blockage_name_to_id: dict[Any, int] = {}
+        # Ports are sparse and can overlap net-specific routing state, so their
+        # owners remain keyed only for the cells that need them.
         self._owners: dict[tuple[int, int], Any] = {}
         self._routes: dict[tuple[int, int], dict[Any, int]] = {}
         self._view = _BitmapView(self)
@@ -187,13 +201,34 @@ class Bitmap:
 
         key = (x, y)
         if code == BLOCKAGE:
-            return True, "blk", self._owners.get(key)
+            return True, "blk", self.blockage_owner(x, y)
         if code == PORT:
             return True, "port", self._owners.get(key)
 
         routes = self._routes.get(key, {})
         owner = next(iter(routes), None)
         return True, _CODE_TO_TYPE.get(code, code), owner
+
+    def _blockage_id(self, owner: Any) -> int:
+        blockage_id = self._blockage_name_to_id.get(owner)
+        if blockage_id is None:
+            blockage_id = len(self._blockage_names)
+            if blockage_id > np.iinfo(self._blockage_ids.dtype).max:
+                for dtype in _BLOCKAGE_ID_DTYPES:
+                    if blockage_id <= np.iinfo(dtype).max:
+                        self._blockage_ids = self._blockage_ids.astype(dtype)
+                        break
+                else:
+                    raise OverflowError("Blockage count exceeds int64 capacity")
+            self._blockage_names.append(owner)
+            self._blockage_name_to_id[owner] = blockage_id
+        return blockage_id
+
+    def blockage_owner(self, x: int, y: int) -> Any:
+        blockage_id = int(self._blockage_ids[x, y])
+        if blockage_id < 0:
+            return None
+        return self._blockage_names[blockage_id]
 
     def to_grid(self, point) -> np.ndarray:
         return np.floor(
@@ -221,13 +256,17 @@ class Bitmap:
             )
             xmin, ymin = np.maximum(lower, 0)
             xmax, ymax = np.minimum(upper, [self.width - 1, self.height - 1])
-            for x in range(int(xmin), int(xmax) + 1):
-                for y in range(int(ymin), int(ymax) + 1):
-                    self.node(x, y).update("blk", blockage.instanceName)
+            if xmin > xmax or ymin > ymax:
+                continue
+            x_slice = slice(int(xmin), int(xmax) + 1)
+            y_slice = slice(int(ymin), int(ymax) + 1)
+            blockage_id = self._blockage_id(blockage.instanceName)
+            self._types[x_slice, y_slice] = BLOCKAGE
+            self._blockage_ids[x_slice, y_slice] = blockage_id
 
     def _is_empty(self, location: np.ndarray) -> bool:
         x, y = map(int, location)
-        return self.in_bounds(x, y) and self.node(x, y).type == "empty"
+        return self.in_bounds(x, y) and int(self._types[x, y]) == EMPTY
 
     def _reserve_port(self, port, net_name: str, port_length: int) -> None:
         orientations = {

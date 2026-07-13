@@ -3,6 +3,8 @@ from itertools import count
 from types import SimpleNamespace
 from unittest.mock import Mock
 
+import numpy as np
+
 from picroute.routing.astarsearch import AstarSearch, GridAstarNode
 from picroute.routing.drgridroute import DrGridRoute
 
@@ -112,3 +114,26 @@ def test_failed_crossing_retry_is_not_registered_as_success() -> None:
 
     assert succeeded is False
     route.registar_net.assert_not_called()
+
+
+def test_history_map_promotes_before_overflow_and_clears_in_place() -> None:
+    route = DrGridRoute.__new__(DrGridRoute)
+    route.historyMap = np.zeros((2, 2, 8), dtype=np.uint16)
+    route.historyMap[1, 1, 0] = np.iinfo(np.uint16).max - 5
+    original_map = route.historyMap
+    route.orientations = {0: 0}
+    route._config = SimpleNamespace(dr=SimpleNamespace(history_cost=10))
+    net = SimpleNamespace(
+        NetPort1=SimpleNamespace(port_grids=[]),
+        NetPort2=SimpleNamespace(port_grids=[]),
+    )
+
+    route.updateHistoryMap([(1, 1, 0)], net)
+
+    assert route.historyMap.dtype == np.uint32
+    assert route.historyMap[1, 1, 0] == np.iinfo(np.uint16).max + 5
+    promoted_map = route.historyMap
+    route.clearHistoryMap()
+    assert route.historyMap is promoted_map
+    assert np.count_nonzero(route.historyMap) == 0
+    assert route.historyMap is not original_map

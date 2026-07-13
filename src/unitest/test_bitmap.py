@@ -50,6 +50,8 @@ def test_bitmap_coordinates_are_relative_to_die_origin() -> None:
     bitmap.initMap([blockage])
     assert bitmap.bitMap[0, 0].type == "blk"
     assert bitmap.bitMap[0, 0].blkID == "partly-outside"
+    assert bitmap._owners == {}
+    assert bitmap._blockage_names == ["partly-outside"]
 
 
 @pytest.mark.parametrize(

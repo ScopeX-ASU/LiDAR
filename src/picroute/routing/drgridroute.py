@@ -12,6 +12,9 @@ from picroute.routing.geometry import RouteGeometry
 from picroute.utils.general import logger
 from picroute.utils.smooth import alignment
 
+_INITIAL_HISTORY_DTYPE = np.uint16
+_HISTORY_DTYPES = (np.uint16, np.uint32, np.uint64)
+
 
 class DrGridRoute(object):
     def __init__(self, CirDB: CustomSchematic, DrcMgr: DrcManager, config):
@@ -21,7 +24,8 @@ class DrGridRoute(object):
 
         self.global_failedNet = set()
         self.historyMap = np.zeros(
-            (self._drcmgr.bitMap_width, self._drcmgr.bitMap_height, 8), dtype=np.int32
+            (self._drcmgr.bitMap_width, self._drcmgr.bitMap_height, 8),
+            dtype=_INITIAL_HISTORY_DTYPE,
         )
         self.orientations = {0: 0, 45: 1, 90: 2, 135: 3, 180: 4, 225: 5, 270: 6, 315: 7}
         self._ripup_times = 0  # config.dr.ripup_times
@@ -440,9 +444,7 @@ class DrGridRoute(object):
         self._cirdb.verify_connectivity()
 
     def clearHistoryMap(self):
-        self.historyMap = np.zeros(
-            (self._drcmgr.bitMap_width, self._drcmgr.bitMap_height, 8), dtype=np.int32
-        )
+        self.historyMap.fill(0)
 
     def mark_conflict_nets(self, violatedNets, cur_net):
         self.global_failedNet.add(cur_net)
@@ -462,7 +464,15 @@ class DrGridRoute(object):
                 continue
             else:
                 ori_index = orientations[ori]
-                historyMap[x][y][ori_index] += historyCost
+                updated_cost = int(historyMap[x, y, ori_index]) + historyCost
+                if updated_cost > np.iinfo(historyMap.dtype).max:
+                    for dtype in _HISTORY_DTYPES:
+                        if updated_cost <= np.iinfo(dtype).max:
+                            self.historyMap = historyMap = historyMap.astype(dtype)
+                            break
+                    else:
+                        raise OverflowError("History cost exceeds uint64 capacity")
+                historyMap[x, y, ori_index] = updated_cost
 
     def post_processing(self):
         """post-processing after routing sucessfully"""
