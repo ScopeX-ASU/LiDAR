@@ -600,12 +600,9 @@ class AstarSearch:
         nextStep = self.nextSteps[orientation]
         end_node = self.endNode.pos
         th = self.connect_th
+        enable_prediction = manhattanDH(currentNode.pos, end_node) > th
         for step in nextStep:
-            enable_prediction = True
             neighbor_position = (currentX + step[0], currentY + step[1], step[2])
-            dis = manhattanDH(currentNode.pos, end_node)
-            if dis <= th:
-                enable_prediction = False
             routing_bound = self.routing_bound
             if (
                 neighbor_position[0] <= routing_bound[0][0]

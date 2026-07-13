@@ -5,7 +5,9 @@ from unittest.mock import Mock
 
 import numpy as np
 
+import picroute.routing.astarsearch as astarsearch_module
 from picroute.routing.astarsearch import AstarSearch, GridAstarNode
+from picroute.drc.drcmanager import DrcResult
 from picroute.routing.drgridroute import DrGridRoute
 
 
@@ -60,6 +62,30 @@ def test_astar_nodes_share_immutable_empty_violation_state() -> None:
     assert first.violated_nets is second.violated_nets
     assert first.violated_nets == frozenset()
     assert not hasattr(first, "neighbors")
+
+
+def test_neighbor_generation_computes_current_distance_once(monkeypatch) -> None:
+    search = AstarSearch.__new__(AstarSearch)
+    search.nextSteps = {
+        0: [(1, 0, 0, "straight_0"), (0, 1, 90, "bend_90")]
+    }
+    search.endNode = GridAstarNode(pos=(8, 8, 180))
+    search.connect_th = 2
+    search.routing_bound = ((-1, -1), (10, 10))
+    search._drcmgr = SimpleNamespace(
+        bViolateDRC=Mock(return_value=DrcResult(False))
+    )
+    search._bStrictDRC = True
+    search._net = SimpleNamespace(netName="net")
+    search.vAllNodesMap = {}
+    current = GridAstarNode(pos=(1, 1, 0), crossing_budget=3)
+    distance = Mock(return_value=14)
+    monkeypatch.setattr(astarsearch_module, "manhattanDH", distance)
+
+    neighbors = list(search.findNeighbors(current))
+
+    assert len(neighbors) == 2
+    distance.assert_called_once_with(current.pos, search.endNode.pos)
 
 
 def test_net_frontier_is_stable_and_rejects_duplicate_objects() -> None:
