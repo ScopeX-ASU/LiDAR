@@ -1,7 +1,7 @@
 import math
 from collections import Counter
 from copy import deepcopy
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from heapq import heappop, heappush
 from itertools import count
 from typing import List, Optional, Self, Tuple
@@ -17,6 +17,8 @@ from .drgridroute import DrGridRoute
 from .utils import EulerDist, customH, manhattanDH, vector_intersection
 
 type Transition = tuple[int, int, int, str]
+
+_NO_VIOLATIONS: frozenset[str] = frozenset()
 
 
 def _rotate_transition(transition: Transition, quarter_turns: int) -> Transition:
@@ -75,10 +77,9 @@ class GridAstarNode:
     cost_f: float = float("inf")
     visited: bool = False
     parent: Self | None = None
-    neighbors: dict[Self, str] = field(default_factory=dict)
     crossing_budget: int = 0
     crossing_net: str | None = None
-    violated_nets: set[str] = field(default_factory=set)
+    violated_nets: frozenset[str] = _NO_VIOLATIONS
     is_violated: bool = False
     straight_count: int = 0
 
@@ -87,9 +88,6 @@ class GridAstarNode:
         self.cost_f = float("inf")
         self.visited = False
         self.parent = None
-
-    def add_neighbor(self, neighbor: Self, step_type: str) -> None:
-        self.neighbors[neighbor] = step_type
 
     def __eq__(self, other):
         if not isinstance(other, GridAstarNode):
@@ -311,7 +309,6 @@ class AstarSearch:
                 cost_g=0,
                 cost_f=self.costH(startPos, endPos),
                 straight_count=0,
-                neighbors={},
                 crossing_budget=self.crossing_budget,
             )
         )
@@ -507,11 +504,7 @@ class AstarSearch:
                 else:
                     current_node.visited = False
 
-            # find the current node's neightbors and loop through the neighbors
-            if not current_node.neighbors:
-                self.findNeighbors(current_node)
-
-            for neighbor, nb_type in current_node.neighbors.items():
+            for neighbor, nb_type in self.findNeighbors(current_node):
                 if neighbor.visited:
                     continue
                 costF = 0
@@ -635,10 +628,9 @@ class AstarSearch:
                     tmp_neighbor = vAllNodesMap[neighbor_position] = GridAstarNode(
                         pos=neighbor_position,
                         parent=None,
-                        neighbors={},
                         crossing_budget=currentNode.crossing_budget,
                     )
-                currentNode.add_neighbor(tmp_neighbor, step[3])
+                yield tmp_neighbor, step[3]
 
             elif result.crossing_position is not None:
                 tmp_neighbor = vAllNodesMap.get(result.crossing_position, None)
@@ -647,13 +639,12 @@ class AstarSearch:
                         GridAstarNode(
                             pos=result.crossing_position,
                             parent=None,
-                            neighbors={},
                             crossing_budget=currentNode.crossing_budget - 1,
                             crossing_net=result.conflicts,
                             # is_violated=ans[4]
                         )
                     )
-                currentNode.add_neighbor(tmp_neighbor, result.obstacle_type)
+                yield tmp_neighbor, result.obstacle_type
 
             elif not self._bStrictDRC and result.obstacle_type not in {"blk", "port"}:
                 tmp_neighbor = vAllNodesMap.get(neighbor_position, None)
@@ -661,11 +652,10 @@ class AstarSearch:
                     tmp_neighbor = vAllNodesMap[neighbor_position] = GridAstarNode(
                         pos=neighbor_position,
                         parent=None,
-                        neighbors={},
                         is_violated=True,
-                        violated_nets=result.conflicts,
+                        violated_nets=frozenset(result.conflicts or ()),
                     )
-                currentNode.add_neighbor(tmp_neighbor, step[3])
+                yield tmp_neighbor, step[3]
 
     def scaledMDist(self, pos1, pos2):
         x = abs(pos1[0] - pos2[0]) * self.resolution

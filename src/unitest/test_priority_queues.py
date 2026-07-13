@@ -51,15 +51,13 @@ def test_astar_node_equality_and_hash_use_position() -> None:
     assert first != same_cost
 
 
-def test_astar_nodes_do_not_share_mutable_state() -> None:
+def test_astar_nodes_share_immutable_empty_violation_state() -> None:
     first = GridAstarNode(pos=(1, 2, 90))
     second = GridAstarNode(pos=(2, 2, 90))
 
-    first.add_neighbor(second, "straight_0")
-    first.violated_nets.add("n1")
-
-    assert second.neighbors == {}
-    assert second.violated_nets == set()
+    assert first.violated_nets is second.violated_nets
+    assert first.violated_nets == frozenset()
+    assert not hasattr(first, "neighbors")
 
 
 def test_net_frontier_is_stable_and_rejects_duplicate_objects() -> None:
